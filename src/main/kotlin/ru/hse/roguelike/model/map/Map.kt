@@ -7,6 +7,8 @@ import ru.hse.roguelike.model.characters.Enemy
 import ru.hse.roguelike.model.items.Item
 import ru.hse.roguelike.util.Constants
 import ru.hse.roguelike.util.*
+import java.lang.Integer.max
+import java.lang.Integer.min
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 import kotlin.random.Random
@@ -93,11 +95,36 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
         }
 
         private fun generatePaths(firstCells: List<Cell>, secondCells: List<Cell>, dim: Int) {
-            // TODO:
             for (firstCell in firstCells) {
                 for (secondCell in secondCells) {
-                    if (dim == 0) {
-                    } else {
+                    if (dim == 0 && firstCell.rightTopPos.y > secondCell.rightTopPos.y &&
+                        secondCell.rightTopPos.y < firstCell.leftBottomPos.y ||
+                        secondCell.leftBottomPos.y < firstCell.rightTopPos.y &&
+                        secondCell.leftBottomPos.y > firstCell.leftBottomPos.y) {
+
+                        val bottomBorder = max(firstCell.leftBottomPos.y, secondCell.leftBottomPos.y)
+                        val topBorder = min(firstCell.rightTopPos.y, secondCell.rightTopPos.y)
+
+                        val yAxis = Random.nextInt(bottomBorder, topBorder)
+                        val fromPos = Position(firstCell.rightTopPos.x, yAxis)
+                        val toPos = Position(secondCell.leftBottomPos.x, yAxis)
+                        firstCell.passages.add(Passage(fromPos, toPos, dim))
+                        secondCell.passages.add(Passage(toPos, fromPos, dim))
+                        break
+                    } else if (firstCell.leftBottomPos.x < secondCell.rightTopPos.x &&
+                            secondCell.rightTopPos.x < firstCell.rightTopPos.x ||
+                            firstCell.rightTopPos.x > secondCell.leftBottomPos.x &&
+                            secondCell.leftBottomPos.x < firstCell.leftBottomPos.x) {
+
+                        val leftBorder = max(firstCell.leftBottomPos.x, secondCell.leftBottomPos.x)
+                        val rightBorder = min(firstCell.rightTopPos.x, secondCell.rightTopPos.x)
+
+                        val xAxis = Random.nextInt(leftBorder, rightBorder)
+                        val fromPos = Position(xAxis, firstCell.leftBottomPos.y)
+                        val toPos = Position(xAxis, secondCell.rightTopPos.y)
+                        firstCell.passages.add(Passage(fromPos, toPos, dim))
+                        secondCell.passages.add(Passage(toPos, fromPos, dim))
+                        break
                     }
                 }
             }
