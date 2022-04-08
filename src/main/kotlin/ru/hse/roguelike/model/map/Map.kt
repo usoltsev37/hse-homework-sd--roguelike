@@ -99,6 +99,7 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
 
         private fun generatePaths(firstCells: List<Cell>, secondCells: List<Cell>, dim: Int) {
             val otherDim = dim xor 1
+            var done = false
             for (firstCell in firstCells) {
                 for (secondCell in secondCells) {
                     if (firstCell.rightTopPos[otherDim] > secondCell.rightTopPos[otherDim] &&
@@ -120,9 +121,27 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
                                     else Position(axisValue, secondCell.rightTopPos.y)
                         firstCell.passages.add(Passage(fromPos, toPos, dim))
                         secondCell.passages.add(Passage(toPos, fromPos, dim))
+                        done = true
                         break
                     }
                 }
+            }
+
+            if (!done && firstCells.isNotEmpty() && secondCells.isNotEmpty()) {
+                val cell = firstCells[0]
+                val nearestCell = secondCells.withIndex()
+                    .minByOrNull { cell.rightTopPos[dim] - it.value.leftBottomPos[dim] }!!.value
+
+                val from = if (dim == 0) Position(cell.rightTopPos.x, Random.nextInt(cell.leftBottomPos.y, cell.rightTopPos.y))
+                           else Position(Random.nextInt(cell.leftBottomPos.x, cell.rightTopPos.x), cell.leftBottomPos.y)
+                val axisValue = if (nearestCell.rightTopPos[otherDim] < cell.leftBottomPos[otherDim]) nearestCell.rightTopPos[otherDim]
+                                else nearestCell.leftBottomPos[otherDim]
+                val to = if (dim == 0) Position(Random.nextInt(nearestCell.leftBottomPos.x, nearestCell.rightTopPos.x), axisValue)
+                         else Position(axisValue, Random.nextInt(nearestCell.leftBottomPos.y, nearestCell.rightTopPos.y))
+
+                cell.passages.add(Passage(from, to, dim))
+                nearestCell.passages.add(Passage(to, from, otherDim))
+                // надо найти наиболее близкие клетки к выбранной выше, дальше дойти до них по нужному направлению и повернуть в нужное направление.
             }
         }
 

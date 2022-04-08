@@ -31,7 +31,7 @@ class BuildMapTest {
         }
     }
 
-    @Test // don't work
+    @Test
     fun testConnectedCells() {
         val height = 100
         val width  = 100
@@ -70,6 +70,18 @@ class BuildMapTest {
         Assertions.assertEquals(map.height, loadedMap.height)
         Assertions.assertEquals(map.width, loadedMap.width)
         Assertions.assertTrue(loadedMap.cells.containsAll(loadedMap.cells))
+    }
+
+    @Test
+    fun testPassageTurnPosition() {
+        val test1 = Passage(Position(2, 3), Position(7, 6), 0)
+        Assertions.assertEquals(Position(7, 3), test1.turnPosition)
+
+        val test2 = Passage(Position(7, 6), Position(2, 3), 1)
+        Assertions.assertEquals(Position(7, 3), test2.turnPosition)
+
+        val test3 = Passage(Position(2, 4), Position(2, 5), 0)
+        Assertions.assertNull(test3.turnPosition)
     }
 
     private fun visitConnectedCells(curCell: Cell, map: Map) {
