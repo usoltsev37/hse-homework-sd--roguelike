@@ -7,6 +7,8 @@ import ru.hse.roguelike.model.characters.Movable
 
 class GameModel(var level: Int, val hero: Hero, val curMap: Map = Map.createMap().build()) {
 
+    var mode = Mode.GAME
+
     // TODO Calculate Cell Index from hero position - Cell First Ever Rotates
     private fun getCurrentCell() : Cell {
         return curMap.cells[0]
@@ -20,6 +22,9 @@ class GameModel(var level: Int, val hero: Hero, val curMap: Map = Map.createMap(
         return getCurrentCell().enemies[index]
     }
 
-
+    enum class Mode {
+        GAME,
+        INVENTORY
+    }
 
 }
