@@ -98,41 +98,26 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
         }
 
         private fun generatePaths(firstCells: List<Cell>, secondCells: List<Cell>, dim: Int) {
+            val otherDim = dim xor 1
             for (firstCell in firstCells) {
                 for (secondCell in secondCells) {
-                    if (dim == 0 && firstCell.rightTopPos.y > secondCell.rightTopPos.y &&
-                        secondCell.rightTopPos.y > firstCell.leftBottomPos.y ||
-                        secondCell.leftBottomPos.y < firstCell.rightTopPos.y &&
-                        secondCell.leftBottomPos.y > firstCell.leftBottomPos.y) {
+                    if (firstCell.rightTopPos[otherDim] > secondCell.rightTopPos[otherDim] &&
+                            secondCell.rightTopPos[otherDim] > firstCell.leftBottomPos[otherDim] ||
+                            secondCell.leftBottomPos[otherDim] < firstCell.rightTopPos[otherDim] &&
+                            secondCell.leftBottomPos[otherDim] > firstCell.leftBottomPos[otherDim]){
 
-                        val bottomBorder = max(firstCell.leftBottomPos.y, secondCell.leftBottomPos.y)
-                        val topBorder = min(firstCell.rightTopPos.y, secondCell.rightTopPos.y)
+                        val bottomBorder = max(firstCell.leftBottomPos[otherDim], secondCell.leftBottomPos[otherDim])
+                        val topBorder = min(firstCell.rightTopPos[otherDim], secondCell.rightTopPos[otherDim])
 
                         check(bottomBorder < topBorder) {
                             "bottomBorder = $bottomBorder, topBorder = $topBorder, firstCell = $firstCell, secondCell = $secondCell"
                         }
 
-                        val yAxis = Random.nextInt(bottomBorder, topBorder + 1)
-                        val fromPos = Position(firstCell.rightTopPos.x, yAxis)
-                        val toPos = Position(secondCell.leftBottomPos.x, yAxis)
-                        firstCell.passages.add(Passage(fromPos, toPos, dim))
-                        secondCell.passages.add(Passage(toPos, fromPos, dim))
-                        break
-                    } else if (firstCell.leftBottomPos.x < secondCell.rightTopPos.x &&
-                            secondCell.rightTopPos.x < firstCell.rightTopPos.x ||
-                            firstCell.rightTopPos.x > secondCell.leftBottomPos.x &&
-                            secondCell.leftBottomPos.x > firstCell.leftBottomPos.x) {
-
-                        val leftBorder = max(firstCell.leftBottomPos.x, secondCell.leftBottomPos.x)
-                        val rightBorder = min(firstCell.rightTopPos.x, secondCell.rightTopPos.x)
-
-                        check(leftBorder < rightBorder) {
-                            "leftBorder = $leftBorder, rightBorder = $rightBorder, firstCell = $firstCell, secondCell = $secondCell"
-                        }
-
-                        val xAxis = Random.nextInt(leftBorder, rightBorder + 1)
-                        val fromPos = Position(xAxis, firstCell.leftBottomPos.y)
-                        val toPos = Position(xAxis, secondCell.rightTopPos.y)
+                        val axisValue = Random.nextInt(bottomBorder, topBorder + 1)
+                        val fromPos = if (dim == 0) Position(firstCell.rightTopPos.x, axisValue)
+                                      else Position(axisValue, firstCell.leftBottomPos.y)
+                        val toPos = if (dim == 0) Position(secondCell.leftBottomPos.x, axisValue)
+                                    else Position(axisValue, secondCell.rightTopPos.y)
                         firstCell.passages.add(Passage(fromPos, toPos, dim))
                         secondCell.passages.add(Passage(toPos, fromPos, dim))
                         break
