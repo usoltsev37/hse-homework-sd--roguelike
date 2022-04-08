@@ -5,6 +5,8 @@ import ru.hse.roguelike.model.map.Cell
 import ru.hse.roguelike.ui.window.Window
 import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.getRoute
+import ru.hse.roguelike.util.x
+import ru.hse.roguelike.util.y
 
 class MapViewImpl(
     private val window: Window
@@ -16,28 +18,38 @@ class MapViewImpl(
     }
 
     override fun setCell(cell: Cell) {
-        for (i in 0 until cell.height) {
-            for (j in 0..cell.width) {
-                val cellImage = mapImage.getCrop(
-                    cell.height,
-                    cell.width,
-                    with(cell) {
-                        leftBottomPos.copy(
-                            second = leftBottomPos.second + height
-                        )
-                    }
-                )
-                if (cell.visited) {
-                    cellImage.fill(TextColor.ANSI.GREEN_BRIGHT)
-                }
-            }
+        val cellImage = mapImage.getCrop(
+            cell.height,
+            cell.width,
+            upperLeft = cell.leftBottomPos
+        )
+
+        if (cell.visited) {
+            cellImage.fill(TextColor.ANSI.GREEN_BRIGHT)
         }
+
+        for (enemy in cell.enemies) {
+            mapImage.printText("V", enemy.position)
+        }
+
+        for (item in cell.items) {
+            mapImage.printText("$", item.second)
+        }
+
 
         val passages = cell.passages
         for (passage in passages) {
-            if (passage.visited) {
+            if (/*passage.visited*/true) {
                 for (position in passage.getRoute()) {
-
+                    if (passage.turnPosition != null) {
+                        mapImage.printText(
+                            " ",
+                            passage.turnPosition!!,
+                            TextColor.ANSI.RED_BRIGHT,
+                            TextColor.ANSI.RED_BRIGHT
+                        )
+                    }
+                    mapImage.printText(" ", position, TextColor.ANSI.BLUE_BRIGHT, TextColor.ANSI.BLUE_BRIGHT)
                 }
             }
         }
