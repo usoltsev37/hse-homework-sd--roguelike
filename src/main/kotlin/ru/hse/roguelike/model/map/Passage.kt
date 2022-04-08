@@ -5,6 +5,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class Passage(val from: Position, val to: Position, val dim: Int) {
+
+    var visited = false
+
     val turnPosition: Position?
         get() {
             if (from.x == to.x || from.y == to.y) {
