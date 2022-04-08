@@ -56,13 +56,13 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
             val firstCells = if (dim == 0) {
                 doGenerateCells(leftBottom, Position(splitValue, rightTop.y))
             } else {
-                doGenerateCells(leftBottom, Position(rightTop.x, splitValue))
+                doGenerateCells(Position(leftBottom.x, splitValue), rightTop)
             }
 
             val secondCells = if (dim == 0) {
                 doGenerateCells(Position(splitValue, leftBottom.y), rightTop)
             } else {
-                doGenerateCells(Position(leftBottom.x, splitValue), rightTop)
+                doGenerateCells(leftBottom, Position(rightTop.x, splitValue))
             }
 
             generatePaths(firstCells, secondCells, dim)
@@ -98,32 +98,40 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
             for (firstCell in firstCells) {
                 for (secondCell in secondCells) {
                     if (dim == 0 && firstCell.rightTopPos.y > secondCell.rightTopPos.y &&
-                        secondCell.rightTopPos.y < firstCell.leftBottomPos.y ||
+                        secondCell.rightTopPos.y > firstCell.leftBottomPos.y ||
                         secondCell.leftBottomPos.y < firstCell.rightTopPos.y &&
                         secondCell.leftBottomPos.y > firstCell.leftBottomPos.y) {
 
                         val bottomBorder = max(firstCell.leftBottomPos.y, secondCell.leftBottomPos.y)
                         val topBorder = min(firstCell.rightTopPos.y, secondCell.rightTopPos.y)
 
-                        val yAxis = Random.nextInt(bottomBorder, topBorder)
+                        check(bottomBorder < topBorder) {
+                            "bottomBorder = $bottomBorder, topBorder = $topBorder, firstCell = $firstCell, secondCell = $secondCell"
+                        }
+
+                        val yAxis = Random.nextInt(bottomBorder, topBorder + 1)
                         val fromPos = Position(firstCell.rightTopPos.x, yAxis)
                         val toPos = Position(secondCell.leftBottomPos.x, yAxis)
-                        firstCell.passages.add(Passage(fromPos, toPos, dim))
-                        secondCell.passages.add(Passage(toPos, fromPos, dim))
+                        firstCell.passages.add(Passage(firstCell, secondCell, fromPos, toPos, dim))
+                        secondCell.passages.add(Passage(secondCell, firstCell, toPos, fromPos, dim))
                         break
                     } else if (firstCell.leftBottomPos.x < secondCell.rightTopPos.x &&
                             secondCell.rightTopPos.x < firstCell.rightTopPos.x ||
                             firstCell.rightTopPos.x > secondCell.leftBottomPos.x &&
-                            secondCell.leftBottomPos.x < firstCell.leftBottomPos.x) {
+                            secondCell.leftBottomPos.x > firstCell.leftBottomPos.x) {
 
                         val leftBorder = max(firstCell.leftBottomPos.x, secondCell.leftBottomPos.x)
                         val rightBorder = min(firstCell.rightTopPos.x, secondCell.rightTopPos.x)
 
-                        val xAxis = Random.nextInt(leftBorder, rightBorder)
+                        check(leftBorder < rightBorder) {
+                            "leftBorder = $leftBorder, rightBorder = $rightBorder, firstCell = $firstCell, secondCell = $secondCell"
+                        }
+
+                        val xAxis = Random.nextInt(leftBorder, rightBorder + 1)
                         val fromPos = Position(xAxis, firstCell.leftBottomPos.y)
                         val toPos = Position(xAxis, secondCell.rightTopPos.y)
-                        firstCell.passages.add(Passage(fromPos, toPos, dim))
-                        secondCell.passages.add(Passage(toPos, fromPos, dim))
+                        firstCell.passages.add(Passage(firstCell, secondCell, fromPos, toPos, dim))
+                        secondCell.passages.add(Passage(secondCell, firstCell, toPos, fromPos, dim))
                         break
                     }
                 }
