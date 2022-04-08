@@ -1,18 +1,16 @@
 package ru.hse.roguelike.model.characters
 
-import ru.hse.roguelike.util.*
+import ru.hse.roguelike.util.Position
 
 abstract class Movable {
-    abstract val position: Position
+    abstract var position: Position
     abstract var health: Int
     abstract val strength: Int
 
+    val isDead: Boolean
+        get() = health <= 0
 
     fun attack(other: Movable) {
         health -= other.strength
-        if (health <= 0) {
-            health = 0
-            // TODO: add death
-        }
     }
 }

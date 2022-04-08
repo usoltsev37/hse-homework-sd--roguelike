@@ -1,43 +1,65 @@
 package ru.hse.roguelike.model.items
 
-enum class ItemType(val value: Int) {
-    Helmet(0),
-    Chestplate(1),
-    Leggings(2),
-    Boots(3),
-    Sword(4),
-    Bow(5);
+import kotlinx.serialization.Serializable
+
+@Serializable
+enum class ItemType(val value: Int) : Usable {
+    Helmet(0) {
+        override fun getHealthIncrease(): Int {
+            return 5
+        }
+
+        override fun getStrengthIncrease(): Int {
+            return 0
+        }
+    },
+    ChestPlate(1) {
+        override fun getHealthIncrease(): Int {
+            return 20
+        }
+
+        override fun getStrengthIncrease(): Int {
+            return 0
+        }
+    },
+    Leggings(2) {
+        override fun getHealthIncrease(): Int {
+            return 15
+        }
+
+        override fun getStrengthIncrease(): Int {
+            return 0
+        }
+    },
+    Boots(3) {
+        override fun getHealthIncrease(): Int {
+            return 5
+        }
+
+        override fun getStrengthIncrease(): Int {
+            return 0
+        }
+    },
+    Sword(4) {
+        override fun getHealthIncrease(): Int {
+            return 0
+        }
+
+        override fun getStrengthIncrease(): Int {
+            return 20
+        }
+    },
+    Potion(5) {
+        override fun getHealthIncrease(): Int {
+            return 0
+        }
+
+        override fun getStrengthIncrease(): Int {
+            return 0
+        }
+    };
 
     companion object {
-        fun getHealthIncrease(type: ItemType) : Int {
-            when (type) {
-                Helmet -> return 5
-                Chestplate -> return 20
-                Leggings -> return 15
-                Boots -> return 5
-                Sword -> return 0
-                Bow -> return 0
-                else -> throw IllegalArgumentException()
-            }
-        }
-
-        fun getStrengthIncrease(type: ItemType) : Int {
-            when (type) {
-                Helmet -> return 0
-                Chestplate -> return 0
-                Leggings -> return 0
-                Boots -> return 0
-                Sword -> return 10
-                Bow -> return 10
-                else -> throw IllegalArgumentException()
-            }
-        }
-
-        fun getDescription(type: ItemType) : String {
-            return type.toString()
-        }
-
         fun fromInt(value: Int) = values().first { it.value == value }
     }
-
 }

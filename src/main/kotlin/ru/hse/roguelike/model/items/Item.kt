@@ -9,26 +9,22 @@ sealed class Item {
 
     abstract val name: String
     abstract val description: String
-    abstract val type: ItemType
+    abstract val itemType: ItemType
 
-    fun use(hero: Hero) {
-        // TODO
+    abstract fun use(hero: Hero)
+
+    fun pickUp(hero: Hero) {
+        hero.inventory.add(this)
     }
 
     companion object {
-        fun createItem(type: ItemType) : Item {
-            return when (type) {
-                ItemType.Helmet -> EquipableItem(type.toString(), ItemType.getDescription(type), type, ItemType.getHealthIncrease(type), ItemType.getStrengthIncrease(type))
-                ItemType.Chestplate -> EquipableItem(type.toString(), ItemType.getDescription(type), type, ItemType.getHealthIncrease(type), ItemType.getStrengthIncrease(type))
-                ItemType.Leggings -> EquipableItem(type.toString(), ItemType.getDescription(type), type, ItemType.getHealthIncrease(type), ItemType.getStrengthIncrease(type))
-                ItemType.Boots -> EquipableItem(type.toString(), ItemType.getDescription(type), type, ItemType.getHealthIncrease(type), ItemType.getStrengthIncrease(type))
-                ItemType.Sword -> EquipableItem(type.toString(), ItemType.getDescription(type), type, ItemType.getHealthIncrease(type), ItemType.getStrengthIncrease(type))
-                ItemType.Bow -> EquipableItem(type.toString(), ItemType.getDescription(type), type, ItemType.getHealthIncrease(type), ItemType.getStrengthIncrease(type))
-            }
+        fun createItem(type: ItemType): Item {
+            return EquipableItem(type.name, type, type.getHealthIncrease(), type.getStrengthIncrease())
         }
 
         fun getRandomItem(): Item {
-            return createItem(ItemType.fromInt(Random.nextInt(ItemType.values().size)))
+            return if (Random.nextInt(100) < 50) createItem(ItemType.fromInt(Random.nextInt(ItemType.values().size)))
+            else ConsumableItem(ItemType.Potion.name, ItemType.Potion)
         }
     }
 }

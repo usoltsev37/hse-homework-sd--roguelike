@@ -4,21 +4,15 @@ import ru.hse.roguelike.util.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Passage(val path: List<Position>) {
+class Passage(val from: Position, val to: Position, val dim: Int) {
 
-    fun getStartPos(cell: Cell): Position {
-        val maybeStart1 = path[0]
-        val maybeStart2 = path[path.size - 1]
+    var visited = false
 
-        if (maybeStart1.x < cell.rightTopPos.x && maybeStart1.x > cell.leftBottomPos.x &&
-            maybeStart1.y > cell.leftBottomPos.y && maybeStart1.y < cell.rightTopPos.y) {
-            return maybeStart1
+    val turnPosition: Position?
+        get() {
+            if (from.x == to.x || from.y == to.y) {
+                return null
+            }
+            return if (dim == 0) Position(to.x, from.y) else Position(from.x, to.y)
         }
-        if (maybeStart2.x < cell.rightTopPos.x && maybeStart2.x > cell.leftBottomPos.x &&
-            maybeStart2.y > cell.leftBottomPos.y && maybeStart2.y < cell.rightTopPos.y) {
-            return maybeStart2
-        }
-        throw IllegalArgumentException("Wrong Cell: ${cell.leftBottomPos}, ${cell.rightTopPos}")
-
-    }
 }

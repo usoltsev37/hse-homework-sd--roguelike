@@ -1,12 +1,16 @@
 package ru.hse.roguelike.model.map
 
-import java.nio.file.Path
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import ru.hse.roguelike.model.characters.Enemy
 import ru.hse.roguelike.model.items.Item
-import ru.hse.roguelike.util.Constants
 import ru.hse.roguelike.util.*
+import java.io.IOException
+import java.lang.Integer.max
+import java.lang.Integer.min
+import java.nio.file.Path
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 import kotlin.random.Random
@@ -46,7 +50,9 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
             val rightBound = rightTop[dim] - Constants.MIN_RECT_DIM_SIZE
 
             if (leftBound >= rightBound) {
-                return listOf(generateCell(leftBottom, rightTop))
+                return if (rightTop.x - leftBottom.x > Constants.MIN_RECT_DIM_SIZE &&
+                           rightTop.y - leftBottom.y > Constants.MIN_RECT_DIM_SIZE) listOf(generateCell(leftBottom, rightTop))
+                       else emptyList()
             }
 
             val splitValue = Random.nextInt(leftBound, rightBound)
@@ -54,13 +60,13 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
             val firstCells = if (dim == 0) {
                 doGenerateCells(leftBottom, Position(splitValue, rightTop.y))
             } else {
-                doGenerateCells(leftBottom, Position(rightTop.x, splitValue))
+                doGenerateCells(Position(leftBottom.x, splitValue), rightTop)
             }
 
             val secondCells = if (dim == 0) {
                 doGenerateCells(Position(splitValue, leftBottom.y), rightTop)
             } else {
-                doGenerateCells(Position(leftBottom.x, splitValue), rightTop)
+                doGenerateCells(leftBottom, Position(rightTop.x, splitValue))
             }
 
             generatePaths(firstCells, secondCells, dim)
@@ -71,9 +77,8 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
         private fun generateCell(leftBottom: Position, rightTop: Position): Cell {
             val centre = Position((rightTop.x + leftBottom.x) / 2, (rightTop.y + leftBottom.y) / 2)
             val left = Position(Random.nextInt(leftBottom.x, centre.x), Random.nextInt(leftBottom.y, centre.y))
-            val right = Position(Random.nextInt(centre.x, rightTop.x), Random.nextInt(centre.y, rightTop.y))
+            val right = Position(Random.nextInt(centre.x + 1, rightTop.x), Random.nextInt(centre.y + 1, rightTop.y))
 
-            //TODO: more enemies and items
             val enemies = ArrayList<Enemy>()
             if (Random.nextInt(100) < Constants.ENEMY_PROB) {
                 enemies.add(
@@ -93,18 +98,55 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
         }
 
         private fun generatePaths(firstCells: List<Cell>, secondCells: List<Cell>, dim: Int) {
-            // TODO:
+            val otherDim = dim xor 1
+            var done = false
             for (firstCell in firstCells) {
                 for (secondCell in secondCells) {
-                    if (dim == 0) {
-                    } else {
+                    if (firstCell.rightTopPos[otherDim] > secondCell.rightTopPos[otherDim] &&
+                            secondCell.rightTopPos[otherDim] > firstCell.leftBottomPos[otherDim] ||
+                            secondCell.leftBottomPos[otherDim] < firstCell.rightTopPos[otherDim] &&
+                            secondCell.leftBottomPos[otherDim] > firstCell.leftBottomPos[otherDim]){
+
+                        val bottomBorder = max(firstCell.leftBottomPos[otherDim], secondCell.leftBottomPos[otherDim])
+                        val topBorder = min(firstCell.rightTopPos[otherDim], secondCell.rightTopPos[otherDim])
+
+                        check(bottomBorder < topBorder) {
+                            "bottomBorder = $bottomBorder, topBorder = $topBorder, firstCell = $firstCell, secondCell = $secondCell"
+                        }
+
+                        val axisValue = Random.nextInt(bottomBorder, topBorder + 1)
+                        val fromPos = if (dim == 0) Position(firstCell.rightTopPos.x, axisValue)
+                                      else Position(axisValue, firstCell.leftBottomPos.y)
+                        val toPos = if (dim == 0) Position(secondCell.leftBottomPos.x, axisValue)
+                                    else Position(axisValue, secondCell.rightTopPos.y)
+                        firstCell.passages.add(Passage(fromPos, toPos, dim))
+                        secondCell.passages.add(Passage(toPos, fromPos, dim))
+                        done = true
+                        break
                     }
                 }
+            }
+
+            if (!done && firstCells.isNotEmpty() && secondCells.isNotEmpty()) {
+                val cell = firstCells[0]
+                val nearestCell = secondCells.withIndex()
+                    .minByOrNull { cell.rightTopPos[dim] - it.value.leftBottomPos[dim] }!!.value
+
+                val from = if (dim == 0) Position(cell.rightTopPos.x, Random.nextInt(cell.leftBottomPos.y, cell.rightTopPos.y))
+                           else Position(Random.nextInt(cell.leftBottomPos.x, cell.rightTopPos.x), cell.leftBottomPos.y)
+                val axisValue = if (nearestCell.rightTopPos[otherDim] < cell.leftBottomPos[otherDim]) nearestCell.rightTopPos[otherDim]
+                                else nearestCell.leftBottomPos[otherDim]
+                val to = if (dim == 0) Position(Random.nextInt(nearestCell.leftBottomPos.x, nearestCell.rightTopPos.x), axisValue)
+                         else Position(axisValue, Random.nextInt(nearestCell.leftBottomPos.y, nearestCell.rightTopPos.y))
+
+                cell.passages.add(Passage(from, to, dim))
+                nearestCell.passages.add(Passage(to, from, otherDim))
             }
         }
 
     }
 
+    @Throws(IOException::class)
     fun save(path: Path) {
         val jsonString = Json.encodeToString(this)
         path.writeText(jsonString)

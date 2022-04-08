@@ -3,10 +3,12 @@ package ru.hse.roguelike.model.characters
 import ru.hse.roguelike.model.items.Item
 import ru.hse.roguelike.util.Position
 
-class Hero(override val position: Position,
-           override var health: Int,
-           override val strength: Int): Movable() {
+class Hero(
+    override var position: Position,
+    override var health: Int = 50,
+    override var strength: Int = 10,
+    var armor: Int = 0
+) : Movable() {
 
-    val inventory: List<Item> = ArrayList()
-    val fastInventory: List<Item> = ArrayList()
+    val inventory: MutableList<Item> = ArrayList()
 }
