@@ -1,5 +1,6 @@
 package ru.hse.roguelike.util
 
+import com.googlecode.lanterna.TerminalPosition
 import ru.hse.roguelike.model.items.Item
 
 typealias Position = Pair<Int, Int>
@@ -19,4 +20,8 @@ operator fun Position.get(ind: Int): Int {
         return second
     }
     throw IllegalArgumentException("Invalid index $ind")
+}
+
+fun Position.toLanternaTerminalPosition(): TerminalPosition {
+    return TerminalPosition(x, y)
 }

@@ -1,7 +1,8 @@
 package ru.hse.roguelike.ui.window
 
-import ru.hse.roguelike.ui.Frame
+import ru.hse.roguelike.ui.image.Image
 
 interface Window {
-    fun show(frame: Frame)
+    fun show(image: Image)
+    fun getDefaultInstance(): Image
 }

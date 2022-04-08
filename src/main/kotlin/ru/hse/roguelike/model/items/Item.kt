@@ -23,6 +23,7 @@ sealed class Item {
                 ItemType.Leggings -> EquipableItem(type.toString(), ItemType.getDescription(type), type, ItemType.getHealthIncrease(type), ItemType.getStrengthIncrease(type))
                 ItemType.Boots -> EquipableItem(type.toString(), ItemType.getDescription(type), type, ItemType.getHealthIncrease(type), ItemType.getStrengthIncrease(type))
                 ItemType.Sword -> EquipableItem(type.toString(), ItemType.getDescription(type), type, ItemType.getHealthIncrease(type), ItemType.getStrengthIncrease(type))
+                ItemType.Bow -> EquipableItem(type.toString(), ItemType.getDescription(type), type, ItemType.getHealthIncrease(type), ItemType.getStrengthIncrease(type))
             }
         }
 

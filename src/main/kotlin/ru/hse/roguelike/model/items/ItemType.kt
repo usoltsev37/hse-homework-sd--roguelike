@@ -5,7 +5,8 @@ enum class ItemType(val value: Int) {
     Chestplate(1),
     Leggings(2),
     Boots(3),
-    Sword(4);
+    Sword(4),
+    Bow(5);
 
     companion object {
         fun getHealthIncrease(type: ItemType) : Int {
@@ -15,6 +16,7 @@ enum class ItemType(val value: Int) {
                 Leggings -> return 15
                 Boots -> return 5
                 Sword -> return 0
+                Bow -> return 0
                 else -> throw IllegalArgumentException()
             }
         }
@@ -26,6 +28,7 @@ enum class ItemType(val value: Int) {
                 Leggings -> return 0
                 Boots -> return 0
                 Sword -> return 10
+                Bow -> return 10
                 else -> throw IllegalArgumentException()
             }
         }

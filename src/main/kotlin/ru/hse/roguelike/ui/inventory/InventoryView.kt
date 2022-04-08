@@ -1,12 +1,13 @@
 package ru.hse.roguelike.ui.inventory
 
+import ru.hse.roguelike.model.items.Item
 import ru.hse.roguelike.ui.View
+import ru.hse.roguelike.util.Position
 
 interface InventoryView : View {
 
-    fun setInventory(/* TODO inventory: List<Item>*/)
-    fun setFastInventory(/* TODO fastInventory: List<Item>*/)
-    fun setCurrentPosition(/* TODO position: Position */)
-    fun setSelectedPosition(/* TODO position: Position */)
-    fun setStats(/* TODO some stats */)
+    fun setInventory(items: List<Item>)
+    fun setCurrentPosition(position: Position)
+    fun setSelectedPosition(position: Position?)
+    fun setStats(level: Int, experience: Int, health: Int, strength: Int)
 }
