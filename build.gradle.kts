@@ -16,6 +16,7 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
     testImplementation(kotlin("test"))
+    implementation("com.googlecode.lanterna:lanterna:3.2.0-alpha1")
 }
 
 tasks.test {
