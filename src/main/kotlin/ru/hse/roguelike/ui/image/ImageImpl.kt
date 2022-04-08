@@ -1,6 +1,7 @@
 package ru.hse.roguelike.ui.image
 
 import com.googlecode.lanterna.TerminalPosition
+import com.googlecode.lanterna.TextCharacter
 import com.googlecode.lanterna.TextColor
 import com.googlecode.lanterna.graphics.TextImage
 import ru.hse.roguelike.util.Position
@@ -56,8 +57,13 @@ class ImageImpl(
         textGraphics.backgroundColor = previousColor
     }
 
+    override fun printText(text: String, position: Position, backgroundColor: TextColor, foregroundColor: TextColor) {
+        val filledArea = TextCharacter.fromString(text, foregroundColor, backgroundColor)
+    }
+
     override fun markPosition(position: Position, textType: TextType) {
-        val char = textGraphics.getCharacter(position.toLanternaTerminalPosition() + upperLeft.toLanternaTerminalPosition()).character
+        val char =
+            textGraphics.getCharacter(position.toLanternaTerminalPosition() + upperLeft.toLanternaTerminalPosition()).character
         val previousColor = textGraphics.backgroundColor
 
         when (textType) {
@@ -87,4 +93,8 @@ class ImageImpl(
         textGraphics.fill(' ')
     }
 
+    override fun fill(backgroundColor: TextColor) {
+        val filledArea = TextCharacter.fromCharacter(' ', backgroundColor, backgroundColor)[0]
+        textGraphics.fillRectangle(upperLeft.toLanternaTerminalPosition(), textGraphics.size, filledArea)
+    }
 }

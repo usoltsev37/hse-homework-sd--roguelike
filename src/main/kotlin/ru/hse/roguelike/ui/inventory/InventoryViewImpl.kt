@@ -103,7 +103,7 @@ class InventoryViewImpl(
 
     private fun updateImage() {
         for (i in 0..UI_WIDTH) {
-            equipedItems.firstOrNull { it.type.value == i }?.let let@{
+            equipedItems.firstOrNull { it.itemType.value == i }?.let let@{
                 equipmentImage.printText(it.description.take(slotWidth), Position(1 + (slotWidth + 1) * i, 3))
             }
         }
