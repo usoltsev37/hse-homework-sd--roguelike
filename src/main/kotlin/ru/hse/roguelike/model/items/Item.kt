@@ -9,19 +9,22 @@ sealed class Item {
 
     abstract val name: String
     abstract val description: String
-    abstract val type: ItemTypeImpl
+    abstract val itemType: ItemType
 
-    fun use(hero: Hero) {
-        // TODO
+    abstract fun use(hero: Hero)
+
+    fun pickUp(hero: Hero) {
+        hero.inventory.add(this)
     }
 
     companion object {
-        fun createItem(type: ItemTypeImpl) : Item {
-            return EquipableItem(type.toString(), type.getDescription(), type,  type.getHealthIncrease(),  type.getStrengthIncrease())
+        fun createItem(type: ItemType): Item {
+            return EquipableItem(type.name, type, type.getHealthIncrease(), type.getStrengthIncrease())
         }
 
         fun getRandomItem(): Item {
-            return createItem(ItemTypeImpl.fromInt(Random.nextInt(ItemTypeImpl.values().size)))
+            return if (Random.nextInt(100) < 50) createItem(ItemType.fromInt(Random.nextInt(ItemType.values().size)))
+            else ConsumableItem(ItemType.Potion.name, ItemType.Potion)
         }
     }
 }

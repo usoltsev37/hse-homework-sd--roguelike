@@ -1,18 +1,18 @@
 package ru.hse.roguelike.model.map
 
-import java.nio.file.Path
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import ru.hse.roguelike.model.characters.Enemy
 import ru.hse.roguelike.model.items.Item
-import ru.hse.roguelike.util.Constants
 import ru.hse.roguelike.util.*
 import java.io.IOException
 import java.lang.Integer.max
 import java.lang.Integer.min
+import java.nio.file.Path
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
-import kotlin.jvm.Throws
 import kotlin.random.Random
 
 @Serializable
@@ -141,7 +141,6 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
 
                 cell.passages.add(Passage(from, to, dim))
                 nearestCell.passages.add(Passage(to, from, otherDim))
-                // надо найти наиболее близкие клетки к выбранной выше, дальше дойти до них по нужному направлению и повернуть в нужное направление.
             }
         }
 
