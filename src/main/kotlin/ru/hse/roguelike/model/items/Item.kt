@@ -9,7 +9,7 @@ sealed class Item {
 
     abstract val name: String
     abstract val description: String
-    abstract val type: ItemType
+    abstract val itemType: ItemType
 
     fun use(hero: Hero) {
         // TODO

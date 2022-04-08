@@ -1,7 +1,7 @@
 package ru.hse.roguelike.model.map
 
 import ru.hse.roguelike.util.*
-
+import kotlin.io.path.createTempFile
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
@@ -9,6 +9,29 @@ import org.junit.jupiter.api.Test
 class BuildMapTest {
 
     @Test
+    fun testCellsIntersection() {
+        val map = Map.createMap().build()
+
+        for (cell1 in map.cells) {
+            for (cell2 in map.cells) {
+                if (cell2 != cell1) {
+                    val errorMessage = "cell1 = $cell1, cell2 = $cell2"
+                    Assertions.assertFalse(isPointInCell(cell1, cell2.leftBottomPos), errorMessage)
+                    Assertions.assertFalse(isPointInCell(cell1, cell2.rightTopPos), errorMessage)
+                    Assertions.assertFalse(
+                        isPointInCell(cell1, Position(cell2.leftBottomPos.x, cell2.rightTopPos.y)),
+                        errorMessage
+                    )
+                    Assertions.assertFalse(
+                        isPointInCell(cell1, Position(cell2.rightTopPos.x, cell2.leftBottomPos.y)),
+                        errorMessage
+                    )
+                }
+            }
+        }
+    }
+
+    @Test // don't work
     fun testConnectedCells() {
         val height = 100
         val width  = 100
@@ -17,9 +40,7 @@ class BuildMapTest {
         Assertions.assertEquals(height, map.height)
         Assertions.assertTrue(map.cells.isNotEmpty())
 
-        println(map.cells.size)
-
-        visitConnectedCells(map.cells[0])
+        visitConnectedCells(map.cells[0], map)
         var visitedNum = 0
         map.cells.forEach { if (it.visited) visitedNum += 1 }
 
@@ -27,30 +48,51 @@ class BuildMapTest {
     }
 
     @Test
-    fun testNoIntersection() {
+    fun testCellsSizes() {
+        val map = Map.createMap().withHeight(50).withWidth(100).build()
+
+        for (cell in map.cells) {
+            val errorMessage = "cell = $cell"
+            Assertions.assertTrue(cell.height > 1, errorMessage)
+            Assertions.assertTrue(cell.width > 1, errorMessage)
+        }
+    }
+
+    @Test
+    fun testSerialization() {
         val map = Map.createMap().build()
 
-        for (cell1 in map.cells) {
-            for (cell2 in map.cells) {
-                Assertions.assertFalse(isPointInCell(cell1, cell2.leftBottomPos))
-                Assertions.assertFalse(isPointInCell(cell1, cell2.rightTopPos))
-                Assertions.assertFalse(isPointInCell(cell1, Position(cell2.leftBottomPos.x, cell2.rightTopPos.y)))
-                Assertions.assertFalse(isPointInCell(cell1, Position(cell2.rightTopPos.x, cell2.leftBottomPos.y)))
+        val tmpFile = createTempFile()
+        map.save(tmpFile)
+
+        val loadedMap = Map.createMap().loadFrom(tmpFile).build()
+
+        Assertions.assertEquals(map.height, loadedMap.height)
+        Assertions.assertEquals(map.width, loadedMap.width)
+        Assertions.assertTrue(loadedMap.cells.containsAll(loadedMap.cells))
+    }
+
+    private fun visitConnectedCells(curCell: Cell, map: Map) {
+        curCell.visited = true
+        for (path in curCell.passages) {
+            val toCell = findCellByPoint(path.to, map)
+            if (!toCell.visited) {
+                visitConnectedCells(toCell, map)
             }
         }
     }
 
     private fun isPointInCell(cell: Cell, point: Position): Boolean {
-        return cell.leftBottomPos.x < point.x && point.x < cell.rightTopPos.x &&
-                cell.leftBottomPos.y < point.y && point.y < cell.rightTopPos.y
+        return cell.leftBottomPos.x <= point.x && point.x <= cell.rightTopPos.x &&
+                cell.leftBottomPos.y <= point.y && point.y <= cell.rightTopPos.y
     }
 
-    private fun visitConnectedCells(curCell: Cell) {
-        curCell.visited = true
-        for (path in curCell.passages) {
-            if (!path.toCell.visited) {
-                visitConnectedCells(path.toCell)
+    private fun findCellByPoint(point: Position, map: Map): Cell {
+        for (cell in map.cells) {
+            if (isPointInCell(cell, point)) {
+                return cell
             }
         }
+        throw IllegalArgumentException("point = $point")
     }
 }

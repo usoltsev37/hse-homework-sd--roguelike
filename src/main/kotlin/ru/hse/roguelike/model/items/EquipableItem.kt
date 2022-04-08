@@ -6,6 +6,6 @@ import ru.hse.roguelike.model.characters.Hero
 @Serializable
 class EquipableItem(override val name: String,
                     override val description: String,
-                    override val type: ItemType,
+                    override val itemType: ItemType,
                     val healthIncrease: Int, val strengthIncrease: Int,
                     val isEquiped: Boolean = false) : Item()

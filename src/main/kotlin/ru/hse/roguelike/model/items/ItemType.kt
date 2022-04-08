@@ -1,5 +1,8 @@
 package ru.hse.roguelike.model.items
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class ItemType(val value: Int) {
     Helmet(0),
     Chestplate(1),
