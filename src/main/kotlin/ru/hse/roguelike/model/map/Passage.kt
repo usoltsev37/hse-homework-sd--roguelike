@@ -1,10 +1,12 @@
 package ru.hse.roguelike.model.map
 
-import ru.hse.roguelike.util.*
 import kotlinx.serialization.Serializable
+import ru.hse.roguelike.util.Position
+import ru.hse.roguelike.util.x
+import ru.hse.roguelike.util.y
 
 @Serializable
-class Passage(val from: Position, val to: Position, val dim: Int) {
+class Passage(val from: Position, val to: Position, val dim: Int, val route: List<Position>) {
 
     var visited = false
 
