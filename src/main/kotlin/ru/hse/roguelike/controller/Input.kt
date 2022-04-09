@@ -3,29 +3,45 @@ package ru.hse.roguelike.controller
 import com.googlecode.lanterna.input.KeyType
 import com.googlecode.lanterna.terminal.Terminal
 
-enum class ButtonType {
+interface EventInterface {}
+
+enum class EventType: EventInterface {
     UP,
     DOWN,
     LEFT,
     RIGHT,
-    EXIT,
-    ENTER
+    ENTER,
+    INVENTORY
 }
 
-class Input(val terminal: Terminal) {
+enum class SpecialEventType: EventInterface {
+    EXIT,
+    UNKNOWN
+}
 
-    fun read() : ButtonType {
-        val keyType = terminal.readInput().keyType
-        when (keyType) {
-            KeyType.ArrowUp -> return ButtonType.UP
-            KeyType.ArrowDown -> return ButtonType.DOWN
-            KeyType.ArrowLeft -> return ButtonType.LEFT
-            KeyType.ArrowRight -> return ButtonType.RIGHT
-            KeyType.Escape -> return ButtonType.EXIT
-            KeyType.Enter -> return ButtonType.ENTER
-            else -> {
-                throw IllegalArgumentException("Unknown Command")
+class Input(private val terminal: Terminal) {
+
+    fun read() : EventInterface {
+        val keyStroke = terminal.readInput()
+        return when (keyStroke.keyType) {
+            KeyType.ArrowUp -> EventType.UP
+            KeyType.ArrowDown -> EventType.DOWN
+            KeyType.ArrowLeft -> EventType.LEFT
+            KeyType.ArrowRight -> EventType.RIGHT
+            KeyType.Escape -> SpecialEventType.EXIT
+            KeyType.Enter -> EventType.ENTER
+            KeyType.Character -> {
+                when (keyStroke.character.lowercaseChar()) {
+                    'w' -> EventType.UP
+                    's' -> EventType.DOWN
+                    'a' -> EventType.LEFT
+                    'd' -> EventType.RIGHT
+                    'i' -> EventType.INVENTORY
+                    else -> SpecialEventType.UNKNOWN
+                }
             }
+            else -> SpecialEventType.UNKNOWN
         }
     }
+
 }
