@@ -4,6 +4,7 @@ import com.googlecode.lanterna.TextColor
 import ru.hse.roguelike.model.map.Cell
 import ru.hse.roguelike.ui.window.Window
 import ru.hse.roguelike.util.Position
+import ru.hse.roguelike.util.getRoute
 
 class MapViewImpl(
     private val window: Window

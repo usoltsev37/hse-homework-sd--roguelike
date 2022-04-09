@@ -99,7 +99,6 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
 
         private fun generatePaths(firstCells: List<Cell>, secondCells: List<Cell>, dim: Int) {
             val otherDim = dim xor 1
-            var done = false
             val allCells = firstCells + secondCells
             for (firstCell in firstCells) {
                 for (secondCell in secondCells) {
@@ -143,28 +142,32 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
 
                         lastCell.passages.add(Passage(fromPos, toPos, dim, route))
                         secondCell.passages.add(Passage(toPos, fromPos, dim, route.reversed()))
-                        done = true
-                        break
+                        return
                     }
                 }
             }
 
-            /*if (!done && firstCells.isNotEmpty() && secondCells.isNotEmpty()) {
-                // val cell = firstCells[0]
-                val nearestCell = secondCells.withIndex()
-                    .minByOrNull { firstCells[0].rightTopPos[dim] - it.value.leftBottomPos[dim] }!!.value
-                val cell = firstCells.withIndex().minByOrNull { it.value.rightTopPos[dim] - nearestCell.leftBottomPos[dim] }!!.value
+            if (firstCells.isNotEmpty() && secondCells.isNotEmpty()) {
+                // generateTurnForPath(firstCells, secondCells, dim) TODO
+            }
+        }
 
-                val from = if (dim == 0) Position(cell.rightTopPos.x, Random.nextInt(cell.leftBottomPos.y, cell.rightTopPos.y))
-                           else Position(Random.nextInt(cell.leftBottomPos.x, cell.rightTopPos.x), cell.leftBottomPos.y)
-                val axisValue = if (nearestCell.rightTopPos[otherDim] < cell.leftBottomPos[otherDim]) nearestCell.rightTopPos[otherDim]
-                                else nearestCell.leftBottomPos[otherDim]
-                val to = if (dim == 0) Position(Random.nextInt(nearestCell.leftBottomPos.x, nearestCell.rightTopPos.x), axisValue)
-                         else Position(axisValue, Random.nextInt(nearestCell.leftBottomPos.y, nearestCell.rightTopPos.y))
+        private fun generateTurnForPath(firstCells: List<Cell>, secondCells: List<Cell>, dim: Int) {
+            val otherDim = dim xor 1
+            val nearestCell = secondCells.withIndex()
+                .minByOrNull { firstCells[0].rightTopPos[dim] - it.value.leftBottomPos[dim] }!!.value
+            val cell = firstCells.withIndex()
+                .minByOrNull { it.value.rightTopPos[dim] - nearestCell.leftBottomPos[dim] }!!.value
 
-                cell.passages.add(Passage(from, to, dim))
-                nearestCell.passages.add(Passage(to, from, otherDim))
-            }*/
+            val from = if (dim == 0) Position(cell.rightTopPos.x, Random.nextInt(cell.leftBottomPos.y, cell.rightTopPos.y))
+                       else Position(Random.nextInt(cell.leftBottomPos.x, cell.rightTopPos.x), cell.leftBottomPos.y)
+            val axisValue = if (nearestCell.rightTopPos[otherDim] < cell.leftBottomPos[otherDim]) nearestCell.rightTopPos[otherDim]
+                            else nearestCell.leftBottomPos[otherDim]
+            val to = if (dim == 0) Position(Random.nextInt(nearestCell.leftBottomPos.x, nearestCell.rightTopPos.x), axisValue)
+                     else Position(axisValue, Random.nextInt(nearestCell.leftBottomPos.y, nearestCell.rightTopPos.y))
+
+            cell.passages.add(Passage(from, to, dim, emptyList()))
+            nearestCell.passages.add(Passage(to, from, otherDim, emptyList()))
         }
 
     }
