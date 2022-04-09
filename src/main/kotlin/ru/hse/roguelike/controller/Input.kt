@@ -1,34 +1,34 @@
-package ru.hse.roguelike
+package ru.hse.roguelike.controller
 
 import com.googlecode.lanterna.input.KeyType
 import com.googlecode.lanterna.terminal.Terminal
-import ru.hse.roguelike.controller.Activity
-import ru.hse.roguelike.controller.GameActivity
-import ru.hse.roguelike.controller.InventoryActivity
 
-enum class EventType {
+interface EventInterface {}
+
+enum class EventType: EventInterface {
     UP,
     DOWN,
     LEFT,
     RIGHT,
-    EXIT,
     ENTER,
-    INVENTORY,
+    INVENTORY
+}
+
+enum class SpecialEventType: EventInterface {
+    EXIT,
     UNKNOWN
 }
 
-class InputActivity(private val terminal: Terminal): Activity {
+class Input(private val terminal: Terminal) {
 
-    private val activities: List<Activity> = listOf(GameActivity(), InventoryActivity())
-
-    fun read() : EventType {
+    fun read() : EventInterface {
         val keyStroke = terminal.readInput()
         return when (keyStroke.keyType) {
             KeyType.ArrowUp -> EventType.UP
             KeyType.ArrowDown -> EventType.DOWN
             KeyType.ArrowLeft -> EventType.LEFT
             KeyType.ArrowRight -> EventType.RIGHT
-            KeyType.Escape -> EventType.EXIT
+            KeyType.Escape -> SpecialEventType.EXIT
             KeyType.Enter -> EventType.ENTER
             KeyType.Character -> {
                 when (keyStroke.character.lowercaseChar()) {
@@ -37,16 +37,11 @@ class InputActivity(private val terminal: Terminal): Activity {
                     'a' -> EventType.LEFT
                     'd' -> EventType.RIGHT
                     'i' -> EventType.INVENTORY
-                    else -> EventType.UNKNOWN
+                    else -> SpecialEventType.UNKNOWN
                 }
             }
-            else -> EventType.UNKNOWN
+            else -> SpecialEventType.UNKNOWN
         }
     }
-
-    override fun handleEvent(eventType: EventType) {
-        activities.forEach { it.handleEvent(eventType) }
-    }
-
 
 }

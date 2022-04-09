@@ -11,4 +11,7 @@ object Constants {
 
     const val BASE_HEALTH = 3
     const val BASE_STRENGTH = 1
+
+    const val INITIAL_LEVEL = 1
+    val INITIAL_POSITION = Position(5, 5)
 }
