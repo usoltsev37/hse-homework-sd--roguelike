@@ -1,11 +1,11 @@
 package ru.hse.roguelike.ui.inventory
 
+import com.googlecode.lanterna.TextColor
 import ru.hse.roguelike.model.items.EquipableItem
 import ru.hse.roguelike.model.items.Item
 import ru.hse.roguelike.ui.image.Image
 import ru.hse.roguelike.ui.window.Window
 import ru.hse.roguelike.util.Position
-import ru.hse.roguelike.util.TextType
 import ru.hse.roguelike.util.x
 import ru.hse.roguelike.util.y
 
@@ -80,12 +80,12 @@ class InventoryViewImpl(
 
     override fun setCurrentPosition(position: Position) {
         currentUiPosition = position
-        updateImageBySpecialPosition(currentUiPosition, TextType.CURRENT)
+        updateImageBySpecialPosition(currentUiPosition, TextColor.ANSI.BLUE)
     }
 
     override fun setSelectedPosition(position: Position?) {
         selectedUiPosition = position
-        selectedUiPosition?.let { updateImageBySpecialPosition(it, TextType.SELECTED) }
+        selectedUiPosition?.let { updateImageBySpecialPosition(it, TextColor.ANSI.MAGENTA) }
     }
 
     override fun setStats(level: Int, experience: Int, health: Int, strength: Int) {
@@ -117,31 +117,31 @@ class InventoryViewImpl(
             )
         }
 
-        updateImageBySpecialPosition(currentUiPosition, TextType.CURRENT)
-        selectedUiPosition?.let { updateImageBySpecialPosition(it, TextType.SELECTED) }
+        updateImageBySpecialPosition(currentUiPosition, TextColor.ANSI.BLUE)
+        selectedUiPosition?.let { updateImageBySpecialPosition(it, TextColor.ANSI.MAGENTA) }
     }
 
-    private fun updateImageBySpecialPosition(position: Position, type: TextType) {
+    private fun updateImageBySpecialPosition(position: Position, backgroundColor: TextColor) {
         when (position.x) {
             0 -> equipedItems.getOrNull(position.y)?.description?.take(slotWidth)?.let {
                 equipmentImage.printText(
                     it,
                     Position(1 + (slotWidth + 1) * position.x, 3),
-                    type
+                    backgroundColor
                 )
             } ?: equipmentImage.markPosition(
                 Position(1 + (slotWidth + 1) * position.x, 3),
-                type
+                backgroundColor
             )
             else -> inventoryItems.getOrNull(position.y + 6 * position.x)?.description?.take(slotWidth)?.let {
                 inventoryImage.printText(
                     it,
                     Position(1 + (slotWidth + 1) * position.y, 3 + 2 * (position.x - 2)),
-                    type
+                    backgroundColor
                 )
             } ?: inventoryImage.markPosition(
                 Position(1 + (slotWidth + 1) * position.y, 3 + 2 * (position.x - 2)),
-                type
+                backgroundColor
             )
         }
     }

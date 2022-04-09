@@ -7,7 +7,7 @@ import com.googlecode.lanterna.TextCharacter
 import com.googlecode.lanterna.TextColor
 import com.googlecode.lanterna.graphics.TextImage
 import ru.hse.roguelike.util.Position
-import ru.hse.roguelike.util.TextType
+import ru.hse.roguelike.util.plus
 import ru.hse.roguelike.util.toLanternaTerminalPosition
 
 class ImageImpl(
@@ -26,41 +26,25 @@ class ImageImpl(
     )
 
     override fun getCrop(height: Int, width: Int, upperLeft: Position): Image {
-        return ImageImpl(textImage, height, width, upperLeft)
-    }
-
-    override fun printText(text: String, position: Position, textType: TextType) {
-        val previousColor = textGraphics.backgroundColor
-
-        when (textType) {
-            TextType.USUAL ->
-                textGraphics.putString(
-                    position.toLanternaTerminalPosition() + upperLeft.toLanternaTerminalPosition(),
-                    text
-                )
-            TextType.CURRENT -> {
-                textGraphics.backgroundColor = TextColor.RGB(0, 0, 255)
-
-                textGraphics.putString(
-                    position.toLanternaTerminalPosition() + upperLeft.toLanternaTerminalPosition(),
-                    text
-                )
-            }
-            TextType.SELECTED -> {
-                textGraphics.backgroundColor = TextColor.RGB(0, 255, 0)
-
-                textGraphics.putString(
-                    position.toLanternaTerminalPosition() + upperLeft.toLanternaTerminalPosition(),
-                    text
-                )
-            }
-        }
-
-        textGraphics.backgroundColor = previousColor
+        return ImageImpl(
+            textImage,
+            height,
+            width,
+            Position(upperLeft.first + this.upperLeft.first, upperLeft.second + this.upperLeft.second)
+        )
     }
 
     override fun printText(text: String, position: Position, backgroundColor: TextColor, foregroundColor: TextColor) {
+        val lines = text.lines()
+
+        if (lines.size != 1) {
+            for (i in lines.indices)
+                printText(lines[i], position + Position(0, i), backgroundColor, foregroundColor)
+            return
+        }
+
         val filledArea = TextCharacter.fromString(text, foregroundColor, backgroundColor, SGR.BORDERED)
+
         for (i in text.indices) {
             textGraphics.fillRectangle(
                 position.toLanternaTerminalPosition() + upperLeft.toLanternaTerminalPosition() + TerminalPosition(i, 0),
@@ -69,30 +53,17 @@ class ImageImpl(
         }
     }
 
-    override fun markPosition(position: Position, textType: TextType) {
+    override fun markPosition(position: Position, backgroundColor: TextColor) {
         val char =
-            textGraphics.getCharacter(position.toLanternaTerminalPosition() + upperLeft.toLanternaTerminalPosition()).character
+            textGraphics.getCharacter(position.toLanternaTerminalPosition() + upperLeft.toLanternaTerminalPosition())
         val previousColor = textGraphics.backgroundColor
 
-        when (textType) {
-            TextType.CURRENT -> {
-                textGraphics.backgroundColor = TextColor.RGB(0, 0, 255)
+        textGraphics.backgroundColor = backgroundColor
 
-                textGraphics.putString(
-                    position.toLanternaTerminalPosition() + upperLeft.toLanternaTerminalPosition(),
-                    char.toString()
-                )
-            }
-
-            TextType.SELECTED -> {
-                textGraphics.backgroundColor = TextColor.RGB(0, 255, 0)
-
-                textGraphics.putString(
-                    position.toLanternaTerminalPosition() + upperLeft.toLanternaTerminalPosition(),
-                    char.toString()
-                )
-            }
-        }
+        textGraphics.putString(
+            position.toLanternaTerminalPosition() + upperLeft.toLanternaTerminalPosition(),
+            char.toString()
+        )
 
         textGraphics.backgroundColor = previousColor
     }

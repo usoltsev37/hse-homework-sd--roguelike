@@ -138,6 +138,7 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
                             }
                             curPos = if (dim == 0) Position(curPos.x + 1, curPos.y) else Position(curPos.x, curPos.y - 1)
                         }
+                        route.add(curPos)
 
 
                         lastCell.passages.add(Passage(fromPos, toPos, dim, route))
