@@ -7,7 +7,7 @@ import ru.hse.roguelike.util.Constants.INITIAL_POSITION
 
 class Controller {
 
-    private val activities: List<Activity> = listOf(GameActivity(), InventoryActivity())
+    private val activities: List<Activity> = listOf(GameActivity(), ViewActivity())
     private val model = GameModel(INITIAL_LEVEL, Hero(INITIAL_POSITION))
 
     fun update(eventType: EventType) {

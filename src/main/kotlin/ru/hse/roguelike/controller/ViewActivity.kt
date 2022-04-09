@@ -2,17 +2,17 @@ package ru.hse.roguelike.controller
 
 import ru.hse.roguelike.model.GameModel
 
-class InventoryActivity: Activity {
+class ViewActivity: Activity {
     override fun handleEvent(eventType: EventType, model: GameModel) {
         when (model.mode) {
             GameModel.Mode.GAME -> {
                 if (eventType == EventType.INVENTORY) {
-                    model.mode = GameModel.Mode.INVENTORY
+                    // поменять VIEW
                 }
             }
             GameModel.Mode.INVENTORY -> {
                 when (eventType) {
-                    EventType.INVENTORY -> model.mode = GameModel.Mode.GAME
+                    EventType.INVENTORY -> TODO() // поменять VIEW
                     EventType.UP -> TODO()
                     EventType.DOWN -> TODO()
                     EventType.LEFT -> TODO()
