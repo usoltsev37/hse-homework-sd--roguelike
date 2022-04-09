@@ -76,7 +76,7 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
 
         private fun generateCell(leftBottom: Position, rightTop: Position): Cell {
             val centre = Position((rightTop.x + leftBottom.x) / 2, (rightTop.y + leftBottom.y) / 2)
-            val left = Position(Random.nextInt(leftBottom.x, centre.x), Random.nextInt(leftBottom.y, centre.y))
+            val left = Position(Random.nextInt(leftBottom.x + 1, centre.x), Random.nextInt(leftBottom.y + 1, centre.y))
             val right = Position(Random.nextInt(centre.x + 1, rightTop.x), Random.nextInt(centre.y + 1, rightTop.y))
 
             val enemies = ArrayList<Enemy>()
@@ -100,6 +100,7 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
         private fun generatePaths(firstCells: List<Cell>, secondCells: List<Cell>, dim: Int) {
             val otherDim = dim xor 1
             var done = false
+            val allCells = firstCells + secondCells
             for (firstCell in firstCells) {
                 for (secondCell in secondCells) {
                     if (firstCell.rightTopPos[otherDim] > secondCell.rightTopPos[otherDim] &&
@@ -115,22 +116,44 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
                         }
 
                         val axisValue = Random.nextInt(bottomBorder, topBorder + 1)
-                        val fromPos = if (dim == 0) Position(firstCell.rightTopPos.x, axisValue)
+                        var fromPos = if (dim == 0) Position(firstCell.rightTopPos.x, axisValue)
                                       else Position(axisValue, firstCell.leftBottomPos.y)
                         val toPos = if (dim == 0) Position(secondCell.leftBottomPos.x, axisValue)
                                     else Position(axisValue, secondCell.rightTopPos.y)
-                        firstCell.passages.add(Passage(fromPos, toPos, dim))
-                        secondCell.passages.add(Passage(toPos, fromPos, dim))
+
+                        var route = ArrayList<Position>()
+                        var curPos = fromPos
+                        var lastCell = firstCell
+                        while (curPos != toPos) {
+                            route.add(curPos)
+                            val newCell = findCellByPoint(curPos, allCells)
+                            if (newCell != null) {
+                                lastCell.passages.add(Passage(fromPos, curPos, dim, route))
+                                newCell.passages.add(Passage(curPos, fromPos, dim, route.reversed()))
+                                fromPos = if (dim == 0) Position(newCell.rightTopPos.x, fromPos.y)
+                                          else Position(fromPos.x, newCell.leftBottomPos.y)
+                                lastCell = newCell
+                                route = ArrayList()
+                                curPos = fromPos
+                                route.add(curPos)
+                            }
+                            curPos = if (dim == 0) Position(curPos.x + 1, curPos.y) else Position(curPos.x, curPos.y - 1)
+                        }
+
+
+                        lastCell.passages.add(Passage(fromPos, toPos, dim, route))
+                        secondCell.passages.add(Passage(toPos, fromPos, dim, route.reversed()))
                         done = true
                         break
                     }
                 }
             }
 
-            if (!done && firstCells.isNotEmpty() && secondCells.isNotEmpty()) {
-                val cell = firstCells[0]
+            /*if (!done && firstCells.isNotEmpty() && secondCells.isNotEmpty()) {
+                // val cell = firstCells[0]
                 val nearestCell = secondCells.withIndex()
-                    .minByOrNull { cell.rightTopPos[dim] - it.value.leftBottomPos[dim] }!!.value
+                    .minByOrNull { firstCells[0].rightTopPos[dim] - it.value.leftBottomPos[dim] }!!.value
+                val cell = firstCells.withIndex().minByOrNull { it.value.rightTopPos[dim] - nearestCell.leftBottomPos[dim] }!!.value
 
                 val from = if (dim == 0) Position(cell.rightTopPos.x, Random.nextInt(cell.leftBottomPos.y, cell.rightTopPos.y))
                            else Position(Random.nextInt(cell.leftBottomPos.x, cell.rightTopPos.x), cell.leftBottomPos.y)
@@ -141,7 +164,7 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
 
                 cell.passages.add(Passage(from, to, dim))
                 nearestCell.passages.add(Passage(to, from, otherDim))
-            }
+            }*/
         }
 
     }

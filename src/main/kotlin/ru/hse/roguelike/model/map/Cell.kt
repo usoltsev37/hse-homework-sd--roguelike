@@ -15,8 +15,8 @@ class Cell(
 
     var visited = false
 
-    val width = rightTopPos.x - leftBottomPos.x
-    val height = rightTopPos.y - leftBottomPos.y
+    val width = rightTopPos.x - leftBottomPos.x + 1
+    val height = rightTopPos.y - leftBottomPos.y + 1
 
     override fun toString(): String {
         return "{$leftBottomPos, $rightTopPos}"

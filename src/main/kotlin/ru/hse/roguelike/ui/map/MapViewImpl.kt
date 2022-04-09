@@ -4,9 +4,6 @@ import com.googlecode.lanterna.TextColor
 import ru.hse.roguelike.model.map.Cell
 import ru.hse.roguelike.ui.window.Window
 import ru.hse.roguelike.util.Position
-import ru.hse.roguelike.util.getRoute
-import ru.hse.roguelike.util.x
-import ru.hse.roguelike.util.y
 
 class MapViewImpl(
     private val window: Window
@@ -40,7 +37,7 @@ class MapViewImpl(
         val passages = cell.passages
         for (passage in passages) {
             if (/*passage.visited*/true) {
-                for (position in passage.getRoute()) {
+                for (position in passage.route) {
                     if (passage.turnPosition != null) {
                         mapImage.printText(
                             " ",
