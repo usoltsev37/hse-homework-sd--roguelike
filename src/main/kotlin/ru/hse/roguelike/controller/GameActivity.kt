@@ -8,8 +8,15 @@ class GameActivity: Activity {
     override fun handleEvent(eventType: EventType, model: GameModel) {
         when (model.mode) {
             GameModel.Mode.GAME -> {
-                if (eventType == EventType.INVENTORY) {
-                    model.mode = GameModel.Mode.INVENTORY
+                when (eventType) {
+                    EventType.INVENTORY -> model.mode = GameModel.Mode.INVENTORY
+                    EventType.UP -> TODO()
+                    EventType.DOWN -> TODO()
+                    EventType.LEFT -> TODO()
+                    EventType.RIGHT -> TODO()
+                    EventType.ENTER -> TODO()
+                    EventType.REMOVE -> TODO()
+                    EventType.USE -> TODO()
                 }
             }
             GameModel.Mode.INVENTORY -> {

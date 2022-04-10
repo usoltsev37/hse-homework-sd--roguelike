@@ -3,8 +3,14 @@ package ru.hse.roguelike.controller
 import com.googlecode.lanterna.input.KeyType
 import com.googlecode.lanterna.terminal.Terminal
 
-interface EventInterface {}
+/**
+ * Abstraction to events from keyboard.
+ */
+interface EventInterface
 
+/**
+ * Event implementation.
+ */
 enum class EventType: EventInterface {
     UP,
     DOWN,
@@ -16,13 +22,24 @@ enum class EventType: EventInterface {
     USE
 }
 
+/**
+ * Event implementation for Special Events.
+ * Event is Special if we need to frame it as soon as we got it.
+ */
 enum class SpecialEventType: EventInterface {
     EXIT,
     UNKNOWN
 }
 
+/**
+ * Keyboard Signal Handler.
+ * @param terminal Lanterna's terminal implementation.
+ */
 class Input(private val terminal: Terminal) {
 
+    /**
+     * Reads keyboard input in blocking mode.
+     */
     fun read() : EventInterface {
         val keyStroke = terminal.readInput()
         return when (keyStroke.keyType) {
