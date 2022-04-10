@@ -1,8 +1,10 @@
 package ru.hse.roguelike.controller
 
+import ru.hse.roguelike.exception.ModelLogicException
 import ru.hse.roguelike.model.GameModel
 import ru.hse.roguelike.model.items.ConsumableItem
 import ru.hse.roguelike.model.items.EquipableItem
+import ru.hse.roguelike.model.items.ItemType
 
 /**
  * Activity implementation responsible for the Game Model.
@@ -17,9 +19,11 @@ class GameActivity: Activity {
                     EventType.DOWN -> TODO()
                     EventType.LEFT -> TODO()
                     EventType.RIGHT -> TODO()
-                    EventType.ENTER -> TODO()
-                    EventType.REMOVE -> TODO()
-                    EventType.USE -> TODO()
+                    EventType.ENTER -> {
+                        model.hero.attackEnemy(model.getCurrentCell())
+                    }
+                    EventType.REMOVE -> return
+                    EventType.USE -> return
                 }
             }
             GameModel.Mode.INVENTORY -> {
@@ -49,6 +53,16 @@ class GameActivity: Activity {
                             model.swapSelectedCurrentItems()
                         } else {
                             model.selectedItemPosition = model.currentItemPosition
+                            if (model.currentItemPosition.first == 0 &&
+                                model.currentItemPosition.second == ItemType.Sword.value ||
+                                model.currentItemPosition.second == ItemType.Potion.value) {
+                                val weapon = model.hero.inventory[model.transformPosition2Index(model.currentItemPosition)]
+                                if (weapon is EquipableItem) {
+                                    model.hero.currWeapon =  weapon
+                                } else {
+                                    throw ModelLogicException("First 6 elements of the inventory must be EquipableItem")
+                                }
+                            }
                         }
                     }
                     EventType.REMOVE -> {

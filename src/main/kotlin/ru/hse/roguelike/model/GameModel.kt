@@ -10,6 +10,9 @@ import ru.hse.roguelike.util.Constants
 import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.findCellByPoint
 import java.util.Collections
+import kotlin.math.abs
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 /**
  * Game Model.
@@ -110,7 +113,11 @@ class GameModel(var level: Int, val hero: Hero, val currMap: Map = Map.createMap
         }
     }
 
-    private fun getCurrentCell(): Cell {
+
+    /**
+     * Сell on which the player is now.
+     */
+    fun getCurrentCell(): Cell {
         return findCellByPoint(hero.position, currMap.cells) ?: throw ModelLogicException("Hero position is in the inconsistent state")
     }
 
