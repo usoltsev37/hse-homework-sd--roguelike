@@ -17,12 +17,17 @@ import java.util.Collections
  * @param hero main Hero.
  * @param currMap Map of the game.
  */
-class GameModel(var level: Int, val hero: Hero, val currMap: Map = Map.createMap().build()) {
+class GameModel(var level: Int, val currMap: Map = Map.createMap().build()) {
 
     var mode = Mode.GAME
     var currentItemPosition: Position = Position(1, 0)
         private set
     var selectedItemPosition: Position? = null
+    val hero: Hero
+
+    init {
+        hero = Hero(currMap.cells[0].getRandomPosition())
+    }
 
     /**
      * for Inventory Mode.

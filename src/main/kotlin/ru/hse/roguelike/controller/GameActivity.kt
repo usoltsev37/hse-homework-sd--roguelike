@@ -22,8 +22,7 @@ class GameActivity: Activity {
                     EventType.ENTER -> {
                         model.hero.attackEnemy(model.getCurrentCell())
                     }
-                    EventType.REMOVE -> return
-                    EventType.USE -> return
+                    EventType.REMOVE, EventType.USE -> return
                 }
             }
             GameModel.Mode.INVENTORY -> {

@@ -6,6 +6,7 @@ import ru.hse.roguelike.util.FreeItems
 import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.x
 import ru.hse.roguelike.util.y
+import kotlin.random.Random
 
 @Serializable
 class Cell(
@@ -20,6 +21,13 @@ class Cell(
 
     override fun toString(): String {
         return "{$leftBottomPos, $rightTopPos}"
+    }
+
+    /*
+    * Get Random Position from Cell
+    */
+    fun getRandomPosition(): Position {
+        return Position(Random.nextInt(leftBottomPos.x, rightTopPos.x), Random.nextInt(leftBottomPos.y, rightTopPos.y))
     }
 
 }

@@ -17,9 +17,9 @@ class ViewActivity(
     override fun handleEvent(eventType: EventType, model: GameModel) {
         when (model.mode) {
             GameModel.Mode.GAME -> {
-                if (eventType == EventType.INVENTORY) {
-
-                    // поменять VIEW
+                when (eventType) {
+                    EventType.UP, EventType.DOWN, EventType.LEFT, EventType.RIGHT -> mapView.setHeroPosition(model.hero.position)
+                    else -> return
                 }
             }
             GameModel.Mode.INVENTORY -> {
