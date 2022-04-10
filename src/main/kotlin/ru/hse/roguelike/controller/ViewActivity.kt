@@ -27,19 +27,19 @@ class ViewActivity(
                         //TODO()
                     } // поменять VIEW
                     EventType.UP -> {
-                        inventoryView.setCurrentPosition(model.currentItem)
+                        inventoryView.setCurrentPosition(model.currentItemPosition)
                     }
                     EventType.DOWN -> {
-                        inventoryView.setCurrentPosition(model.currentItem)
+                        inventoryView.setCurrentPosition(model.currentItemPosition)
                     }
                     EventType.LEFT -> {
-                        inventoryView.setCurrentPosition(model.currentItem)
+                        inventoryView.setCurrentPosition(model.currentItemPosition)
                     }
                     EventType.RIGHT -> {
-                        inventoryView.setCurrentPosition(model.currentItem)
+                        inventoryView.setCurrentPosition(model.currentItemPosition)
                     }
                     EventType.ENTER -> {
-                        inventoryView.setSelectedPosition(model.selectedItem)
+                        inventoryView.setSelectedPosition(model.selectedItemPosition)
                     }
                 }
                 inventoryView.show()

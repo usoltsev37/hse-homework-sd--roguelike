@@ -1,7 +1,8 @@
 package ru.hse.roguelike.controller
 
 import ru.hse.roguelike.model.GameModel
-import java.util.Collections
+import ru.hse.roguelike.model.items.ConsumableItem
+import ru.hse.roguelike.model.items.EquipableItem
 
 class GameActivity: Activity {
     override fun handleEvent(eventType: EventType, model: GameModel) {
@@ -12,12 +13,6 @@ class GameActivity: Activity {
                 }
             }
             GameModel.Mode.INVENTORY -> {
-                //   TODO   Меняем состояние инвенторя героя
-                // удалять элементы инвенторя
-                // использовать элементы (съедать)
-                // менять тип оружия
-
-
                 when (eventType) {
                     EventType.INVENTORY -> model.mode = GameModel.Mode.GAME
                     EventType.UP -> model.currentItemMoveUp()
@@ -25,21 +20,38 @@ class GameActivity: Activity {
                     EventType.LEFT -> model.currentItemMoveLeft()
                     EventType.RIGHT -> model.currentItemMoveRight()
                     EventType.ENTER -> {
-                        if (model.selectedItem != null) {
-                            Collections.swap(model.hero.inventory, model.transformPosition2Index(model.selectedItem!!), model.transformPosition2Index(model.currentItem))
-                            model.selectedItem = null
+                        if (model.selectedItemPosition != null) {
+                            val indexCurrentItem = model.transformPosition2Index(model.currentItemPosition)
+                            val indexSelectedItem = model.transformPosition2Index(model.selectedItemPosition!!)
+                            if (model.currentItemPosition.first == 0 && model.hero.inventory[indexCurrentItem] is EquipableItem) {
+                                val currentItem = model.hero.inventory[indexCurrentItem] as EquipableItem
+                                if (model.hero.inventory[indexSelectedItem] is EquipableItem) {
+                                    val selectedItem = model.hero.inventory[indexSelectedItem] as EquipableItem
+                                    if (selectedItem.itemType.value == model.currentItemPosition.second) {
+                                        currentItem.use(model.hero)
+                                        selectedItem.use(model.hero)
+                                        model.swapSelectedCurrentItems()
+                                    }
+                                } else {
+                                    return
+                                }
+                            }
+                            model.swapSelectedCurrentItems()
                         } else {
-                            model.selectedItem = model.currentItem
+                            model.selectedItemPosition = model.currentItemPosition
                         }
                     }
                     EventType.REMOVE -> {
-                        if (model.selectedItem != null) {
-                            model.hero.inventory.removeAt(model.transformPosition2Index(model.selectedItem!!))
+                        if (model.selectedItemPosition != null) {
+                            model.hero.inventory.removeAt(model.transformPosition2Index(model.selectedItemPosition!!))
                         }
                     }
                     EventType.USE -> {
-                        if (model.selectedItem != null) {
-                            model.hero.inventory.get(model.transformPosition2Index(model.selectedItem!!)).use(model.hero)
+                        if (model.selectedItemPosition != null) {
+                            val selectedItem = model.hero.inventory.get(model.transformPosition2Index(model.selectedItemPosition!!))
+                            if (selectedItem is ConsumableItem) {
+                                selectedItem.use(model.hero)
+                            }
                         }
                     }
                 }

@@ -17,6 +17,12 @@ class EquipableItem(
         isEquiped = true
     }
 
+    fun unuse(hero: Hero) {
+        hero.strength -= strengthIncrease
+        hero.armor -= healthIncrease
+        isEquiped = false
+    }
+
     override val description: String
         get() = "health increase = $healthIncrease, strength increase = $strengthIncrease"
 
