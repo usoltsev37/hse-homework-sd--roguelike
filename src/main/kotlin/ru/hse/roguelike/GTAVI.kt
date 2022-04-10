@@ -13,6 +13,9 @@ import ru.hse.roguelike.ui.window.WindowImpl
 import ru.hse.roguelike.ui.window.Window
 import ru.hse.roguelike.util.Constants
 
+/**
+ * Point of Entry to the Game.
+ */
 fun main() {
     val terminalFactory = DefaultTerminalFactory()
     terminalFactory.setInitialTerminalSize(TerminalSize(Constants.DEFAULT_MAP_WIDTH, Constants.DEFAULT_MAP_HEIGHT))

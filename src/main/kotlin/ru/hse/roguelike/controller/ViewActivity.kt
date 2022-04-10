@@ -5,6 +5,9 @@ import ru.hse.roguelike.ui.hud.HudView
 import ru.hse.roguelike.ui.inventory.InventoryView
 import ru.hse.roguelike.ui.map.MapView
 
+/**
+ * Activity implementation responsible for the View.
+ */
 class ViewActivity(
     private val mapView: MapView,
     private val hudView: HudView,
@@ -14,9 +17,9 @@ class ViewActivity(
     override fun handleEvent(eventType: EventType, model: GameModel) {
         when (model.mode) {
             GameModel.Mode.GAME -> {
-                if (eventType == EventType.INVENTORY) {
-
-                    // поменять VIEW
+                when (eventType) {
+                    EventType.UP, EventType.DOWN, EventType.LEFT, EventType.RIGHT -> mapView.setHeroPosition(model.hero.position)
+                    else -> return
                 }
             }
             GameModel.Mode.INVENTORY -> {
@@ -48,9 +51,13 @@ class ViewActivity(
         }
     }
 
+    /**
+     * Init state of the ViewActivity.
+     * @param model the Game Model.
+     */
     fun initState(model: GameModel) {
-        model.curMap.cells.map { mapView.setCell(it)}
-        mapView.setHeroPosition(model.curMap.cells.first().leftBottomPos)
+        model.currMap.cells.map { mapView.setCell(it)}
+        mapView.setHeroPosition(model.currMap.cells.first().leftBottomPos)
         mapView.show()
 
         hudView.setStats(model.hero)
