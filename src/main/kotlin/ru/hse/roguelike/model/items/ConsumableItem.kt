@@ -17,5 +17,6 @@ class ConsumableItem(
 
     override fun use(hero: Hero) {
         hero.health += healthAmount
+        hero.inventory.remove(this)
     }
 }

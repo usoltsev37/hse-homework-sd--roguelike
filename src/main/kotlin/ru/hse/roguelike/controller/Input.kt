@@ -11,7 +11,9 @@ enum class EventType: EventInterface {
     LEFT,
     RIGHT,
     ENTER,
-    INVENTORY
+    INVENTORY,
+    REMOVE,
+    USE
 }
 
 enum class SpecialEventType: EventInterface {
@@ -37,6 +39,8 @@ class Input(private val terminal: Terminal) {
                     'a' -> EventType.LEFT
                     'd' -> EventType.RIGHT
                     'i' -> EventType.INVENTORY
+                    'r' -> EventType.REMOVE
+                    ' ' -> EventType.USE
                     else -> SpecialEventType.UNKNOWN
                 }
             }
