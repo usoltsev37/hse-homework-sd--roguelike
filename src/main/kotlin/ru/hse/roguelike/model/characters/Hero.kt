@@ -9,6 +9,9 @@ import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
 
+/**
+ * The main character the player will play as. Has an inventory that contains picked up items.
+ */
 class Hero(
     override var position: Position,
     override var health: Int = 50,

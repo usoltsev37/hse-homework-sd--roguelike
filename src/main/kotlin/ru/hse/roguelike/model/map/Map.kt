@@ -15,13 +15,43 @@ import kotlin.io.path.readText
 import kotlin.io.path.writeText
 import kotlin.random.Random
 
+/**
+ * Represents the entity of the playing field. The playing field consists of Cells and Passages
+ * @see Cell
+ * @see Passage
+ */
 @Serializable
 class Map private constructor(val width: Int, val height: Int, val cells: List<Cell>) {
 
+    /**
+     * Interface for Map Builder
+     */
     interface Builder {
+        /**
+         * Specifies map's width. If map loaded from a file, does nothing
+         * @param width map's width
+         * @return builder
+         */
         fun withWidth(width: Int): Builder
+
+        /**
+         * Specifies map's height. If map loaded from a file, does nothing
+         * @param height map's height
+         * @return builder
+         */
         fun withHeight(height: Int): Builder
+
+        /**
+         * Specifies if map will be load from file
+         * @param path path to serialized map
+         * @return builder
+         */
         fun loadFrom(path: Path): Builder
+
+        /**
+         * Build Map with specified parameters
+         * @return constructed map
+         */
         fun build(): Map
     }
 
@@ -147,32 +177,15 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
                     }
                 }
             }
-
-            if (firstCells.isNotEmpty() && secondCells.isNotEmpty()) {
-                // generateTurnForPath(firstCells, secondCells, dim) TODO
-            }
-        }
-
-        private fun generateTurnForPath(firstCells: List<Cell>, secondCells: List<Cell>, dim: Int) {
-            val otherDim = dim xor 1
-            val nearestCell = secondCells.withIndex()
-                .minByOrNull { firstCells[0].rightTopPos[dim] - it.value.leftBottomPos[dim] }!!.value
-            val cell = firstCells.withIndex()
-                .minByOrNull { it.value.rightTopPos[dim] - nearestCell.leftBottomPos[dim] }!!.value
-
-            val from = if (dim == 0) Position(cell.rightTopPos.x, Random.nextInt(cell.leftBottomPos.y, cell.rightTopPos.y))
-                       else Position(Random.nextInt(cell.leftBottomPos.x, cell.rightTopPos.x), cell.leftBottomPos.y)
-            val axisValue = if (nearestCell.rightTopPos[otherDim] < cell.leftBottomPos[otherDim]) nearestCell.rightTopPos[otherDim]
-                            else nearestCell.leftBottomPos[otherDim]
-            val to = if (dim == 0) Position(Random.nextInt(nearestCell.leftBottomPos.x, nearestCell.rightTopPos.x), axisValue)
-                     else Position(axisValue, Random.nextInt(nearestCell.leftBottomPos.y, nearestCell.rightTopPos.y))
-
-            cell.passages.add(Passage(from, to, dim, emptyList()))
-            nearestCell.passages.add(Passage(to, from, otherDim, emptyList()))
         }
 
     }
 
+    /**
+     * Save serialized Map into given file
+     * @param path path to file
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun save(path: Path) {
         val jsonString = Json.encodeToString(this)
@@ -180,6 +193,9 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
     }
 
     companion object {
+        /**
+         * Start Map building
+         */
         fun createMap(): Builder {
             return BuilderImpl()
         }
