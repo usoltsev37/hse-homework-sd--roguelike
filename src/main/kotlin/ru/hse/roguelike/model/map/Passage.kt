@@ -5,6 +5,11 @@ import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.x
 import ru.hse.roguelike.util.y
 
+/**
+ * Represents passages between Cells on Map. Can contain no more than one turn.
+ * @see Map
+ * @see Cell
+ */
 @Serializable
 class Passage(val from: Position, val to: Position, val dim: Int, val route: List<Position>) {
 

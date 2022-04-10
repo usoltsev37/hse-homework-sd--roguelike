@@ -4,6 +4,9 @@ import kotlinx.serialization.Serializable
 import ru.hse.roguelike.util.Position
 import kotlin.random.Random
 
+/**
+ * Enemy that randomly spawns on the Map and attacks Hero when he gets too close.
+ */
 @Serializable
 class Enemy(
     override var position: Position,

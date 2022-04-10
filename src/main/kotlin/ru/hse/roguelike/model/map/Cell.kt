@@ -7,6 +7,11 @@ import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.x
 import ru.hse.roguelike.util.y
 
+/**
+ * Represents a cell on the field where Hero can move. The cage also contains Enemies and Items.
+ * @see Passage
+ * @see Map
+ */
 @Serializable
 class Cell(
     val leftBottomPos: Position, val rightTopPos: Position, val enemies: List<Enemy>,

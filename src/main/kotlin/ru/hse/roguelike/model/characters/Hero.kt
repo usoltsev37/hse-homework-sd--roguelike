@@ -4,6 +4,9 @@ import ru.hse.roguelike.model.items.Item
 import ru.hse.roguelike.util.Constants
 import ru.hse.roguelike.util.Position
 
+/**
+ * The main character the player will play as. Has an inventory that contains picked up items.
+ */
 class Hero(
     override var position: Position,
     override var health: Int = 50,
