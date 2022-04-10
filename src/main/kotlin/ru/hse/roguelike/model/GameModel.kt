@@ -100,12 +100,67 @@ class GameModel(var level: Int, val hero: Hero, val currMap: Map = Map.createMap
      * for Game Mode.
      * Shift Hero Position one up.
      */
-    fun moveHeroUp() { // TODO переход героя в другую cell
+    fun moveHeroUp() {
         if (hero.position.first + 1 < getCurrentCell().rightTopPos.first) {
             hero.position = with(hero.position) {
                 copy(
                     first = first + 1
                 )
+            }
+        }
+        walkPassageIfNeed()
+    }
+
+    /**
+     * for Game Mode.
+     * Shift Hero Position one down.
+     */
+    fun moveHeroDown() {
+        if (getCurrentCell().leftBottomPos.first < hero.position.first - 1) {
+            hero.position = with(hero.position) {
+                copy(
+                    first = first - 1
+                )
+            }
+        }
+        walkPassageIfNeed()
+    }
+
+    /**
+     * for Game Mode.
+     * Shift Hero Position one down.
+     */
+    fun moveHeroLeft() {
+        if (getCurrentCell().leftBottomPos.second < hero.position.second - 1) {
+            hero.position = with(hero.position) {
+                copy(
+                    second = second - 1
+                )
+            }
+        }
+        walkPassageIfNeed()
+    }
+
+    /**
+     * for Game Mode.
+     * Shift Hero Position one down.
+     */
+    fun moveHeroRight() {
+        if (hero.position.second + 1 < getCurrentCell().leftBottomPos.second) {
+            hero.position = with(hero.position) {
+                copy(
+                    second = second + 1
+                )
+            }
+        }
+        walkPassageIfNeed()
+    }
+
+    private fun walkPassageIfNeed() {
+        for (passage in getCurrentCell().passages) {
+            if (passage.from == currentItemPosition) {
+                currentItemPosition = passage.to
+                break
             }
         }
     }

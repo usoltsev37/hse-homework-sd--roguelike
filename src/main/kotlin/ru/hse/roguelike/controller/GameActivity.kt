@@ -15,10 +15,10 @@ class GameActivity: Activity {
             GameModel.Mode.GAME -> {
                 when (eventType) {
                     EventType.INVENTORY -> model.mode = GameModel.Mode.INVENTORY
-                    EventType.UP -> TODO()
-                    EventType.DOWN -> TODO()
-                    EventType.LEFT -> TODO()
-                    EventType.RIGHT -> TODO()
+                    EventType.UP -> model.moveHeroUp()
+                    EventType.DOWN -> model.moveHeroDown()
+                    EventType.LEFT -> model.moveHeroLeft()
+                    EventType.RIGHT -> model.moveHeroRight()
                     EventType.ENTER -> {
                         model.hero.attackEnemy(model.getCurrentCell())
                     }
