@@ -7,6 +7,10 @@ import ru.hse.roguelike.ui.window.Window
 import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.UiConstants.HUD_WIDTH
 
+/**
+ * Implementation HUD view via Lanterna
+ * @param window Window for output HUD view
+ */
 class HudViewImpl(
     private val window: Window
 ) : HudView {

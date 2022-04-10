@@ -8,6 +8,10 @@ import com.googlecode.lanterna.terminal.Terminal
 import ru.hse.roguelike.ui.image.Image
 import ru.hse.roguelike.ui.image.ImageImpl
 
+/**
+ * Window implementation via Lanterna
+ * @param terminal Lanterna's terminal implementation
+ */
 class WindowImpl(
     private val terminal: Terminal
 ) : Window {

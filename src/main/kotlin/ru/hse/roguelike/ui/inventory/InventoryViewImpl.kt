@@ -9,6 +9,10 @@ import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.x
 import ru.hse.roguelike.util.y
 
+/**
+ * Implementation inventory view via Lanterna
+ * @param window Window for output inventory view
+ */
 class InventoryViewImpl(
     private val window: Window
 ) : InventoryView {

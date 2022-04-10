@@ -10,6 +10,13 @@ import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.plus
 import ru.hse.roguelike.util.toLanternaTerminalPosition
 
+/**
+ * Image implementation via Lanterna.
+ * @param textImage TextImage from Lanterna, it is used to delegate methods
+ * @param height Image height
+ * @param width Image width
+ * @param upperLeft Position of the image upper-left corner on some view
+ */
 class ImageImpl(
     private val textImage: TextImage,
     override val height: Int,

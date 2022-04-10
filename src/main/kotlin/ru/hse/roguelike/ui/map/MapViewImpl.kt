@@ -7,6 +7,10 @@ import ru.hse.roguelike.ui.window.Window
 import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.UiConstants.HUD_WIDTH
 
+/**
+ * Implementation map view via Lanterna
+ * @param window Window for output map view
+ */
 class MapViewImpl(
     private val window: Window
 ) : MapView {
