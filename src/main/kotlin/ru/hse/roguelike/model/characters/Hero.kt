@@ -8,8 +8,7 @@ class Hero(
     override var position: Position,
     override var health: Int = 50,
     override var strength: Int = 10,
-    var armor: Int = 0,
-    private var selectedItem: Int = 0
+    var armor: Int = 0
 
 ) : Movable() {
 
@@ -18,23 +17,4 @@ class Hero(
      */
     val inventory: MutableList<Item> = ArrayList(Constants.COUNT_COLUMNS)
 
-    fun selectedItemMoveLeft() {
-        if (selectedItem > 1) {
-            selectedItem--
-        }
-    }
-
-    fun selectedItemMoveRight() {
-        selectedItem++
-    }
-
-    fun selectedItemMoveUp() {
-        if (selectedItem > 5) {
-            selectedItem -= Constants.COUNT_COLUMNS
-        }
-    }
-
-    fun selectedItemMoveDown() {
-        selectedItem += Constants.COUNT_COLUMNS
-    }
 }

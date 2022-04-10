@@ -62,7 +62,7 @@ class ImageImpl(
 
     override fun markPosition(position: Position, backgroundColor: TextColor) {
         val char =
-            textGraphics.getCharacter(position.toLanternaTerminalPosition() + upperLeft.toLanternaTerminalPosition())
+            textGraphics.getCharacter(position.toLanternaTerminalPosition() + upperLeft.toLanternaTerminalPosition()).character
         val previousColor = textGraphics.backgroundColor
 
         textGraphics.backgroundColor = backgroundColor

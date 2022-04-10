@@ -1,6 +1,7 @@
 package ru.hse.roguelike.controller
 
 import ru.hse.roguelike.model.GameModel
+import java.util.Collections
 
 class GameActivity: Activity {
     override fun handleEvent(eventType: EventType, model: GameModel) {
@@ -19,15 +20,30 @@ class GameActivity: Activity {
 
                 when (eventType) {
                     EventType.INVENTORY -> model.mode = GameModel.Mode.GAME
-                    EventType.UP -> model.hero.selectedItemMoveUp()
-                    EventType.DOWN -> model.hero.selectedItemMoveDown()
-                    EventType.LEFT -> model.hero.selectedItemMoveLeft()
-                    EventType.RIGHT -> model.hero.selectedItemMoveRight()
-                    EventType.ENTER -> TODO()
+                    EventType.UP -> model.currentItemMoveUp()
+                    EventType.DOWN -> model.currentItemMoveDown()
+                    EventType.LEFT -> model.currentItemMoveLeft()
+                    EventType.RIGHT -> model.currentItemMoveRight()
+                    EventType.ENTER -> {
+                        if (model.selectedItem != null) {
+                            Collections.swap(model.hero.inventory, model.transformPosition2Index(model.selectedItem!!), model.transformPosition2Index(model.currentItem))
+                            model.selectedItem = null
+                        } else {
+                            model.selectedItem = model.currentItem
+                        }
+                    }
+                    EventType.REMOVE -> {
+                        if (model.selectedItem != null) {
+                            model.hero.inventory.removeAt(model.transformPosition2Index(model.selectedItem!!))
+                        }
+                    }
+                    EventType.USE -> {
+                        if (model.selectedItem != null) {
+                            model.hero.inventory.get(model.transformPosition2Index(model.selectedItem!!)).use(model.hero)
+                        }
+                    }
                 }
-                TODO("Изменить курсор на View")
             }
         }
-        TODO("Not yet implemented")
     }
 }

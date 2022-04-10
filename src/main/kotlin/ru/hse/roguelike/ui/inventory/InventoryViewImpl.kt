@@ -25,7 +25,7 @@ class InventoryViewImpl(
 
     private var inventoryItems: List<Item> = emptyList()
     private var equipedItems: List<EquipableItem> = emptyList()
-    private var currentUiPosition = Position(2, 0)
+    private var currentUiPosition = Position(1, 0)
     private var selectedUiPosition: Position? = null
 
     init {
@@ -126,28 +126,30 @@ class InventoryViewImpl(
     }
 
     private fun updateImageBySpecialPosition(position: Position, backgroundColor: TextColor) {
+        println(position)
         when (position.x) {
             0 -> equipedItems.getOrNull(position.y)?.description?.take(slotWidth)?.let {
                 equipmentImage.printText(
                     it,
-                    Position(1 + (slotWidth + 1) * position.x, 3),
+                    Position(1 + (slotWidth + 1) * position.y, 3),
                     backgroundColor
                 )
             } ?: equipmentImage.markPosition(
-                Position(1 + (slotWidth + 1) * position.x, 3),
+                Position(1 + (slotWidth + 1) * position.y, 3),
                 backgroundColor
             )
-            else -> inventoryItems.getOrNull(position.y + 6 * position.x)?.description?.take(slotWidth)?.let {
+            else -> inventoryItems.getOrNull(position.y + slotWidth * position.x)?.description?.take(slotWidth)?.let {
                 inventoryImage.printText(
                     it,
-                    Position(1 + (slotWidth + 1) * position.y, 3 + 2 * (position.x - 2)),
+                    Position(1 + (slotWidth + 1) * position.y, 3 + 2 * (position.x - 1)),
                     backgroundColor
                 )
             } ?: inventoryImage.markPosition(
-                Position(1 + (slotWidth + 1) * position.y, 3 + 2 * (position.x - 2)),
+                Position(1 + (slotWidth + 1) * position.y, 3 + 2 * (position.x - 1)),
                 backgroundColor
             )
         }
+        println(Position(1 + (slotWidth + 1) * position.y, 3 + 2 * (position.x - 1)))
     }
 
     companion object {
