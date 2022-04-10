@@ -4,6 +4,9 @@ import ru.hse.roguelike.model.GameModel
 import ru.hse.roguelike.model.items.ConsumableItem
 import ru.hse.roguelike.model.items.EquipableItem
 
+/**
+ * Activity implementation responsible for the Game Model.
+ */
 class GameActivity: Activity {
     override fun handleEvent(eventType: EventType, model: GameModel) {
         when (model.mode) {
