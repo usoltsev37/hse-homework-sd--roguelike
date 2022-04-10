@@ -10,9 +10,6 @@ import ru.hse.roguelike.util.Constants
 import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.findCellByPoint
 import java.util.Collections
-import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.sqrt
 
 /**
  * Game Model.
