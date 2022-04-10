@@ -129,7 +129,7 @@
 ## Логическая структура
 
 <p align="center">
-  <img src="images/architecture_rouge.png" width="1000" title="screen_authorization">
+  <img src="images/architecture_rouge.svg" width="1000" title="screen_authorization">
 </p>
 
 ### Input and Controller
