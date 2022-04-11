@@ -55,7 +55,7 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
         fun build(): Map
     }
 
-    private class BuilderImpl: Builder {
+    private class BuilderImpl : Builder {
         private var width: Int = Constants.DEFAULT_MAP_WIDTH
         private var height: Int = Constants.DEFAULT_MAP_HEIGHT
         private var path: Path? = null
@@ -81,8 +81,9 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
 
             if (leftBound >= rightBound) {
                 return if (rightTop.x - leftBottom.x > Constants.MIN_RECT_DIM_SIZE &&
-                           rightTop.y - leftBottom.y > Constants.MIN_RECT_DIM_SIZE) listOf(generateCell(leftBottom, rightTop))
-                       else emptyList()
+                    rightTop.y - leftBottom.y > Constants.MIN_RECT_DIM_SIZE
+                ) listOf(generateCell(leftBottom, rightTop))
+                else emptyList()
             }
 
             val splitValue = Random.nextInt(leftBound, rightBound)
@@ -112,14 +113,17 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
             val enemies = ArrayList<Enemy>()
             if (Random.nextInt(100) < Constants.ENEMY_PROB) {
                 enemies.add(
-                    Enemy(Position(Random.nextInt(left.x, right.x), Random.nextInt(left.y, right.y)),
-                        Constants.BASE_HEALTH, Constants.BASE_STRENGTH)
+                    Enemy(
+                        Position(Random.nextInt(left.x, right.x), Random.nextInt(left.y, right.y)),
+                        Constants.BASE_HEALTH, Constants.BASE_STRENGTH
+                    )
                 )
             }
             val items = ArrayList<Pair<Item, Position>>()
             if (Random.nextInt(100) < Constants.ITEM_PROB) {
                 items.add(
-                    Pair(Item.getRandomItem(),
+                    Pair(
+                        Item.getRandomItem(),
                         Position(Random.nextInt(left.x, right.x), Random.nextInt(left.y, right.y))
                     )
                 )
@@ -133,9 +137,10 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
             for (firstCell in firstCells) {
                 for (secondCell in secondCells) {
                     if (firstCell.rightTopPos[otherDim] > secondCell.rightTopPos[otherDim] &&
-                            secondCell.rightTopPos[otherDim] > firstCell.leftBottomPos[otherDim] ||
-                            secondCell.leftBottomPos[otherDim] < firstCell.rightTopPos[otherDim] &&
-                            secondCell.leftBottomPos[otherDim] > firstCell.leftBottomPos[otherDim]){
+                        secondCell.rightTopPos[otherDim] > firstCell.leftBottomPos[otherDim] ||
+                        secondCell.leftBottomPos[otherDim] < firstCell.rightTopPos[otherDim] &&
+                        secondCell.leftBottomPos[otherDim] > firstCell.leftBottomPos[otherDim]
+                    ) {
 
                         val bottomBorder = max(firstCell.leftBottomPos[otherDim], secondCell.leftBottomPos[otherDim])
                         val topBorder = min(firstCell.rightTopPos[otherDim], secondCell.rightTopPos[otherDim])
@@ -146,9 +151,9 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
 
                         val axisValue = Random.nextInt(bottomBorder, topBorder + 1)
                         var fromPos = if (dim == 0) Position(firstCell.rightTopPos.x, axisValue)
-                                      else Position(axisValue, firstCell.leftBottomPos.y)
+                        else Position(axisValue, firstCell.leftBottomPos.y)
                         val toPos = if (dim == 0) Position(secondCell.leftBottomPos.x, axisValue)
-                                    else Position(axisValue, secondCell.rightTopPos.y)
+                        else Position(axisValue, secondCell.rightTopPos.y)
 
                         var route = ArrayList<Position>()
                         var curPos = fromPos
@@ -160,13 +165,14 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
                                 lastCell.passages.add(Passage(fromPos, curPos, dim, route))
                                 newCell.passages.add(Passage(curPos, fromPos, dim, route.reversed()))
                                 fromPos = if (dim == 0) Position(newCell.rightTopPos.x, fromPos.y)
-                                          else Position(fromPos.x, newCell.leftBottomPos.y)
+                                else Position(fromPos.x, newCell.leftBottomPos.y)
                                 lastCell = newCell
                                 route = ArrayList()
                                 curPos = fromPos
                                 route.add(curPos)
                             }
-                            curPos = if (dim == 0) Position(curPos.x + 1, curPos.y) else Position(curPos.x, curPos.y - 1)
+                            curPos =
+                                if (dim == 0) Position(curPos.x + 1, curPos.y) else Position(curPos.x, curPos.y - 1)
                         }
                         route.add(curPos)
 

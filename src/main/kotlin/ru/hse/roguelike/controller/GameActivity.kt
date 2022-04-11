@@ -1,5 +1,6 @@
 package ru.hse.roguelike.controller
 
+import ru.hse.roguelike.EventType
 import ru.hse.roguelike.exception.ModelLogicException
 import ru.hse.roguelike.model.GameModel
 import ru.hse.roguelike.model.items.ConsumableItem
@@ -13,7 +14,7 @@ import ru.hse.roguelike.util.upper
 /**
  * Activity implementation responsible for the Game Model.
  */
-class GameActivity(private val model: GameModel): Activity {
+class GameActivity(private val model: GameModel) : Activity {
 
     override fun handleEvent(eventType: EventType) {
         when (model.mode) {
@@ -59,10 +60,12 @@ class GameActivity(private val model: GameModel): Activity {
                             model.selectedItemPosition = model.currentItemPosition
                             if (model.currentItemPosition.first == 0 &&
                                 model.currentItemPosition.second == ItemType.Sword.value ||
-                                model.currentItemPosition.second == ItemType.Potion.value) {
-                                val weapon = model.hero.inventory[model.transformPosition2Index(model.currentItemPosition)]
+                                model.currentItemPosition.second == ItemType.Potion.value
+                            ) {
+                                val weapon =
+                                    model.hero.inventory[model.transformPosition2Index(model.currentItemPosition)]
                                 if (weapon is EquipableItem) {
-                                    model.hero.currWeapon =  weapon
+                                    model.hero.currWeapon = weapon
                                 } else {
                                     throw ModelLogicException("First 6 elements of the inventory must be EquipableItem")
                                 }
@@ -76,7 +79,8 @@ class GameActivity(private val model: GameModel): Activity {
                     }
                     EventType.USE -> {
                         if (model.selectedItemPosition != null) {
-                            val selectedItem = model.hero.inventory.get(model.transformPosition2Index(model.selectedItemPosition!!))
+                            val selectedItem =
+                                model.hero.inventory.get(model.transformPosition2Index(model.selectedItemPosition!!))
                             if (selectedItem is ConsumableItem) {
                                 selectedItem.use(model.hero)
                             }

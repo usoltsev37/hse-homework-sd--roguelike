@@ -5,8 +5,8 @@ import com.googlecode.lanterna.TextColor
 import ru.hse.roguelike.model.map.Cell
 import ru.hse.roguelike.ui.image.Image
 import ru.hse.roguelike.ui.window.Window
-import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.Constants.HUD_WIDTH
+import ru.hse.roguelike.util.Position
 
 /**
  * Implementation map view via Lanterna
@@ -14,7 +14,7 @@ import ru.hse.roguelike.util.Constants.HUD_WIDTH
  */
 class MapViewImpl(
     private val window: Window,
-    private var heroPos: Position
+    override var heroPos: Position
 ) : MapView {
     private val mapImage: Image
 
@@ -59,9 +59,6 @@ class MapViewImpl(
     }
 
     override fun setHeroPosition(position: Position, prevPosition: Position?) {
-        if (position == heroPos) {
-            return
-        }
         prevPosition?.let { pos ->
             prevChar?.let {
                 mapImage.printText(it.characterString, pos, it.backgroundColor, it.foregroundColor)

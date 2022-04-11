@@ -9,6 +9,8 @@ import ru.hse.roguelike.util.Position
  */
 interface MapView : View {
 
+    var heroPos: Position
+
     /**
      * Set cell on the view with entire information.
      * @param cell Given cell

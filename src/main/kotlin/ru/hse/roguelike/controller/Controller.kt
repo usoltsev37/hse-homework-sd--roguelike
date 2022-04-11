@@ -1,5 +1,6 @@
 package ru.hse.roguelike.controller
 
+import ru.hse.roguelike.EventType
 import ru.hse.roguelike.model.GameModel
 import ru.hse.roguelike.ui.window.Window
 

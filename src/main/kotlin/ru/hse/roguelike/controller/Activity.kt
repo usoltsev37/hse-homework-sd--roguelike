@@ -1,6 +1,6 @@
 package ru.hse.roguelike.controller
 
-import ru.hse.roguelike.model.GameModel
+import ru.hse.roguelike.EventType
 
 /**
  * Abstraction for entities that can handle events.

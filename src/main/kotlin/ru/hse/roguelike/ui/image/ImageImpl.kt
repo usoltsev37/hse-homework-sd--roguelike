@@ -1,10 +1,6 @@
 package ru.hse.roguelike.ui.image
 
-import com.googlecode.lanterna.SGR
-import com.googlecode.lanterna.TerminalPosition
-import com.googlecode.lanterna.TerminalSize
-import com.googlecode.lanterna.TextCharacter
-import com.googlecode.lanterna.TextColor
+import com.googlecode.lanterna.*
 import com.googlecode.lanterna.graphics.TextImage
 import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.plus

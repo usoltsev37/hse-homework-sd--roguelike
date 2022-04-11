@@ -11,6 +11,7 @@ interface Usable {
      * @return health increase
      */
     fun getHealthIncrease(): Int
+
     /**
      * The amount of strength that the hero will gain when he uses the item
      * @return strength increase

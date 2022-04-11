@@ -4,8 +4,8 @@ import com.googlecode.lanterna.TextColor
 import ru.hse.roguelike.model.characters.Hero
 import ru.hse.roguelike.ui.image.Image
 import ru.hse.roguelike.ui.window.Window
-import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.Constants.HUD_WIDTH
+import ru.hse.roguelike.util.Position
 
 /**
  * Implementation HUD view via Lanterna

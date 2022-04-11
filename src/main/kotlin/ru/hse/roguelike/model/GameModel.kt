@@ -1,13 +1,13 @@
 package ru.hse.roguelike.model
 
 import ru.hse.roguelike.exception.ModelLogicException
-import ru.hse.roguelike.model.characters.Hero
 import ru.hse.roguelike.model.characters.Enemy
-import ru.hse.roguelike.model.map.Map
-import ru.hse.roguelike.model.map.Cell
+import ru.hse.roguelike.model.characters.Hero
 import ru.hse.roguelike.model.characters.Movable
+import ru.hse.roguelike.model.map.Cell
+import ru.hse.roguelike.model.map.Map
 import ru.hse.roguelike.util.*
-import java.util.Collections
+import java.util.*
 
 /**
  * Game Model.
@@ -82,7 +82,7 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24
      * Transform Position into Index of the Inventory array.
      * @param position Position
      */
-    fun transformPosition2Index(position: Position) : Int {
+    fun transformPosition2Index(position: Position): Int {
         return position.first * Constants.COUNT_COLUMNS + position.second
     }
 
@@ -90,9 +90,11 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24
      * Swap two items into Inventory array.
      */
     fun swapSelectedCurrentItems() {
-        Collections.swap(hero.inventory,
+        Collections.swap(
+            hero.inventory,
             transformPosition2Index(selectedItemPosition!!),
-            transformPosition2Index(currentItemPosition))
+            transformPosition2Index(currentItemPosition)
+        )
         selectedItemPosition = null
     }
 
@@ -145,7 +147,7 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24
      * Сell on which the player is now.
      */
     fun getCurrentCell(): Cell {
-        curCell = findCellByPoint(hero.position, currMap.cells) ?: throw ModelLogicException("Hero position is in the inconsistent state")
+        curCell = findCellByPoint(hero.position, currMap.cells) ?: curCell
         return curCell
     }
 

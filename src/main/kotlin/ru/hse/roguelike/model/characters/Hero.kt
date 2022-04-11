@@ -20,7 +20,7 @@ class Hero(
 
 ) : Movable() {
 
-    /*
+    /**
     The first 6 elements are worn on the hero (isEquiped = True)
      */
     val inventory: MutableList<Item> = ArrayList(Constants.COUNT_COLUMNS)
@@ -55,10 +55,12 @@ class Hero(
         return minEnemy
     }
 
-    private fun distanceBetweenHeroEnemy(enemy: Enemy) : Double {
+    private fun distanceBetweenHeroEnemy(enemy: Enemy): Double {
         return sqrt(
-            abs((enemy.position.first - position.first).toDouble().pow(2) -
-                    (enemy.position.second - position.second).toDouble().pow(2))
+            abs(
+                (enemy.position.first - position.first).toDouble().pow(2) -
+                        (enemy.position.second - position.second).toDouble().pow(2)
+            )
         )
     }
 

@@ -1,5 +1,6 @@
 package ru.hse.roguelike.controller
 
+import ru.hse.roguelike.EventType
 import ru.hse.roguelike.model.GameModel
 import ru.hse.roguelike.ui.hud.HudView
 import ru.hse.roguelike.ui.hud.HudViewImpl
@@ -16,7 +17,7 @@ import ru.hse.roguelike.util.upper
 /**
  * Activity implementation responsible for the View.
  */
-class ViewActivity(window: Window, private val model: GameModel): Activity {
+class ViewActivity(window: Window, private val model: GameModel) : Activity {
 
     private val mapView: MapView = MapViewImpl(window, model.hero.position)
     private val hudView: HudView = HudViewImpl(window)
@@ -33,8 +34,9 @@ class ViewActivity(window: Window, private val model: GameModel): Activity {
                     EventType.RIGHT -> curPos.left()
                     else -> return
                 }
-
-                mapView.setHeroPosition(curPos, prevPos)
+                if (curPos != mapView.heroPos) {
+                    mapView.setHeroPosition(curPos, prevPos)
+                }
             }
             GameModel.Mode.INVENTORY -> {
                 when (eventType) {
@@ -71,7 +73,7 @@ class ViewActivity(window: Window, private val model: GameModel): Activity {
      * @param model the Game Model.
      */
     fun initState(model: GameModel) {
-        model.currMap.cells.map { mapView.setCell(it)}
+        model.currMap.cells.map { mapView.setCell(it) }
         mapView.setHeroPosition(model.currMap.cells.first().leftBottomPos)
         mapView.show()
 

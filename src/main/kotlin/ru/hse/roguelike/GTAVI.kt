@@ -2,16 +2,10 @@ package ru.hse.roguelike
 
 import com.googlecode.lanterna.TerminalSize
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory
-import ru.hse.roguelike.controller.*
+import ru.hse.roguelike.controller.Controller
 import ru.hse.roguelike.model.GameModel
-import ru.hse.roguelike.ui.hud.HudView
-import ru.hse.roguelike.ui.hud.HudViewImpl
-import ru.hse.roguelike.ui.inventory.InventoryView
-import ru.hse.roguelike.ui.inventory.InventoryViewImpl
-import ru.hse.roguelike.ui.map.MapView
-import ru.hse.roguelike.ui.map.MapViewImpl
-import ru.hse.roguelike.ui.window.WindowImpl
 import ru.hse.roguelike.ui.window.Window
+import ru.hse.roguelike.ui.window.WindowImpl
 import ru.hse.roguelike.util.Constants
 
 /**
