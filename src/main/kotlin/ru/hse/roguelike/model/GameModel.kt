@@ -1,6 +1,5 @@
 package ru.hse.roguelike.model
 
-import ru.hse.roguelike.exception.ModelLogicException
 import ru.hse.roguelike.model.characters.Enemy
 import ru.hse.roguelike.model.characters.Hero
 import ru.hse.roguelike.model.characters.Movable
