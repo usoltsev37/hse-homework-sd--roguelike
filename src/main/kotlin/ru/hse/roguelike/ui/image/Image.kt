@@ -1,5 +1,6 @@
 package ru.hse.roguelike.ui.image
 
+import com.googlecode.lanterna.TextCharacter
 import com.googlecode.lanterna.TextColor
 import ru.hse.roguelike.util.Position
 
@@ -57,4 +58,10 @@ abstract class Image {
      * @param backgroundColor Color to fill
      */
     abstract fun fill(backgroundColor: TextColor)
+
+    /**
+     * Get character at given position
+     * @param position position of character
+     */
+    abstract fun getCharacterAt(position: Position): TextCharacter
 }

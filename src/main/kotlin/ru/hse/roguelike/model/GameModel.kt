@@ -6,9 +6,7 @@ import ru.hse.roguelike.model.characters.Enemy
 import ru.hse.roguelike.model.map.Map
 import ru.hse.roguelike.model.map.Cell
 import ru.hse.roguelike.model.characters.Movable
-import ru.hse.roguelike.util.Constants
-import ru.hse.roguelike.util.Position
-import ru.hse.roguelike.util.findCellByPoint
+import ru.hse.roguelike.util.*
 import java.util.Collections
 
 /**
@@ -17,17 +15,14 @@ import java.util.Collections
  * @param hero main Hero.
  * @param currMap Map of the game.
  */
-class GameModel(var level: Int, val currMap: Map = Map.createMap().build()) {
+class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24).withWidth(50).build()) {
 
     var mode = Mode.GAME
     var currentItemPosition: Position = Position(1, 0)
         private set
     var selectedItemPosition: Position? = null
-    val hero: Hero
-
-    init {
-        hero = Hero(currMap.cells[0].getRandomPosition())
-    }
+    val hero: Hero = Hero(currMap.cells.first().leftBottomPos)
+    var curCell: Cell = getCurrentCell()
 
     /**
      * for Inventory Mode.
@@ -105,30 +100,11 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().build()) {
      * for Game Mode.
      * Shift Hero Position one up.
      */
-    fun moveHeroUp() {
-        if (hero.position.first + 1 < getCurrentCell().rightTopPos.first) {
-            hero.position = with(hero.position) {
-                copy(
-                    first = first + 1
-                )
-            }
+    fun moveHeroRight() {
+        val newPos = hero.position.right()
+        if (checkOnPassage(newPos) || newPos.x <= getCurrentCell().rightTopPos.x) {
+            hero.position = newPos
         }
-        walkPassageIfNeed()
-    }
-
-    /**
-     * for Game Mode.
-     * Shift Hero Position one down.
-     */
-    fun moveHeroDown() {
-        if (getCurrentCell().leftBottomPos.first < hero.position.first - 1) {
-            hero.position = with(hero.position) {
-                copy(
-                    first = first - 1
-                )
-            }
-        }
-        walkPassageIfNeed()
     }
 
     /**
@@ -136,37 +112,31 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().build()) {
      * Shift Hero Position one down.
      */
     fun moveHeroLeft() {
-        if (getCurrentCell().leftBottomPos.second < hero.position.second - 1) {
-            hero.position = with(hero.position) {
-                copy(
-                    second = second - 1
-                )
-            }
+        val newPos = hero.position.left()
+        if (checkOnPassage(newPos) || getCurrentCell().leftBottomPos.x <= newPos.x) {
+            hero.position = newPos
         }
-        walkPassageIfNeed()
     }
 
     /**
      * for Game Mode.
      * Shift Hero Position one down.
      */
-    fun moveHeroRight() {
-        if (hero.position.second + 1 < getCurrentCell().leftBottomPos.second) {
-            hero.position = with(hero.position) {
-                copy(
-                    second = second + 1
-                )
-            }
+    fun moveHeroUp() {
+        val newPos = hero.position.upper()
+        if (checkOnPassage(newPos) || getCurrentCell().leftBottomPos.y <= newPos.y) {
+            hero.position = newPos
         }
-        walkPassageIfNeed()
     }
 
-    private fun walkPassageIfNeed() {
-        for (passage in getCurrentCell().passages) {
-            if (passage.from == currentItemPosition) {
-                currentItemPosition = passage.to
-                break
-            }
+    /**
+     * for Game Mode.
+     * Shift Hero Position one down.
+     */
+    fun moveHeroDown() {
+        val newPos = hero.position.lower()
+        if (checkOnPassage(newPos) || newPos.y <= getCurrentCell().rightTopPos.y) {
+            hero.position = newPos
         }
     }
 
@@ -175,7 +145,8 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().build()) {
      * Сell on which the player is now.
      */
     fun getCurrentCell(): Cell {
-        return findCellByPoint(hero.position, currMap.cells) ?: throw ModelLogicException("Hero position is in the inconsistent state")
+        curCell = findCellByPoint(hero.position, currMap.cells) ?: throw ModelLogicException("Hero position is in the inconsistent state")
+        return curCell
     }
 
     /**
@@ -193,6 +164,22 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().build()) {
      */
     fun getEnemy(index: Int): Enemy {
         return getCurrentCell().enemies[index]
+    }
+
+    fun moveHero(newPos: Position) {
+        if (canMove(newPos))
+            hero.position = newPos
+    }
+
+    fun canMove(newPos: Position) = checkOnPassage(newPos) || newPos.isInCell(getCurrentCell())
+
+    private fun checkOnPassage(pos: Position): Boolean {
+        for (passage in curCell.passages) {
+            if (pos == passage.from || passage.route.contains(pos)) {
+                return true
+            }
+        }
+        return false
     }
 
     /**

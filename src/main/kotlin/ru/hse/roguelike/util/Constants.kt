@@ -16,4 +16,6 @@ object Constants {
     val INITIAL_POSITION = Position(5, 5)
 
     const val COUNT_COLUMNS = 6
+
+    const val HUD_WIDTH = 20
 }

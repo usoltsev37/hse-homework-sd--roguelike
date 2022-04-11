@@ -1,23 +1,20 @@
 package ru.hse.roguelike.controller
 
 import ru.hse.roguelike.model.GameModel
-import ru.hse.roguelike.util.Constants.INITIAL_LEVEL
-import ru.hse.roguelike.util.Constants.INITIAL_POSITION
+import ru.hse.roguelike.ui.window.Window
 
 /**
  * The Controller of the game.
- * @param gameActivity the Controller part responsible for the model.
- * @param viewActivity the Controller part responsible for the view.
  */
-class Controller(
-    gameActivity: GameActivity,
-    viewActivity: ViewActivity
-) {
+class Controller(window: Window, model: GameModel) {
 
-    private val activities: List<Activity> = listOf(gameActivity, viewActivity)
-    private val model = GameModel(INITIAL_LEVEL)
+    private val activities: List<Activity>
 
     init {
+        val gameActivity = GameActivity(model)
+        val viewActivity = ViewActivity(window, model)
+        activities = listOf(gameActivity, viewActivity)
+
         viewActivity.initState(model)
     }
 
@@ -26,6 +23,6 @@ class Controller(
      * @param eventType Event from keyboard.
      */
     fun update(eventType: EventType) {
-        activities.forEach { it.handleEvent(eventType, model) }
+        activities.forEach { it.handleEvent(eventType) }
     }
 }

@@ -5,7 +5,7 @@ import ru.hse.roguelike.model.characters.Hero
 import ru.hse.roguelike.ui.image.Image
 import ru.hse.roguelike.ui.window.Window
 import ru.hse.roguelike.util.Position
-import ru.hse.roguelike.util.UiConstants.HUD_WIDTH
+import ru.hse.roguelike.util.Constants.HUD_WIDTH
 
 /**
  * Implementation HUD view via Lanterna
@@ -42,9 +42,6 @@ class HudViewImpl(
             
             Armour: ${hero.armor}
             
-            Level: TODO
-            
-            Exp: TODO / TODO
         """.trimIndent()
 
         hudImage.printText(heroInfo, Position(0, 0), TextColor.ANSI.BLACK_BRIGHT, TextColor.ANSI.CYAN)

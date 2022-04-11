@@ -19,5 +19,5 @@ interface MapView : View {
      * Set hero on the view.
      * @param position Current hero position
      */
-    fun setHeroPosition(position: Position)
+    fun setHeroPosition(position: Position, prevPosition: Position? = null)
 }

@@ -19,7 +19,7 @@ class Cell(
     val items: FreeItems, val passages: MutableList<Passage> = ArrayList()
 ) {
 
-    var visited = false
+    var visited = true //TODO: make false
 
     val width = rightTopPos.x - leftBottomPos.x + 1
     val height = rightTopPos.y - leftBottomPos.y + 1

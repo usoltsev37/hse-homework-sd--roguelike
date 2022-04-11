@@ -75,6 +75,10 @@ class ImageImpl(
         textGraphics.backgroundColor = previousColor
     }
 
+    override fun getCharacterAt(position: Position): TextCharacter {
+        return textGraphics.getCharacter(position.toLanternaTerminalPosition() + upperLeft.toLanternaTerminalPosition())
+    }
+
     override fun clear() {
         textGraphics.fill(' ')
     }

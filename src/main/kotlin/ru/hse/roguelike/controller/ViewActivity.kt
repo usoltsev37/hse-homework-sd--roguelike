@@ -2,25 +2,39 @@ package ru.hse.roguelike.controller
 
 import ru.hse.roguelike.model.GameModel
 import ru.hse.roguelike.ui.hud.HudView
+import ru.hse.roguelike.ui.hud.HudViewImpl
 import ru.hse.roguelike.ui.inventory.InventoryView
+import ru.hse.roguelike.ui.inventory.InventoryViewImpl
 import ru.hse.roguelike.ui.map.MapView
+import ru.hse.roguelike.ui.map.MapViewImpl
+import ru.hse.roguelike.ui.window.Window
+import ru.hse.roguelike.util.left
+import ru.hse.roguelike.util.lower
+import ru.hse.roguelike.util.right
+import ru.hse.roguelike.util.upper
 
 /**
  * Activity implementation responsible for the View.
  */
-class ViewActivity(
-    private val mapView: MapView,
-    private val hudView: HudView,
-    private val inventoryView: InventoryView
-): Activity {
+class ViewActivity(window: Window, private val model: GameModel): Activity {
 
-    override fun handleEvent(eventType: EventType, model: GameModel) {
+    private val mapView: MapView = MapViewImpl(window, model.hero.position)
+    private val hudView: HudView = HudViewImpl(window)
+    private val inventoryView: InventoryView = InventoryViewImpl(window)
+
+    override fun handleEvent(eventType: EventType) {
         when (model.mode) {
             GameModel.Mode.GAME -> {
-                when (eventType) {
-                    EventType.UP, EventType.DOWN, EventType.LEFT, EventType.RIGHT -> mapView.setHeroPosition(model.hero.position)
+                val curPos = model.hero.position
+                val prevPos = when (eventType) {
+                    EventType.UP -> curPos.lower()
+                    EventType.DOWN -> curPos.upper()
+                    EventType.LEFT -> curPos.right()
+                    EventType.RIGHT -> curPos.left()
                     else -> return
                 }
+
+                mapView.setHeroPosition(curPos, prevPos)
             }
             GameModel.Mode.INVENTORY -> {
                 when (eventType) {
@@ -44,6 +58,7 @@ class ViewActivity(
                     EventType.ENTER -> {
                         inventoryView.setSelectedPosition(model.selectedItemPosition)
                     }
+                    else -> {}
                 }
                 inventoryView.show()
 //                TODO("Изменить курсор на View")

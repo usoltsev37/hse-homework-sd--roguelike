@@ -47,3 +47,19 @@ fun findCellByPoint(point: Position?, cells: List<Cell>): Cell? {
 operator fun Position.plus(position: Position): Position {
     return Position(this.first + position.first, this.second + position.second)
 }
+
+fun Position.upper(): Position {
+    return Position(this.x, this.y - 1)
+}
+
+fun Position.lower(): Position {
+    return Position(this.x, this.y + 1)
+}
+
+fun Position.left(): Position {
+    return Position(this.x - 1, this.y)
+}
+
+fun Position.right(): Position {
+    return Position(this.x + 1, this.y)
+}

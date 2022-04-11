@@ -5,20 +5,25 @@ import ru.hse.roguelike.model.GameModel
 import ru.hse.roguelike.model.items.ConsumableItem
 import ru.hse.roguelike.model.items.EquipableItem
 import ru.hse.roguelike.model.items.ItemType
+import ru.hse.roguelike.util.left
+import ru.hse.roguelike.util.lower
+import ru.hse.roguelike.util.right
+import ru.hse.roguelike.util.upper
 
 /**
  * Activity implementation responsible for the Game Model.
  */
-class GameActivity: Activity {
-    override fun handleEvent(eventType: EventType, model: GameModel) {
+class GameActivity(private val model: GameModel): Activity {
+
+    override fun handleEvent(eventType: EventType) {
         when (model.mode) {
             GameModel.Mode.GAME -> {
                 when (eventType) {
                     EventType.INVENTORY -> model.mode = GameModel.Mode.INVENTORY
-                    EventType.UP -> model.moveHeroUp()
-                    EventType.DOWN -> model.moveHeroDown()
-                    EventType.LEFT -> model.moveHeroLeft()
-                    EventType.RIGHT -> model.moveHeroRight()
+                    EventType.UP -> model.moveHero(model.hero.position.upper())
+                    EventType.DOWN -> model.moveHero(model.hero.position.lower())
+                    EventType.LEFT -> model.moveHero(model.hero.position.left())
+                    EventType.RIGHT -> model.moveHero(model.hero.position.right())
                     EventType.ENTER -> {
                         model.hero.attackEnemy(model.getCurrentCell())
                     }
