@@ -99,51 +99,6 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24
     }
 
     /**
-     * for Game Mode.
-     * Shift Hero Position one up.
-     */
-    fun moveHeroRight() {
-        val newPos = hero.position.right()
-        if (checkOnPassage(newPos) || newPos.x <= getCurrentCell().rightTopPos.x) {
-            hero.position = newPos
-        }
-    }
-
-    /**
-     * for Game Mode.
-     * Shift Hero Position one down.
-     */
-    fun moveHeroLeft() {
-        val newPos = hero.position.left()
-        if (checkOnPassage(newPos) || getCurrentCell().leftBottomPos.x <= newPos.x) {
-            hero.position = newPos
-        }
-    }
-
-    /**
-     * for Game Mode.
-     * Shift Hero Position one down.
-     */
-    fun moveHeroUp() {
-        val newPos = hero.position.upper()
-        if (checkOnPassage(newPos) || getCurrentCell().leftBottomPos.y <= newPos.y) {
-            hero.position = newPos
-        }
-    }
-
-    /**
-     * for Game Mode.
-     * Shift Hero Position one down.
-     */
-    fun moveHeroDown() {
-        val newPos = hero.position.lower()
-        if (checkOnPassage(newPos) || newPos.y <= getCurrentCell().rightTopPos.y) {
-            hero.position = newPos
-        }
-    }
-
-
-    /**
      * Сell on which the player is now.
      */
     fun getCurrentCell(): Cell {
