@@ -12,7 +12,7 @@ class Hero(
     override var health: Int = 50,
     override var maxHealth: Int = 50,
     override var strength: Int = 10,
-    override var armor: Int = 0,
+    override var armour: Int = 0,
     override var xp: Int = 0,
     override var level: Int = 0
 

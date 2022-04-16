@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import ru.hse.roguelike.util.Constants
 import ru.hse.roguelike.model.mobs.AbstractHero
 import ru.hse.roguelike.model.mobs.Hero
+import java.lang.Integer.min
 import kotlin.random.Random
 
 
@@ -26,7 +27,7 @@ class ConsumableItem(
         """.trimMargin()
 
     override fun use(hero: AbstractHero) {
-        hero.health += healthAmount
+        hero.health = min(hero.health + healthAmount, hero.maxHealth)
         hero.inventory.remove(this)
     }
 }

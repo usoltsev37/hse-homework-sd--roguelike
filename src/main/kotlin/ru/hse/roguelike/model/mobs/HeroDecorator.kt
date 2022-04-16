@@ -14,7 +14,7 @@ class HeroDecorator(private val hero: AbstractHero): AbstractHero() {
     override var maxHealth: Int = hero.maxHealth
     override var position: Position = hero.position
     override var strength: Int = hero.strength
-    override var armor: Int = hero.armor
+    override var armour: Int = hero.armour
     override var xp: Int = hero.xp
     override var level: Int = hero.level
     override val inventory: MutableList<Item> = hero.inventory
