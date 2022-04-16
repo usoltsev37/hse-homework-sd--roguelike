@@ -39,7 +39,7 @@ sealed class Item {
          * @return item with given type
          */
         fun createItem(type: ItemType): Item {
-            return EquipableItem(type.name, type, type.getHealthIncrease(), type.getStrengthIncrease())
+            return EquipableItem("${type.name.take(8)} #${Random.nextInt(100)}", type, type.getHealthIncrease(), type.getStrengthIncrease())
         }
 
         /**
@@ -47,7 +47,7 @@ sealed class Item {
          * @return item with random type
          */
         fun getRandomItem(): Item {
-            return if (Random.nextInt(100) < 50) createItem(ItemType.fromInt(Random.nextInt(ItemType.values().size)))
+            return if (Random.nextInt(100) < 50) createItem(ItemType.fromInt(Random.nextInt(ItemType.values().size - 1)))
             else ConsumableItem(ItemType.Potion.name, ItemType.Potion)
         }
     }

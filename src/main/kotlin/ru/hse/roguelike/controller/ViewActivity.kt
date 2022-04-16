@@ -17,7 +17,7 @@ import ru.hse.roguelike.util.upper
 /**
  * Activity implementation responsible for the View.
  */
-class ViewActivity(window: Window, private val model: GameModel) : Activity {
+class ViewActivity(window: Window, private val model: GameModel, override var isEndGame: Boolean) : Activity {
 
     private val mapView: MapView = MapViewImpl(window, model.hero.position)
     private val hudView: HudView = HudViewImpl(window)
@@ -26,6 +26,19 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
     override fun handleEvent(eventType: EventType) {
         when (model.mode) {
             GameModel.Mode.GAME -> {
+                when (eventType) {
+                    EventType.USE -> {
+                        val itemIndex = model.curCell.items.map { it.second }.indexOf(model.hero.position)
+                        if (itemIndex != -1) {
+                            model.curCell.items.removeAt(itemIndex) // TODO: move action in GameActivity
+                            hudView.setMessage(
+                                "You found:\n" + model.hero.inventory.last().description
+                            )
+                        }
+                    }
+                    else -> {}
+                }
+
                 val curPos = model.hero.position
                 val prevPos = when (eventType) {
                     EventType.UP -> curPos.lower()
@@ -46,10 +59,6 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
 
                 hudView.setStats(model.hero)
                 hudView.show()
-
-                if (model.hero.isDead) {
-                    //TODO: game over
-                }
             }
             GameModel.Mode.INVENTORY -> {
                 when (eventType) {
@@ -72,12 +81,16 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
                     }
                     EventType.ENTER -> {
                         inventoryView.setSelectedPosition(model.selectedItemPosition)
+                        inventoryView.setInventory(model.hero.inventory)
                     }
                     else -> {}
                 }
                 inventoryView.show()
 //                TODO("Изменить курсор на View")
             }
+        }
+        if (model.hero.isDead) {
+            isEndGame = true
         }
     }
 
