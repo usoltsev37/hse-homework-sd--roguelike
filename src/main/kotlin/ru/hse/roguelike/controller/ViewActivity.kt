@@ -34,9 +34,15 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
                     EventType.RIGHT -> curPos.left()
                     else -> curPos
                 }
+
+                model.currMap.cells.map { mapView.setCell(it) }
+
                 if (curPos != mapView.heroPos) {
                     mapView.setHeroPosition(curPos, prevPos)
+                } else {
+                    mapView.setHeroPosition(curPos)
                 }
+
                 mapView.show()
             }
             GameModel.Mode.INVENTORY -> {
@@ -74,6 +80,9 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
      * @param model the Game Model.
      */
     fun initState(model: GameModel) {
+        val initialCell = model.currMap.cells.first()
+        initialCell.visited = true
+
         model.currMap.cells.map { mapView.setCell(it) }
         mapView.setHeroPosition(model.currMap.cells.first().leftBottomPos)
         mapView.show()

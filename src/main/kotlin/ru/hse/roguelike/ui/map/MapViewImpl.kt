@@ -33,9 +33,10 @@ class MapViewImpl(
             upperLeft = cell.leftBottomPos
         )
 
-        if (cell.visited) {
-            cellImage.fill(TextColor.ANSI.GREEN_BRIGHT)
-        }
+        if (!cell.visited)
+            return
+
+        cellImage.fill(TextColor.ANSI.GREEN_BRIGHT)
 
         for (enemy in cell.enemies) {
             mapImage.printText("V", enemy.position)
@@ -48,7 +49,7 @@ class MapViewImpl(
 
         val passages = cell.passages
         for (passage in passages) {
-            if (/*passage.visited*/ true) {
+            if (passage.visited) {
                 if (passage.route.size == 1)
                     continue
                 for (position in passage.route.subList(1, passage.route.lastIndex)) {
@@ -67,7 +68,6 @@ class MapViewImpl(
         prevChar = mapImage.getCharacterAt(position)
         mapImage.printText("H", position, TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)
         heroPos = position
-        show()
     }
 
     override fun show() {

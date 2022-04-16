@@ -30,6 +30,8 @@ class GameActivity(private val model: GameModel) : Activity {
                     }
                     EventType.REMOVE, EventType.USE -> return
                 }
+
+                model.getCurrentCell().visited = true
             }
             GameModel.Mode.INVENTORY -> {
                 when (eventType) {
