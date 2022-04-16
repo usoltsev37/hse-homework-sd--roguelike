@@ -127,7 +127,7 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24
                 if (result) {
                     newCell!!.enemies.add(it)
                 }
-                result
+                result || it.isDead
             }
         }
         //TODO: items

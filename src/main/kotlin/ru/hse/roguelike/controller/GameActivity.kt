@@ -20,12 +20,13 @@ class GameActivity(private val model: GameModel) : Activity {
                 val oldPos = model.hero.position
                 when (eventType) {
                     EventType.INVENTORY -> model.mode = GameModel.Mode.INVENTORY
-                    EventType.UP -> model.moveHero(model.hero.position.upper())
-                    EventType.DOWN -> model.moveHero(model.hero.position.lower())
-                    EventType.LEFT -> model.moveHero(model.hero.position.left())
-                    EventType.RIGHT -> model.moveHero(model.hero.position.right())
+                    EventType.UP -> model.moveHero(oldPos.upper())
+                    EventType.DOWN -> model.moveHero(oldPos.lower())
+                    EventType.LEFT -> model.moveHero(oldPos.left())
+                    EventType.RIGHT -> model.moveHero(oldPos.right())
                     else -> return
                 }
+
                 model.curCell.enemies.find {
                     it.position == model.hero.position
                 }?.let {
