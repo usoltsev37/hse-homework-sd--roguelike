@@ -87,19 +87,6 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24
         return position.first * Constants.COUNT_COLUMNS + position.second
     }
 
-    /**
-     * Swap two items into Inventory array.
-     */
-    fun swapSelectedCurrentItems() {
-        Collections.swap(
-            hero.inventory,
-            transformPosition2Index(selectedItemPosition!!),
-            transformPosition2Index(currentItemPosition)
-        )
-        selectedItemPosition = null
-    }
-    
-
     fun moveHero(newPos: Position) {
         if (canMove(newPos))
             hero.position = newPos
@@ -148,6 +135,10 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24
     private fun getCurrentCell(): Cell {
         curCell = findCellByPoint(hero.position, currMap.cells) ?: curCell
         return curCell
+    }
+
+    fun updateCurrentCell() {
+        curCell = getCurrentCell()
     }
 
     /**

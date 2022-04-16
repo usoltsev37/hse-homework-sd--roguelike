@@ -17,7 +17,6 @@ class GameActivity(private val model: GameModel) : Activity {
     override fun handleEvent(eventType: EventType) {
         when (model.mode) {
             GameModel.Mode.GAME -> {
-                val oldPos = model.hero.position
                 when (eventType) {
                     EventType.INVENTORY -> model.mode = GameModel.Mode.INVENTORY
                     EventType.UP -> model.moveHero(model.hero.position.upper())
@@ -32,6 +31,9 @@ class GameActivity(private val model: GameModel) : Activity {
                     }
                     EventType.REMOVE -> return
                 }
+
+                model.updateCurrentCell()
+
                 model.curCell.enemies.find {
                     it.position == model.hero.position
                 }?.let {
@@ -83,27 +85,26 @@ class GameActivity(private val model: GameModel) : Activity {
             model.hero.inventory.filter { it is ConsumableItem || (it is EquipableItem && !it.isEquiped) }
 
         if (model.selectedItemPosition != null) {
-            val indexCurrentItem = model.transformPosition2Index(model.currentItemPosition)
-            val indexSelectedItem = model.transformPosition2Index(model.selectedItemPosition!!)
+            val indexSelectedItem = model.transformPosition2Index(model.selectedItemPosition!!) - 6
 
             if (model.currentItemPosition.first == 0) {
-                val currentItem = model.hero.inventory[indexCurrentItem] as EquipableItem
-                val selectedItem = model.hero.inventory[indexSelectedItem] as EquipableItem
+                val currentItem =
+                    model.hero.inventory.find { it is EquipableItem && it.isEquiped && it.itemType.value == model.currentItemPosition.second } as EquipableItem
+                val selectedItem = inventoryItems[indexSelectedItem] as EquipableItem
 
                 if (selectedItem.itemType.value == model.currentItemPosition.second) {
-                    currentItem.use(model.hero)
+                    currentItem.unuse(model.hero)
                     selectedItem.use(model.hero)
-                    model.swapSelectedCurrentItems()
                 }
             }
-            model.swapSelectedCurrentItems()
+            model.selectedItemPosition = null
         } else {
-            val inventoryIndex = model.transformPosition2Index(model.currentItemPosition) - 6
+            val indexCurrentItem = model.transformPosition2Index(model.currentItemPosition) - 6
 
-            if (inventoryIndex < 0 || inventoryIndex >= inventoryItems.size)
+            if (indexCurrentItem < 0 || indexCurrentItem >= inventoryItems.size)
                 return
 
-            when (val item = inventoryItems[inventoryIndex]) {
+            when (val item = inventoryItems[indexCurrentItem]) {
                 is ConsumableItem -> {
                     item.use(model.hero)
                     return

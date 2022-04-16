@@ -56,7 +56,6 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
                     mapView.setHeroPosition(curPos)
                 }
 
-                hudView.show()
                 mapView.show()
                 
                 hudView.setStats(model.hero)
@@ -64,10 +63,6 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
 
                 if (model.hero.isDead) {
                     //TODO: game over
-                }
-
-                model.currMap.cells.forEach {
-                    mapView.setCell(it)
                 }
             }
             GameModel.Mode.INVENTORY -> {

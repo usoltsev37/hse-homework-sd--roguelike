@@ -28,7 +28,7 @@ class EquipableItem(
      * Stop using item
      * @param hero who stops using item
      */
-    fun unuse(hero: Hero) {
+    fun unuse(hero: AbstractHero) {
         hero.strength -= strengthIncrease
         hero.armor -= healthIncrease
         isEquiped = false
