@@ -72,10 +72,12 @@ class GameModel(val currMap: Map = Map.createMap().withHeight(24).withWidth(50).
      * Shift currentItemPosition one down.
      */
     fun currentItemMoveDown() { // TODO bottom line should be limited
-        currentItemPosition = with(currentItemPosition) {
-            copy(
-                first = first + 1
-            )
+        if (currentItemPosition.first < 7) {
+            currentItemPosition = with(currentItemPosition) {
+                copy(
+                    first = first + 1
+                )
+            }
         }
     }
 

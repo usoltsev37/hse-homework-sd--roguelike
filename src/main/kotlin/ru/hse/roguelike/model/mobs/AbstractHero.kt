@@ -10,7 +10,7 @@ import kotlin.math.sqrt
 abstract class AbstractHero: Mob() {
 
     abstract val inventory: MutableList<Item>
-    abstract var armor: Int
+    abstract var armour: Int
     abstract var xp: Int
     abstract var level: Int
     abstract var maxHealth: Int

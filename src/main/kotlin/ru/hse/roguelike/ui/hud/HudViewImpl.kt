@@ -2,7 +2,6 @@ package ru.hse.roguelike.ui.hud
 
 import com.googlecode.lanterna.TextColor
 import ru.hse.roguelike.model.mobs.AbstractHero
-import ru.hse.roguelike.model.mobs.Hero
 import ru.hse.roguelike.ui.image.Image
 import ru.hse.roguelike.ui.window.Window
 import ru.hse.roguelike.util.Constants.HUD_WIDTH
@@ -50,9 +49,9 @@ class HudViewImpl(
             
             Health: ${hero.health} / ${hero.maxHealth}
             
-            Strenght: ${hero.strength}
+            Strength: ${hero.strength}
             
-            Armour: ${hero.armor}
+            Armour: ${hero.armour}
             
             Exp: ${hero.xp} / ${hero.currMaxXp}
             
