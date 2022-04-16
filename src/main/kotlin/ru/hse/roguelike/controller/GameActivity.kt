@@ -6,10 +6,8 @@ import ru.hse.roguelike.model.GameModel
 import ru.hse.roguelike.model.items.ConsumableItem
 import ru.hse.roguelike.model.items.EquipableItem
 import ru.hse.roguelike.model.items.ItemType
-import ru.hse.roguelike.util.left
-import ru.hse.roguelike.util.lower
-import ru.hse.roguelike.util.right
-import ru.hse.roguelike.util.upper
+import ru.hse.roguelike.util.*
+import kotlin.random.Random
 
 /**
  * Activity implementation responsible for the Game Model.
@@ -19,19 +17,33 @@ class GameActivity(private val model: GameModel) : Activity {
     override fun handleEvent(eventType: EventType) {
         when (model.mode) {
             GameModel.Mode.GAME -> {
+                val oldPos = model.hero.position
                 when (eventType) {
                     EventType.INVENTORY -> model.mode = GameModel.Mode.INVENTORY
                     EventType.UP -> model.moveHero(model.hero.position.upper())
                     EventType.DOWN -> model.moveHero(model.hero.position.lower())
                     EventType.LEFT -> model.moveHero(model.hero.position.left())
                     EventType.RIGHT -> model.moveHero(model.hero.position.right())
-                    EventType.ENTER -> {
-                        model.hero.attackEnemy(model.getCurrentCell())
-                    }
-                    EventType.REMOVE, EventType.USE -> return
+                    else -> return
+                }
+                model.curCell.enemies.find {
+                    it.position == model.hero.position
+                }?.let {
+                    model.hero.attack(it)
+                    it.attack(model.hero)
+                }
+
+                if (model.hero.isDead) {
+                    //TODO: game over
+                }
+                //TODO: hero experience
+
+                model.curCell.enemies.forEach {
+                    model.moveEnemy(it)
                 }
 
                 model.getCurrentCell().visited = true
+                model.updateCellsState()
             }
             GameModel.Mode.INVENTORY -> {
                 when (eventType) {
@@ -67,7 +79,7 @@ class GameActivity(private val model: GameModel) : Activity {
                                 val weapon =
                                     model.hero.inventory[model.transformPosition2Index(model.currentItemPosition)]
                                 if (weapon is EquipableItem) {
-                                    model.hero.currWeapon = weapon
+                                    // TODO
                                 } else {
                                     throw ModelLogicException("First 6 elements of the inventory must be EquipableItem")
                                 }
