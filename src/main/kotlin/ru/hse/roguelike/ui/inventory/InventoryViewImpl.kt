@@ -126,7 +126,6 @@ class InventoryViewImpl(
     }
 
     private fun updateImageBySpecialPosition(position: Position, backgroundColor: TextColor) {
-        println(position)
         when (position.x) {
             0 -> equipedItems.getOrNull(position.y)?.description?.take(slotWidth)?.let {
                 equipmentImage.printText(
@@ -149,7 +148,6 @@ class InventoryViewImpl(
                 backgroundColor
             )
         }
-        println(Position(1 + (slotWidth + 1) * position.y, 3 + 2 * (position.x - 1)))
     }
 
     companion object {
