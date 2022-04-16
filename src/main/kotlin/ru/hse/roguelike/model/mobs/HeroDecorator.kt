@@ -26,9 +26,9 @@ class HeroDecorator(private val hero: AbstractHero): AbstractHero() {
         get() = hero.strength
         set(value) { hero.strength = value }
 
-    override var armor: Int
-        get() = hero.armor
-        set(value) {hero.armor = value}
+    override var armour: Int
+        get() = hero.armour
+        set(value) {hero.armour = value}
 
     override var xp: Int
         get() = hero.xp
