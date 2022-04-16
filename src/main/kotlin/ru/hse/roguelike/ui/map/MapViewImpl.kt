@@ -46,8 +46,7 @@ class MapViewImpl(
         }
 
         cell.passages.forEach { passage ->
-            mapImage.printText(" ", passage.from, TextColor.ANSI.BLUE_BRIGHT, TextColor.ANSI.BLACK)
-            if (passage.visited && passage.route.size != 1) {
+            if (passage.visited) {
                 passage.route.subList(1, passage.route.lastIndex).forEach { position ->
                     mapImage.printText(" ", position, TextColor.ANSI.BLUE_BRIGHT, TextColor.ANSI.BLACK)
                 }
