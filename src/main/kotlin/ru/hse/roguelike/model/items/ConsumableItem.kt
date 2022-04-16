@@ -2,6 +2,7 @@ package ru.hse.roguelike.model.items
 
 import kotlinx.serialization.Serializable
 import ru.hse.roguelike.model.characters.Hero
+import ru.hse.roguelike.util.Constants
 import kotlin.random.Random
 
 
@@ -19,7 +20,9 @@ class ConsumableItem(
     private val healthAmount: Int = Random.nextInt(1, 11)
 
     override val description: String
-        get() = "healthAmount = $healthAmount"
+        get() = """${name.take(Constants.HUD_WIDTH)} 
+            |healthAmount = $healthAmount
+        """.trimMargin()
 
     override fun use(hero: Hero) {
         hero.health += healthAmount

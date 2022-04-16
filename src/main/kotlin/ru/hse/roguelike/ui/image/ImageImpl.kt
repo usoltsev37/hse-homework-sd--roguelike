@@ -76,7 +76,11 @@ class ImageImpl(
     }
 
     override fun clear() {
-        textGraphics.fill(' ')
+        textGraphics.fillRectangle(
+            upperLeft.toLanternaTerminalPosition(),
+            TerminalSize(width, height),
+            ' '
+        )
     }
 
     override fun fill(backgroundColor: TextColor) {

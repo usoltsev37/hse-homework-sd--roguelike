@@ -108,7 +108,7 @@ class InventoryViewImpl(
     private fun updateImage() {
         for (i in 0..UI_WIDTH) {
             equipedItems.firstOrNull { it.itemType.value == i }?.let let@{
-                equipmentImage.printText(it.description.take(slotWidth), Position(1 + (slotWidth + 1) * i, 3))
+                equipmentImage.printText(it.name.take(slotWidth), Position(1 + (slotWidth + 1) * i, 3))
             }
         }
 
@@ -116,7 +116,7 @@ class InventoryViewImpl(
             val row = index / UI_WIDTH
             val column = index % UI_WIDTH
             inventoryImage.printText(
-                item.description.take(slotWidth),
+                item.name.take(slotWidth),
                 Position(1 + (slotWidth + 1) * column, 3 + 2 * row)
             )
         }
@@ -127,7 +127,7 @@ class InventoryViewImpl(
 
     private fun updateImageBySpecialPosition(position: Position, backgroundColor: TextColor) {
         when (position.x) {
-            0 -> equipedItems.getOrNull(position.y)?.description?.take(slotWidth)?.let {
+            0 -> equipedItems.getOrNull(position.y)?.name?.take(slotWidth)?.let {
                 equipmentImage.printText(
                     it,
                     Position(1 + (slotWidth + 1) * position.y, 3),
@@ -137,7 +137,7 @@ class InventoryViewImpl(
                 Position(1 + (slotWidth + 1) * position.y, 3),
                 backgroundColor
             )
-            else -> inventoryItems.getOrNull(position.y + slotWidth * position.x)?.description?.take(slotWidth)?.let {
+            else -> inventoryItems.getOrNull(position.y + slotWidth * position.x)?.name?.take(slotWidth)?.let {
                 inventoryImage.printText(
                     it,
                     Position(1 + (slotWidth + 1) * position.y, 3 + 2 * (position.x - 1)),

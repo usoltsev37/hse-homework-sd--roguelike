@@ -2,6 +2,7 @@ package ru.hse.roguelike.model.items
 
 import kotlinx.serialization.Serializable
 import ru.hse.roguelike.model.characters.Hero
+import ru.hse.roguelike.util.Constants
 
 /**
  * Item which can be equipped.
@@ -33,6 +34,8 @@ class EquipableItem(
     }
 
     override val description: String
-        get() = "health increase = $healthIncrease, strength increase = $strengthIncrease"
+        get() = """${name.take(Constants.HUD_WIDTH)} 
+                |health = $healthIncrease
+                |strength = $strengthIncrease""".trimMargin()
 
 }

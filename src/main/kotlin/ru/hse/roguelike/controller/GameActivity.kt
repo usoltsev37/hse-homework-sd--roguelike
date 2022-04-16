@@ -28,7 +28,13 @@ class GameActivity(private val model: GameModel) : Activity {
                     EventType.ENTER -> {
                         model.hero.attackEnemy(model.getCurrentCell())
                     }
-                    EventType.REMOVE, EventType.USE -> return
+                    EventType.USE -> {
+                        val itemIndex = model.getCurrentCell().items.map { it.second }.indexOf(model.hero.position)
+                        if (itemIndex != -1) {
+                            model.hero.inventory.add(model.curCell.items[itemIndex].first)
+                        }
+                    }
+                    EventType.REMOVE -> return
                 }
 
                 model.getCurrentCell().visited = true
