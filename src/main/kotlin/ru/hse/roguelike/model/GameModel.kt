@@ -123,11 +123,10 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24
         currMap.cells.forEach { cell ->
             cell.enemies.removeIf {
                 val newCell = findCellByPoint(it.position, currMap.cells)
-                val result = newCell != cell && newCell != null
-                if (result) {
-                    newCell!!.enemies.add(it)
+                if (newCell != null && newCell != cell) {
+                    newCell.enemies.add(it)
                 }
-                result || it.isDead
+                newCell != null && newCell != cell || it.isDead
             }
         }
         //TODO: items
