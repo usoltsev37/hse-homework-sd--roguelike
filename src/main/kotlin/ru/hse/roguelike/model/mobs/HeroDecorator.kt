@@ -10,13 +10,38 @@ import kotlin.random.Random
 @Serializable
 class HeroDecorator(private val hero: AbstractHero): AbstractHero() {
 
-    override var health: Int = hero.health
-    override var maxHealth: Int = hero.maxHealth
-    override var position: Position = hero.position
-    override var strength: Int = hero.strength
-    override var armour: Int = hero.armour
-    override var xp: Int = hero.xp
-    override var level: Int = hero.level
+    override var health: Int
+        get() = hero.health
+        set(value) { hero.health = value }
+
+    override var maxHealth: Int
+        get() = hero.maxHealth
+        set(value) { hero.health = value }
+
+    override var position: Position
+        get() = hero.position
+        set(value) {hero.position = value}
+
+    override var strength: Int
+        get() = hero.strength
+        set(value) { hero.strength = value }
+
+    override var armor: Int
+        get() = hero.armor
+        set(value) {hero.armor = value}
+
+    override var xp: Int
+        get() = hero.xp
+        set(value) {hero.xp = value}
+
+    override var currMaxXp: Int
+        get() = hero.currMaxXp
+        set(value) {hero.currMaxXp = value}
+
+    override var level: Int
+        get() = hero.level
+        set(value) {hero.level = value}
+
     override val inventory: MutableList<Item> = hero.inventory
 
 

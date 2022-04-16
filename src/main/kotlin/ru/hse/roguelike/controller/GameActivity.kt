@@ -15,7 +15,6 @@ import kotlin.random.Random
 class GameActivity(private val model: GameModel, override var isEndGame: Boolean) : Activity {
 
 
-
     override fun handleEvent(eventType: EventType) {
         when (model.mode) {
             GameModel.Mode.GAME -> {
@@ -32,6 +31,7 @@ class GameActivity(private val model: GameModel, override var isEndGame: Boolean
                         }
                     }
                     EventType.REMOVE -> return
+                    else -> {}
                 }
 
                 model.updateCurrentCell()
@@ -42,11 +42,6 @@ class GameActivity(private val model: GameModel, override var isEndGame: Boolean
                     model.hero.attack(it)
                     it.attack(model.hero)
                 }
-
-                if (model.hero.isDead) {
-                    //TODO: game over
-                }
-                //TODO: hero experience
 
                 model.curCell.enemies.forEach {
                     model.moveEnemy(it)

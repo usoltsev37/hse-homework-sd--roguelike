@@ -55,7 +55,7 @@ class MapViewImpl(
         }
 
         cell.enemies.forEach { enemy ->
-            mapImage.printText(enemy.name, enemy.position)
+            mapImage.printText(enemy.name, enemy.position, if (enemy.confused) TextColor.ANSI.MAGENTA else TextColor.ANSI.RED)
         }
     }
 
