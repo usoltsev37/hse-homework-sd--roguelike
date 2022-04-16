@@ -26,6 +26,19 @@ class ViewActivity(window: Window, private val model: GameModel, override var is
     override fun handleEvent(eventType: EventType) {
         when (model.mode) {
             GameModel.Mode.GAME -> {
+                when (eventType) {
+                    EventType.USE -> {
+                        val itemIndex = model.curCell.items.map { it.second }.indexOf(model.hero.position)
+                        if (itemIndex != -1) {
+                            model.curCell.items.removeAt(itemIndex) // TODO: move action in GameActivity
+                            hudView.setMessage(
+                                "You found:\n" + model.hero.inventory.last().description
+                            )
+                        }
+                    }
+                    else -> {}
+                }
+
                 val curPos = model.hero.position
                 val prevPos = when (eventType) {
                     EventType.UP -> curPos.lower()
@@ -47,10 +60,6 @@ class ViewActivity(window: Window, private val model: GameModel, override var is
                 
                 hudView.setStats(model.hero)
                 hudView.show()
-
-                model.currMap.cells.forEach {
-                    mapView.setCell(it)
-                }
             }
             GameModel.Mode.INVENTORY -> {
                 when (eventType) {
@@ -73,6 +82,7 @@ class ViewActivity(window: Window, private val model: GameModel, override var is
                     }
                     EventType.ENTER -> {
                         inventoryView.setSelectedPosition(model.selectedItemPosition)
+                        inventoryView.setInventory(model.hero.inventory)
                     }
                     else -> {}
                 }

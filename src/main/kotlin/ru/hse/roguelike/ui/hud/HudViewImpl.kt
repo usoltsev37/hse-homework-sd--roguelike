@@ -18,6 +18,7 @@ class HudViewImpl(
     private val hudImage: Image
 
     private lateinit var hero: AbstractHero
+    private var message: String? = null
 
     init {
         val fullImage = window.getCurrentInstance()
@@ -29,13 +30,23 @@ class HudViewImpl(
         this.hero = hero
     }
 
+    override fun setMessage(message: String) {
+        this.message = message
+    }
+
     override fun show() {
         updateImage()
         window.show(hudImage)
     }
 
     private fun updateImage() {
-        val heroInfo = """
+        hudImage.clear()
+        hudImage.fill(TextColor.ANSI.BLACK_BRIGHT)
+
+        val stringBuilder = StringBuilder()
+
+        stringBuilder.append(
+            """
             
             Health: ${hero.health} / 50
             
@@ -44,7 +55,14 @@ class HudViewImpl(
             Armour: ${hero.armor}
             
         """.trimIndent()
+        )
 
-        hudImage.printText(heroInfo, Position(0, 0), TextColor.ANSI.BLACK_BRIGHT, TextColor.ANSI.CYAN)
+        if (message != null) {
+            stringBuilder.append("-".repeat(HUD_WIDTH) + "\n")
+            stringBuilder.append("\n$message\n")
+        }
+        message = null
+
+        hudImage.printText(stringBuilder.toString(), Position(0, 0), TextColor.ANSI.BLACK_BRIGHT, TextColor.ANSI.CYAN)
     }
 }

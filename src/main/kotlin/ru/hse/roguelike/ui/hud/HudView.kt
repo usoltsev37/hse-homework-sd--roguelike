@@ -14,4 +14,10 @@ interface HudView : View {
      * @param hero Given hero
      */
     fun setStats(hero: AbstractHero)
+
+    /**
+     * Set informational message
+     * @param message Given message
+     */
+    fun setMessage(message: String)
 }
