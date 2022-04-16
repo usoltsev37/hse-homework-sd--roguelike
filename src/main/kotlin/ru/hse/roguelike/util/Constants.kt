@@ -20,4 +20,7 @@ object Constants {
     const val HUD_WIDTH = 20
 
     const val CONFUSE_PROB = 30
+
+    const val LEVEL_UPDATE_STRENGTH = 3
+    const val LEVEL_UPDATE_HEALTH = 5
 }
