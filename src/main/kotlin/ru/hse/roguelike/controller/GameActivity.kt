@@ -24,11 +24,8 @@ class GameActivity(private val model: GameModel) : Activity {
                     EventType.DOWN -> model.moveHero(model.hero.position.lower())
                     EventType.LEFT -> model.moveHero(model.hero.position.left())
                     EventType.RIGHT -> model.moveHero(model.hero.position.right())
-                    EventType.ENTER -> {
-                        model.hero.attackEnemy(model.getCurrentCell())
-                    }
                     EventType.USE -> {
-                        val itemIndex = model.getCurrentCell().items.map { it.second }.indexOf(model.hero.position)
+                        val itemIndex = model.curCell.items.map { it.second }.indexOf(model.hero.position)
                         if (itemIndex != -1) {
                             model.hero.inventory.add(model.curCell.items[itemIndex].first)
                         }
