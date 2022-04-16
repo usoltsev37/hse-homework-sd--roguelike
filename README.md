@@ -6,14 +6,20 @@
 * Владимир Федоров
 * Никита Усольцев
 
-## Build
+## Запуск и тестирование
+
+* **Build**
+```
 ./gradlew gta-vi
-
-## Run
+```
+* **Run**
+```
 java -jar build/libs/gta-vi.jar
-
-## Tests
+```
+* **Tests**
+```
 ./gradlew test
+```
 
 ## Управление
 
