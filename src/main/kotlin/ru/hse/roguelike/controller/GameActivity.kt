@@ -42,7 +42,7 @@ class GameActivity(private val model: GameModel) : Activity {
                     model.moveEnemy(it)
                 }
 
-                model.getCurrentCell().visited = true
+                model.curCell.visited = true
                 model.updateCellsState()
             }
             GameModel.Mode.INVENTORY -> {
