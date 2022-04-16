@@ -166,8 +166,10 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
                             route.add(curPos)
                             val newCell = findCellByPoint(curPos, allCells)
                             if (newCell != null) {
-                                lastCell.passages.add(Passage(fromPos, curPos, dim, route))
-                                newCell.passages.add(Passage(curPos, fromPos, dim, route.reversed()))
+                                if (fromPos != curPos) {
+                                    lastCell.passages.add(Passage(fromPos, curPos, dim, route))
+                                    newCell.passages.add(Passage(curPos, fromPos, dim, route.reversed()))
+                                }
                                 fromPos = if (dim == 0) Position(newCell.rightTopPos.x, fromPos.y)
                                 else Position(fromPos.x, newCell.leftBottomPos.y)
                                 lastCell = newCell

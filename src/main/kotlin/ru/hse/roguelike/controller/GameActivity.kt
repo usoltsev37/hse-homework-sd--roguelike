@@ -52,6 +52,7 @@ class GameActivity(private val model: GameModel) : Activity {
 
                 model.curCell.visited = true
                 model.updateCellsState()
+                model.updatePassagesState()
             }
             GameModel.Mode.INVENTORY -> {
                 when (eventType) {

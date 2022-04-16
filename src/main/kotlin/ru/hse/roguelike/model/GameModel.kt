@@ -120,12 +120,16 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24
         //TODO: items
     }
 
+    fun updatePassagesState() {
+        currMap.cells.flatMap { it.passages }.filter { it.route.subList(1, it.route.lastIndex).contains(hero.position) }
+            .forEach { it.visited = true }
+    }
+
     private fun canMove(newPos: Position) = checkOnPassage(newPos) || newPos.isInCell(getCurrentCell())
 
     private fun checkOnPassage(pos: Position): Boolean {
         for (passage in curCell.passages) {
             if (passage.route.contains(pos)) {
-                passage.visited = true
                 return true
             }
         }
