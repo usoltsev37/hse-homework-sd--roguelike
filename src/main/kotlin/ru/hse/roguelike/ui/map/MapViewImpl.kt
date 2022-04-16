@@ -63,8 +63,8 @@ class MapViewImpl(
             prevChar?.let {
                 mapImage.printText(it.characterString, pos, it.backgroundColor, it.foregroundColor)
             }
-            prevChar = mapImage.getCharacterAt(position)
         }
+        prevChar = mapImage.getCharacterAt(position)
         mapImage.printText("H", position, TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)
         heroPos = position
         show()
