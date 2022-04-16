@@ -12,11 +12,13 @@ abstract class Mob {
     abstract var health: Int
     abstract val strength: Int
 
+    var confused: Boolean = false
+
     val isDead: Boolean
         get() = health <= 0
 
     /**
-     * Attack other character
+     * Attack other mob
      * @param other who will be attacked
      */
     abstract fun attack(other: Mob)
