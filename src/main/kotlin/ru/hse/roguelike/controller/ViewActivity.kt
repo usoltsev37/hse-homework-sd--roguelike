@@ -32,12 +32,19 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
                     EventType.DOWN -> curPos.upper()
                     EventType.LEFT -> curPos.right()
                     EventType.RIGHT -> curPos.left()
-                    else -> return
-                }
-                if (curPos != mapView.heroPos) {
-                    mapView.setHeroPosition(curPos, prevPos)
+                    else -> curPos
                 }
 
+                model.currMap.cells.map { mapView.setCell(it) }
+
+                if (curPos != mapView.heroPos) {
+                    mapView.setHeroPosition(curPos, prevPos)
+                } else {
+                    mapView.setHeroPosition(curPos)
+                }
+
+                mapView.show()
+                
                 hudView.setStats(model.hero)
                 hudView.show()
 
@@ -84,6 +91,9 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
      * @param model the Game Model.
      */
     fun initState(model: GameModel) {
+        val initialCell = model.currMap.cells.first()
+        initialCell.visited = true
+
         model.currMap.cells.map { mapView.setCell(it) }
         mapView.setHeroPosition(model.hero.position)
         mapView.show()

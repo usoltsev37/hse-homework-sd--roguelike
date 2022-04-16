@@ -137,7 +137,8 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24
 
     private fun checkOnPassage(pos: Position): Boolean {
         for (passage in curCell.passages) {
-            if (pos == passage.from || passage.route.contains(pos)) {
+            if (passage.route.contains(pos)) {
+                passage.visited = true
                 return true
             }
         }

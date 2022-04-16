@@ -41,6 +41,8 @@ class GameActivity(private val model: GameModel) : Activity {
                 model.curCell.enemies.forEach {
                     model.moveEnemy(it)
                 }
+
+                model.curCell.visited = true
                 model.updateCellsState()
             }
             GameModel.Mode.INVENTORY -> {
