@@ -4,8 +4,11 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import ru.hse.roguelike.model.characters.Enemy
+import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.model.items.Item
+import ru.hse.roguelike.model.mobs.enemies.AggressiveEnemy
+import ru.hse.roguelike.model.mobs.enemies.CowardEnemy
+import ru.hse.roguelike.model.mobs.enemies.PassiveEnemy
 import ru.hse.roguelike.util.*
 import java.io.IOException
 import java.lang.Integer.max
@@ -112,12 +115,13 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
 
             val enemies = ArrayList<Enemy>()
             if (Random.nextInt(100) < Constants.ENEMY_PROB) {
-                enemies.add(
-                    Enemy(
-                        Position(Random.nextInt(left.x, right.x), Random.nextInt(left.y, right.y)),
-                        Constants.BASE_HEALTH, Constants.BASE_STRENGTH
-                    )
-                )
+                val enemyPos = Position(Random.nextInt(left.x, right.x), Random.nextInt(left.y, right.y))
+                val enemy = when (Random.nextInt(3)) {
+                    0 -> PassiveEnemy(enemyPos)
+                    1 -> CowardEnemy(enemyPos)
+                    else -> AggressiveEnemy(enemyPos)
+                }
+                enemies.add(enemy)
             }
             val items = ArrayList<Pair<Item, Position>>()
             if (Random.nextInt(100) < Constants.ITEM_PROB) {

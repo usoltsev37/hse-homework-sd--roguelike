@@ -58,6 +58,17 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
 
                 hudView.show()
                 mapView.show()
+                
+                hudView.setStats(model.hero)
+                hudView.show()
+
+                if (model.hero.isDead) {
+                    //TODO: game over
+                }
+
+                model.currMap.cells.forEach {
+                    mapView.setCell(it)
+                }
             }
             GameModel.Mode.INVENTORY -> {
                 when (eventType) {
@@ -99,7 +110,7 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
         initialCell.visited = true
 
         model.currMap.cells.map { mapView.setCell(it) }
-        mapView.setHeroPosition(model.currMap.cells.first().leftBottomPos)
+        mapView.setHeroPosition(model.hero.position)
         mapView.show()
 
         hudView.setStats(model.hero)

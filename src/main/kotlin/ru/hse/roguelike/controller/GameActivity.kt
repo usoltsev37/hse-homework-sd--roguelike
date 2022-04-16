@@ -6,10 +6,8 @@ import ru.hse.roguelike.model.GameModel
 import ru.hse.roguelike.model.items.ConsumableItem
 import ru.hse.roguelike.model.items.EquipableItem
 import ru.hse.roguelike.model.items.ItemType
-import ru.hse.roguelike.util.left
-import ru.hse.roguelike.util.lower
-import ru.hse.roguelike.util.right
-import ru.hse.roguelike.util.upper
+import ru.hse.roguelike.util.*
+import kotlin.random.Random
 
 /**
  * Activity implementation responsible for the Game Model.
@@ -19,6 +17,7 @@ class GameActivity(private val model: GameModel) : Activity {
     override fun handleEvent(eventType: EventType) {
         when (model.mode) {
             GameModel.Mode.GAME -> {
+                val oldPos = model.hero.position
                 when (eventType) {
                     EventType.INVENTORY -> model.mode = GameModel.Mode.INVENTORY
                     EventType.UP -> model.moveHero(model.hero.position.upper())
@@ -36,8 +35,24 @@ class GameActivity(private val model: GameModel) : Activity {
                     }
                     EventType.REMOVE -> return
                 }
+                model.curCell.enemies.find {
+                    it.position == model.hero.position
+                }?.let {
+                    model.hero.attack(it)
+                    it.attack(model.hero)
+                }
 
-                model.getCurrentCell().visited = true
+                if (model.hero.isDead) {
+                    //TODO: game over
+                }
+                //TODO: hero experience
+
+                model.curCell.enemies.forEach {
+                    model.moveEnemy(it)
+                }
+
+                model.curCell.visited = true
+                model.updateCellsState()
             }
             GameModel.Mode.INVENTORY -> {
                 when (eventType) {
