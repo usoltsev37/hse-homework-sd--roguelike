@@ -17,6 +17,6 @@ class AggressiveEnemy(override var position: Position): Enemy() {
         val direction = if (position.x < heroPos.x || position.y < heroPos.y) 1 else -1
 
         return if (xDist <= yDist) Position(position.x + direction, position.y)
-               else Position(position.x, position.y + 1)
+               else Position(position.x, position.y + direction)
     }
 }
