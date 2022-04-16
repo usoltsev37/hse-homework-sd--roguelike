@@ -48,7 +48,7 @@ class HudViewImpl(
         stringBuilder.append(
             """
             
-            Health: ${hero.health} / 50
+            Health: ${hero.health} / ${hero.maxHealth}
             
             Strenght: ${hero.strength}
             

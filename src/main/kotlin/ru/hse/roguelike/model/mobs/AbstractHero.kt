@@ -14,11 +14,9 @@ abstract class AbstractHero: Mob() {
     abstract var xp: Int
     abstract var level: Int
     abstract var maxHealth: Int
+    abstract var currMaxXp: Int
 
     override val name: String = "H"
-
-    var currMaxXp: Int = 2
-        private set
 
     /**
      * Update XP
