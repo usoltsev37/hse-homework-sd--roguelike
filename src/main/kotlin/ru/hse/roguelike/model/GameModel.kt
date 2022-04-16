@@ -1,12 +1,14 @@
 package ru.hse.roguelike.model
 
-import ru.hse.roguelike.model.characters.Enemy
-import ru.hse.roguelike.model.characters.Hero
-import ru.hse.roguelike.model.characters.Movable
+import ru.hse.roguelike.model.mobs.enemies.Enemy
+import ru.hse.roguelike.model.mobs.Hero
 import ru.hse.roguelike.model.map.Cell
 import ru.hse.roguelike.model.map.Map
+import ru.hse.roguelike.model.mobs.AbstractHero
+import ru.hse.roguelike.model.mobs.HeroDecorator
 import ru.hse.roguelike.util.*
 import java.util.*
+import kotlin.random.Random
 
 /**
  * Game Model.
@@ -20,7 +22,7 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24
     var currentItemPosition: Position = Position(1, 0)
         private set
     var selectedItemPosition: Position? = null
-    val hero: Hero = Hero(currMap.cells.first().leftBottomPos)
+    val hero: AbstractHero = HeroDecorator(Hero(currMap.cells.first().leftBottomPos))
     var curCell: Cell = getCurrentCell()
 
     /**
@@ -96,38 +98,42 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24
         )
         selectedItemPosition = null
     }
-
-    /**
-     * Сell on which the player is now.
-     */
-    fun getCurrentCell(): Cell {
-        curCell = findCellByPoint(hero.position, currMap.cells) ?: curCell
-        return curCell
-    }
-
-    /**
-     * Attack one Movable by another Movable.
-     * @param from Movable that attacks.
-     * @param to Movable that receives damage.
-     */
-    fun strikeBlow(from: Movable, to: Movable) {
-        from.attack(to)
-    }
-
-    /**
-     * Return Enemy.
-     * @param index index in Enemies array.
-     */
-    fun getEnemy(index: Int): Enemy {
-        return getCurrentCell().enemies[index]
-    }
+    
 
     fun moveHero(newPos: Position) {
         if (canMove(newPos))
             hero.position = newPos
     }
+    
+    fun moveEnemy(enemy: Enemy) {
+        val newPos = if (enemy.confused) {
+            val dir = Random.nextInt(-1, 2)
+             if (Random.nextInt(2) == 0) Position(enemy.position.x + dir, enemy.position.y)
+                             else Position(enemy.position.x, enemy.position.y + dir)
+        } else {
+            enemy.getNextPosition(hero.position)
+        }
 
-    fun canMove(newPos: Position) = checkOnPassage(newPos) || newPos.isInCell(getCurrentCell())
+        if (canMove(newPos)) {
+            enemy.position = newPos
+        }
+    }
+
+    fun updateCellsState() {
+        currMap.cells.forEach { cell ->
+            cell.enemies.removeIf {
+                val newCell = findCellByPoint(it.position, currMap.cells)
+                val result = newCell != cell && newCell != null
+                if (result) {
+                    newCell!!.enemies.add(it)
+                }
+                result
+            }
+        }
+        //TODO: items
+    }
+
+    private fun canMove(newPos: Position) = checkOnPassage(newPos) || newPos.isInCell(getCurrentCell())
 
     private fun checkOnPassage(pos: Position): Boolean {
         for (passage in curCell.passages) {
@@ -136,6 +142,11 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24
             }
         }
         return false
+    }
+
+    private fun getCurrentCell(): Cell {
+        curCell = findCellByPoint(hero.position, currMap.cells) ?: curCell
+        return curCell
     }
 
     /**

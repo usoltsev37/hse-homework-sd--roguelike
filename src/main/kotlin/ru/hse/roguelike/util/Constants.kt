@@ -18,4 +18,6 @@ object Constants {
     const val COUNT_COLUMNS = 6
 
     const val HUD_WIDTH = 20
+
+    const val CONFUSE_PROB = 30
 }

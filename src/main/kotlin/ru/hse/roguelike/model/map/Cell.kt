@@ -1,7 +1,7 @@
 package ru.hse.roguelike.model.map
 
 import kotlinx.serialization.Serializable
-import ru.hse.roguelike.model.characters.Enemy
+import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.util.FreeItems
 import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.x
@@ -15,7 +15,7 @@ import kotlin.random.Random
  */
 @Serializable
 class Cell(
-    val leftBottomPos: Position, val rightTopPos: Position, val enemies: List<Enemy>,
+    val leftBottomPos: Position, val rightTopPos: Position, val enemies: MutableList<Enemy>,
     val items: FreeItems, val passages: MutableList<Passage> = ArrayList()
 ) {
 

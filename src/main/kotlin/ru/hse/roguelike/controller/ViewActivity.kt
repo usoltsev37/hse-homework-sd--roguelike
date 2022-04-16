@@ -37,6 +37,17 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
                 if (curPos != mapView.heroPos) {
                     mapView.setHeroPosition(curPos, prevPos)
                 }
+
+                hudView.setStats(model.hero)
+                hudView.show()
+
+                if (model.hero.isDead) {
+                    //TODO: game over
+                }
+
+                model.currMap.cells.forEach {
+                    mapView.setCell(it)
+                }
             }
             GameModel.Mode.INVENTORY -> {
                 when (eventType) {
@@ -74,7 +85,7 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
      */
     fun initState(model: GameModel) {
         model.currMap.cells.map { mapView.setCell(it) }
-        mapView.setHeroPosition(model.currMap.cells.first().leftBottomPos)
+        mapView.setHeroPosition(model.hero.position)
         mapView.show()
 
         hudView.setStats(model.hero)
