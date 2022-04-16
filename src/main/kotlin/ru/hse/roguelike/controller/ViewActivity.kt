@@ -17,7 +17,7 @@ import ru.hse.roguelike.util.upper
 /**
  * Activity implementation responsible for the View.
  */
-class ViewActivity(window: Window, private val model: GameModel) : Activity {
+class ViewActivity(window: Window, private val model: GameModel, override var isEndGame: Boolean) : Activity {
 
     private val mapView: MapView = MapViewImpl(window, model.hero.position)
     private val hudView: HudView = HudViewImpl(window)
@@ -60,10 +60,6 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
                 
                 hudView.setStats(model.hero)
                 hudView.show()
-
-                if (model.hero.isDead) {
-                    //TODO: game over
-                }
             }
             GameModel.Mode.INVENTORY -> {
                 when (eventType) {
@@ -93,6 +89,9 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
                 inventoryView.show()
 //                TODO("Изменить курсор на View")
             }
+        }
+        if (model.hero.isDead) {
+            isEndGame = true
         }
     }
 

@@ -12,7 +12,9 @@ import kotlin.random.Random
 /**
  * Activity implementation responsible for the Game Model.
  */
-class GameActivity(private val model: GameModel) : Activity {
+class GameActivity(private val model: GameModel, override var isEndGame: Boolean) : Activity {
+
+
 
     override fun handleEvent(eventType: EventType) {
         when (model.mode) {
@@ -78,6 +80,9 @@ class GameActivity(private val model: GameModel) : Activity {
                     }
                 }
             }
+        }
+        if (model.hero.isDead) {
+            isEndGame = true
         }
     }
 

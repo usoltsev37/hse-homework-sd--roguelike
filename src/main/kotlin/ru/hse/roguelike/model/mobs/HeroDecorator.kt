@@ -11,9 +11,12 @@ import kotlin.random.Random
 class HeroDecorator(private val hero: AbstractHero): AbstractHero() {
 
     override var health: Int = hero.health
+    override var maxHealth: Int = hero.maxHealth
     override var position: Position = hero.position
     override var strength: Int = hero.strength
     override var armor: Int = hero.armor
+    override var xp: Int = hero.xp
+    override var level: Int = hero.level
     override val inventory: MutableList<Item> = hero.inventory
 
 

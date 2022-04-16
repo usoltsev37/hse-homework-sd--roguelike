@@ -29,6 +29,9 @@ fun main() {
 
         while (curEvent != SpecialEventType.EXIT) {
             controller.update(curEvent as EventType)
+            if (controller.isEndGame) {
+                return
+            }
             curEvent = input.read()
             while (curEvent == SpecialEventType.UNKNOWN) {
                 curEvent = input.read()
