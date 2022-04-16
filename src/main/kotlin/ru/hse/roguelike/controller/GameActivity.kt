@@ -15,7 +15,6 @@ import kotlin.random.Random
 class GameActivity(private val model: GameModel, override var isEndGame: Boolean) : Activity {
 
 
-
     override fun handleEvent(eventType: EventType) {
         when (model.mode) {
             GameModel.Mode.GAME -> {
