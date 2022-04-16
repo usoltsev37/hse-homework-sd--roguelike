@@ -3,6 +3,9 @@ package ru.hse.roguelike.ui.map
 import com.googlecode.lanterna.TextCharacter
 import com.googlecode.lanterna.TextColor
 import ru.hse.roguelike.model.map.Cell
+import ru.hse.roguelike.model.mobs.enemies.AggressiveEnemy
+import ru.hse.roguelike.model.mobs.enemies.CowardEnemy
+import ru.hse.roguelike.model.mobs.enemies.PassiveEnemy
 import ru.hse.roguelike.ui.image.Image
 import ru.hse.roguelike.ui.window.Window
 import ru.hse.roguelike.util.Constants.HUD_WIDTH
@@ -38,24 +41,21 @@ class MapViewImpl(
 
         cellImage.fill(TextColor.ANSI.GREEN_BRIGHT)
 
-        for (enemy in cell.enemies) {
-            mapImage.printText("V", enemy.position)
-        }
-
-        for (item in cell.items) {
+        cell.items.forEach { item ->
             mapImage.printText("$", item.second)
         }
 
-
-        val passages = cell.passages
-        for (passage in passages) {
-            if (passage.visited) {
-                if (passage.route.size == 1)
-                    continue
-                for (position in passage.route.subList(1, passage.route.lastIndex)) {
+        cell.passages.forEach { passage ->
+            mapImage.printText(" ", passage.from, TextColor.ANSI.BLUE_BRIGHT, TextColor.ANSI.BLACK)
+            if (passage.visited && passage.route.size != 1) {
+                passage.route.subList(1, passage.route.lastIndex).forEach { position ->
                     mapImage.printText(" ", position, TextColor.ANSI.BLUE_BRIGHT, TextColor.ANSI.BLACK)
                 }
             }
+        }
+
+        cell.enemies.forEach { enemy ->
+            mapImage.printText(enemy.name, enemy.position)
         }
     }
 

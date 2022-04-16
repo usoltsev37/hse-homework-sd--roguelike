@@ -25,7 +25,9 @@ class Hero(
 
     override fun attack(other: Mob) {
         other.health -= strength
-        updateXp(other.strength)
+        if (other.isDead) {
+            updateXp(other.strength)
+        }
     }
 
 }

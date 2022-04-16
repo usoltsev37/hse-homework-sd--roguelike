@@ -9,6 +9,7 @@ import kotlin.math.abs
 @Serializable
 class AggressiveEnemy(override var position: Position): Enemy() {
 
+    override val name: String = "A"
     override fun getNextPosition(heroPos: Position): Position {
         val yDist = abs(position.y - heroPos.y)
         val xDist = abs(position.x - heroPos.x)

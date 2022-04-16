@@ -54,6 +54,10 @@ class HudViewImpl(
             
             Armour: ${hero.armor}
             
+            Exp: ${hero.xp} / ${hero.currMaxXp}
+            
+            Level: ${hero.level}
+            
         """.trimIndent()
         )
 

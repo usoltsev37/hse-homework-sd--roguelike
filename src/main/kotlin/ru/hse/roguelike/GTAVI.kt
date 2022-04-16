@@ -17,7 +17,7 @@ fun main() {
     val terminal = terminalFactory.createTerminal()
 
     val mainWindow: Window = WindowImpl(terminal)
-    val model = GameModel(Constants.INITIAL_LEVEL)
+    val model = GameModel()
 
     terminal.use {
         it.enterPrivateMode()

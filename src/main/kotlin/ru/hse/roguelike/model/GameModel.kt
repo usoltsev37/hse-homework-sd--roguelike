@@ -16,7 +16,7 @@ import kotlin.random.Random
  * @param hero main Hero.
  * @param currMap Map of the game.
  */
-class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24).withWidth(50).build()) {
+class GameModel(val currMap: Map = Map.createMap().withHeight(24).withWidth(50).build()) {
 
     var mode = Mode.GAME
     var currentItemPosition: Position = Position(1, 0)
@@ -110,11 +110,10 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24
         currMap.cells.forEach { cell ->
             cell.enemies.removeIf {
                 val newCell = findCellByPoint(it.position, currMap.cells)
-                val result = newCell != cell && newCell != null
-                if (result) {
-                    newCell!!.enemies.add(it)
+                if (newCell != null && newCell != cell) {
+                    newCell.enemies.add(it)
                 }
-                result
+                newCell != null && newCell != cell || it.isDead
             }
         }
         //TODO: items

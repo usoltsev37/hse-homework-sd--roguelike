@@ -35,7 +35,7 @@ class GameActivity(private val model: GameModel, override var isEndGame: Boolean
                 }
 
                 model.updateCurrentCell()
-
+                
                 model.curCell.enemies.find {
                     it.position == model.hero.position
                 }?.let {
