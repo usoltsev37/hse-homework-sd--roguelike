@@ -80,6 +80,7 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
                     }
                     EventType.ENTER -> {
                         inventoryView.setSelectedPosition(model.selectedItemPosition)
+                        inventoryView.setInventory(model.hero.inventory)
                     }
                     else -> {}
                 }

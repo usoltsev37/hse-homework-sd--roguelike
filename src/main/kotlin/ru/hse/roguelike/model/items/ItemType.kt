@@ -54,7 +54,16 @@ enum class ItemType(val value: Int) : Usable {
             return 20
         }
     },
-    Potion(5) {
+    Bow(5) {
+        override fun getHealthIncrease(): Int {
+            return 0
+        }
+
+        override fun getStrengthIncrease(): Int {
+            return 15
+        }
+    },
+    Potion(6) {
         override fun getHealthIncrease(): Int {
             return 0
         }
