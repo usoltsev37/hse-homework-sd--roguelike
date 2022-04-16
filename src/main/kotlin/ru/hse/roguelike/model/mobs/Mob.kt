@@ -11,6 +11,7 @@ abstract class Mob {
     abstract var position: Position
     abstract var health: Int
     abstract var strength: Int
+    abstract val name: String
 
     var confused: Boolean = false
 

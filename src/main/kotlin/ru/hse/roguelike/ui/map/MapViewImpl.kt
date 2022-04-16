@@ -55,12 +55,7 @@ class MapViewImpl(
         }
 
         cell.enemies.forEach { enemy ->
-            val name = when (enemy) {
-                is AggressiveEnemy -> "A"
-                is CowardEnemy -> "Z"
-                is PassiveEnemy -> "V"
-            }
-            mapImage.printText(name, enemy.position)
+            mapImage.printText(enemy.name, enemy.position)
         }
     }
 

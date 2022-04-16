@@ -15,6 +15,8 @@ abstract class AbstractHero: Mob() {
     abstract var level: Int
     abstract var maxHealth: Int
 
+    override val name: String = "H"
+
     var currMaxXp: Int = 2
         private set
 
