@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import ru.hse.roguelike.model.characters.Enemy
+import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.model.items.Item
 import ru.hse.roguelike.util.*
 import java.io.IOException

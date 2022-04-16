@@ -1,7 +1,7 @@
 package ru.hse.roguelike.model.map
 
 import kotlinx.serialization.Serializable
-import ru.hse.roguelike.model.characters.Enemy
+import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.util.FreeItems
 import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.x

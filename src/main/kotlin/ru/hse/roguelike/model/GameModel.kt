@@ -1,8 +1,8 @@
 package ru.hse.roguelike.model
 
-import ru.hse.roguelike.model.characters.Enemy
-import ru.hse.roguelike.model.characters.Hero
-import ru.hse.roguelike.model.characters.Movable
+import ru.hse.roguelike.model.mobs.enemies.Enemy
+import ru.hse.roguelike.model.mobs.Hero
+import ru.hse.roguelike.model.mobs.Mob
 import ru.hse.roguelike.model.map.Cell
 import ru.hse.roguelike.model.map.Map
 import ru.hse.roguelike.util.*
@@ -110,7 +110,7 @@ class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24
      * @param from Movable that attacks.
      * @param to Movable that receives damage.
      */
-    fun strikeBlow(from: Movable, to: Movable) {
+    fun strikeBlow(from: Mob, to: Mob) {
         from.attack(to)
     }
 

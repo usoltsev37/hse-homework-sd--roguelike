@@ -1,7 +1,7 @@
 package ru.hse.roguelike.model.items
 
 import kotlinx.serialization.Serializable
-import ru.hse.roguelike.model.characters.Hero
+import ru.hse.roguelike.model.mobs.Hero
 import kotlin.random.Random
 
 

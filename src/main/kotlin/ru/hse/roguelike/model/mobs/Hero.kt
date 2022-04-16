@@ -1,8 +1,9 @@
-package ru.hse.roguelike.model.characters
+package ru.hse.roguelike.model.mobs
 
 import ru.hse.roguelike.model.items.EquipableItem
 import ru.hse.roguelike.model.items.Item
 import ru.hse.roguelike.model.map.Cell
+import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.util.Constants
 import ru.hse.roguelike.util.Position
 import kotlin.math.abs
@@ -18,7 +19,7 @@ class Hero(
     override var strength: Int = 10,
     var armor: Int = 0
 
-) : Movable() {
+) : Mob() {
 
     /**
     The first 6 elements are worn on the hero (isEquiped = True)
@@ -27,6 +28,10 @@ class Hero(
 
 
     var currWeapon: EquipableItem? = null
+
+    override fun attack(other: Mob) {
+        other.health -= strength
+    }
 
     /**
      * Attack Closest Enemy.
