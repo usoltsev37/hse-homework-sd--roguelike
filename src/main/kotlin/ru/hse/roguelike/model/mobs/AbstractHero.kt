@@ -15,6 +15,10 @@ abstract class AbstractHero: Mob() {
     private var currMaxXp: Int = valueToUpdateXp
     abstract var maxHealth: Int
 
+    /**
+     * Update XP
+     * @param strength of the enemy we attack
+     */
     protected fun updateXp(strength: Int) {
         xp += calcXp(strength)
         if (xp > currMaxXp) {

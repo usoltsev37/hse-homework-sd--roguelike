@@ -1,14 +1,8 @@
 package ru.hse.roguelike.model.mobs
 
-import ru.hse.roguelike.model.items.EquipableItem
 import ru.hse.roguelike.model.items.Item
-import ru.hse.roguelike.model.map.Cell
-import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.util.Constants
 import ru.hse.roguelike.util.Position
-import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.sqrt
 
 /**
  * The main character the player will play as. Has an inventory that contains picked up items.
