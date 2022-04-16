@@ -15,7 +15,7 @@ import kotlin.random.Random
  */
 @Serializable
 class Cell(
-    val leftBottomPos: Position, val rightTopPos: Position, val enemies: List<Enemy>,
+    val leftBottomPos: Position, val rightTopPos: Position, val enemies: MutableList<Enemy>,
     val items: FreeItems, val passages: MutableList<Passage> = ArrayList()
 ) {
 

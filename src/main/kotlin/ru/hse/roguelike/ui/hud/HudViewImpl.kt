@@ -1,6 +1,7 @@
 package ru.hse.roguelike.ui.hud
 
 import com.googlecode.lanterna.TextColor
+import ru.hse.roguelike.model.mobs.AbstractHero
 import ru.hse.roguelike.model.mobs.Hero
 import ru.hse.roguelike.ui.image.Image
 import ru.hse.roguelike.ui.window.Window
@@ -16,7 +17,7 @@ class HudViewImpl(
 ) : HudView {
     private val hudImage: Image
 
-    private lateinit var hero: Hero
+    private lateinit var hero: AbstractHero
 
     init {
         val fullImage = window.getCurrentInstance()
@@ -24,7 +25,7 @@ class HudViewImpl(
         hudImage.fill(TextColor.ANSI.BLACK_BRIGHT)
     }
 
-    override fun setStats(hero: Hero) {
+    override fun setStats(hero: AbstractHero) {
         this.hero = hero
     }
 

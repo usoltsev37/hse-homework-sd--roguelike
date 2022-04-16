@@ -10,7 +10,7 @@ import ru.hse.roguelike.util.Position
 abstract class Mob {
     abstract var position: Position
     abstract var health: Int
-    abstract val strength: Int
+    abstract var strength: Int
 
     var confused: Boolean = false
 

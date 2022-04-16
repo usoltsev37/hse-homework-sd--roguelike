@@ -1,6 +1,7 @@
 package ru.hse.roguelike.model.items
 
 import kotlinx.serialization.Serializable
+import ru.hse.roguelike.model.mobs.AbstractHero
 import ru.hse.roguelike.model.mobs.Hero
 
 /**
@@ -16,7 +17,7 @@ class EquipableItem(
     var isEquiped: Boolean = false
 ) : Item() {
 
-    override fun use(hero: Hero) {
+    override fun use(hero: AbstractHero) {
         hero.strength += strengthIncrease
         hero.armor += healthIncrease
         isEquiped = true

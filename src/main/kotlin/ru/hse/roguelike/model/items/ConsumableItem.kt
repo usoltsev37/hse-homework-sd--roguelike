@@ -1,6 +1,7 @@
 package ru.hse.roguelike.model.items
 
 import kotlinx.serialization.Serializable
+import ru.hse.roguelike.model.mobs.AbstractHero
 import ru.hse.roguelike.model.mobs.Hero
 import kotlin.random.Random
 
@@ -21,7 +22,7 @@ class ConsumableItem(
     override val description: String
         get() = "healthAmount = $healthAmount"
 
-    override fun use(hero: Hero) {
+    override fun use(hero: AbstractHero) {
         hero.health += healthAmount
         hero.inventory.remove(this)
     }

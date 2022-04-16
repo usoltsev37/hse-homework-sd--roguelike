@@ -1,19 +1,24 @@
 package ru.hse.roguelike.model.mobs
 
+import kotlinx.serialization.Serializable
+import ru.hse.roguelike.model.items.Item
 import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.util.Constants
 import ru.hse.roguelike.util.Position
 import kotlin.random.Random
 
-class HeroDecorator(private val mob: Mob): Mob() {
+@Serializable
+class HeroDecorator(private val hero: AbstractHero): AbstractHero() {
 
-    override var health: Int = mob.health
-    override var position: Position = mob.position
-    override val strength: Int = mob.strength
+    override var health: Int = hero.health
+    override var position: Position = hero.position
+    override var strength: Int = hero.strength
+    override var armor: Int = hero.armor
+    override val inventory: MutableList<Item> = hero.inventory
 
 
     override fun attack(other: Mob) {
-        mob.attack(other)
+        hero.attack(other)
         if (Random.nextInt(100) < Constants.CONFUSE_PROB) {
             confuseEnemy(other)
         }
