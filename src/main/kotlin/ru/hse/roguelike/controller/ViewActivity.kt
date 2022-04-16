@@ -24,75 +24,78 @@ class ViewActivity(window: Window, private val model: GameModel, override var is
     private val inventoryView: InventoryView = InventoryViewImpl(window)
 
     override fun handleEvent(eventType: EventType) {
-        when (model.mode) {
-            GameModel.Mode.GAME -> {
-                when (eventType) {
-                    EventType.USE -> {
-                        val itemIndex = model.curCell.items.map { it.second }.indexOf(model.hero.position)
-                        if (itemIndex != -1) {
-                            model.curCell.items.removeAt(itemIndex) // TODO: move action in GameActivity
-                            hudView.setMessage(
-                                "You found:\n" + model.hero.inventory.last().description
-                            )
-                        }
-                    }
-                    else -> {}
-                }
-
-                val curPos = model.hero.position
-                val prevPos = when (eventType) {
-                    EventType.UP -> curPos.lower()
-                    EventType.DOWN -> curPos.upper()
-                    EventType.LEFT -> curPos.right()
-                    EventType.RIGHT -> curPos.left()
-                    else -> curPos
-                }
-
-                model.currMap.cells.forEach { mapView.setCell(it) }
-
-                if (curPos != mapView.heroPos) {
-                    mapView.setHeroPosition(curPos, prevPos)
-                } else {
-                    mapView.setHeroPosition(curPos)
-                }
-                mapView.show()
-
-                hudView.setStats(model.hero)
-                hudView.show()
-            }
-            GameModel.Mode.INVENTORY -> {
-                when (eventType) {
-                    EventType.INVENTORY -> {
-                        inventoryView.setInventory(model.hero.inventory)
-                        inventoryView.setStats(0, 0, model.hero.health, model.hero.strength)
-                        //TODO()
-                    } // поменять VIEW
-                    EventType.UP -> {
-                        inventoryView.setCurrentPosition(model.currentItemPosition)
-                    }
-                    EventType.DOWN -> {
-                        inventoryView.setCurrentPosition(model.currentItemPosition)
-                    }
-                    EventType.LEFT -> {
-                        inventoryView.setCurrentPosition(model.currentItemPosition)
-                    }
-                    EventType.RIGHT -> {
-                        inventoryView.setCurrentPosition(model.currentItemPosition)
-                    }
-                    EventType.ENTER -> {
-                        inventoryView.setSelectedPosition(model.selectedItemPosition)
-                        inventoryView.setInventory(model.hero.inventory)
-                    }
-                    else -> {}
-                }
-                inventoryView.show()
-//                TODO("Изменить курсор на View")
-            }
-        }
-        if (model.hero.isDead) {
-            isEndGame = true
+        if (model.mode == GameModel.Mode.GAME) {
+            handleEventInGameMode(eventType)
+        } else if (model.mode == GameModel.Mode.INVENTORY) {
+            handleEventInInventoryMode(eventType)
         }
     }
+
+
+    private fun handleEventInGameMode(eventType: EventType) {
+        when (eventType) {
+            EventType.USE -> {
+                val itemIndex = model.curCell.items.map { it.second }.indexOf(model.hero.position)
+                if (itemIndex != -1) {
+                    model.curCell.items.removeAt(itemIndex) // TODO: move action in GameActivity
+                    hudView.setMessage(
+                        "You found:\n" + model.hero.inventory.last().description
+                    )
+                }
+            }
+            else -> {}
+        }
+
+        val curPos = model.hero.position
+        val prevPos = when (eventType) {
+            EventType.UP -> curPos.lower()
+            EventType.DOWN -> curPos.upper()
+            EventType.LEFT -> curPos.right()
+            EventType.RIGHT -> curPos.left()
+            else -> curPos
+        }
+
+        model.currMap.cells.forEach { mapView.setCell(it) }
+
+        if (curPos != mapView.heroPos) {
+            mapView.setHeroPosition(curPos, prevPos)
+        } else {
+            mapView.setHeroPosition(curPos)
+        }
+        mapView.show()
+
+        hudView.setStats(model.hero)
+        hudView.show()
+    }
+
+    private fun handleEventInInventoryMode(eventType: EventType) {
+        when (eventType) {
+            EventType.INVENTORY -> {
+                inventoryView.setInventory(model.hero.inventory)
+                inventoryView.setStats(0, 0, model.hero.health, model.hero.strength)
+            }
+            EventType.UP -> {
+                inventoryView.setCurrentPosition(model.currentItemPosition)
+            }
+            EventType.DOWN -> {
+                inventoryView.setCurrentPosition(model.currentItemPosition)
+            }
+            EventType.LEFT -> {
+                inventoryView.setCurrentPosition(model.currentItemPosition)
+            }
+            EventType.RIGHT -> {
+                inventoryView.setCurrentPosition(model.currentItemPosition)
+            }
+            EventType.ENTER -> {
+                inventoryView.setSelectedPosition(model.selectedItemPosition)
+                inventoryView.setInventory(model.hero.inventory)
+            }
+            else -> {}
+        }
+        inventoryView.show()
+    }
+
+
 
     /**
      * Init state of the ViewActivity.

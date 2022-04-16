@@ -7,6 +7,7 @@ import ru.hse.roguelike.model.items.ConsumableItem
 import ru.hse.roguelike.model.items.EquipableItem
 import ru.hse.roguelike.model.items.ItemType
 import ru.hse.roguelike.util.*
+import kotlin.math.E
 import kotlin.random.Random
 
 /**
@@ -14,70 +15,74 @@ import kotlin.random.Random
  */
 class GameActivity(private val model: GameModel, override var isEndGame: Boolean) : Activity {
 
-
     override fun handleEvent(eventType: EventType) {
-        when (model.mode) {
-            GameModel.Mode.GAME -> {
-                when (eventType) {
-                    EventType.INVENTORY -> model.mode = GameModel.Mode.INVENTORY
-                    EventType.UP -> model.moveHero(model.hero.position.upper())
-                    EventType.DOWN -> model.moveHero(model.hero.position.lower())
-                    EventType.LEFT -> model.moveHero(model.hero.position.left())
-                    EventType.RIGHT -> model.moveHero(model.hero.position.right())
-                    EventType.USE -> {
-                        val itemIndex = model.curCell.items.map { it.second }.indexOf(model.hero.position)
-                        if (itemIndex != -1) {
-                            model.hero.inventory.add(model.curCell.items[itemIndex].first)
-                        }
-                    }
-                    EventType.REMOVE -> return
-                    else -> {}
-                }
-
-                model.updateCurrentCell()
-                
-                model.curCell.enemies.find {
-                    it.position == model.hero.position
-                }?.let {
-                    model.hero.attack(it)
-                    it.attack(model.hero)
-                }
-
-                model.curCell.enemies.forEach {
-                    model.moveEnemy(it)
-                }
-
-                model.curCell.visited = true
-                model.updateCellsState()
-                model.updatePassagesState()
-            }
-            GameModel.Mode.INVENTORY -> {
-                when (eventType) {
-                    EventType.INVENTORY -> model.mode = GameModel.Mode.GAME
-                    EventType.UP -> model.currentItemMoveUp()
-                    EventType.DOWN -> model.currentItemMoveDown()
-                    EventType.LEFT -> model.currentItemMoveLeft()
-                    EventType.RIGHT -> model.currentItemMoveRight()
-                    EventType.ENTER -> processInventoryEnter()
-                    EventType.REMOVE -> {
-                        if (model.selectedItemPosition != null) {
-                            model.hero.inventory.removeAt(model.transformPosition2Index(model.selectedItemPosition!!))
-                        }
-                    }
-                    EventType.USE -> {
-                        if (model.selectedItemPosition != null) {
-                            val selectedItem =
-                                model.hero.inventory.get(model.transformPosition2Index(model.selectedItemPosition!!))
-                            if (selectedItem is ConsumableItem) {
-                                selectedItem.use(model.hero)
-                            }
-                        }
-                    }
-                }
-            }
+        if (model.mode == GameModel.Mode.GAME) {
+            handleEventInGameMode(eventType)
+        } else if (model.mode == GameModel.Mode.INVENTORY) {
+            handleEventInInventoryMode(eventType)
         }
         if (model.hero.isDead) {
             isEndGame = true
+        }
+    }
+
+    private fun handleEventInGameMode(eventType: EventType) {
+        when (eventType) {
+            EventType.INVENTORY -> model.mode = GameModel.Mode.INVENTORY
+            EventType.UP -> model.moveHero(model.hero.position.upper())
+            EventType.DOWN -> model.moveHero(model.hero.position.lower())
+            EventType.LEFT -> model.moveHero(model.hero.position.left())
+            EventType.RIGHT -> model.moveHero(model.hero.position.right())
+            EventType.USE -> {
+                val itemIndex = model.curCell.items.map { it.second }.indexOf(model.hero.position)
+                if (itemIndex != -1) {
+                    model.hero.inventory.add(model.curCell.items[itemIndex].first)
+                }
+            }
+            EventType.REMOVE -> return
+            else -> {}
+        }
+
+        model.updateCurrentCell()
+
+        model.curCell.enemies.find {
+            it.position == model.hero.position
+        }?.let {
+            model.hero.attack(it)
+            it.attack(model.hero)
+        }
+
+        model.curCell.enemies.forEach {
+            model.moveEnemy(it)
+        }
+
+        model.curCell.visited = true
+        model.updateCellsState()
+        model.updatePassagesState()
+    }
+
+    private fun handleEventInInventoryMode(eventType: EventType) {
+        when (eventType) {
+            EventType.INVENTORY -> model.mode = GameModel.Mode.GAME
+            EventType.UP -> model.currentItemMoveUp()
+            EventType.DOWN -> model.currentItemMoveDown()
+            EventType.LEFT -> model.currentItemMoveLeft()
+            EventType.RIGHT -> model.currentItemMoveRight()
+            EventType.ENTER -> processInventoryEnter()
+            EventType.REMOVE -> {
+                if (model.selectedItemPosition != null) {
+                    model.hero.inventory.removeAt(model.transformPosition2Index(model.selectedItemPosition!!))
+                }
+            }
+            EventType.USE -> {
+                if (model.selectedItemPosition != null) {
+                    val selectedItem =
+                        model.hero.inventory.get(model.transformPosition2Index(model.selectedItemPosition!!))
+                    if (selectedItem is ConsumableItem) {
+                        selectedItem.use(model.hero)
+                    }
+                }
+            }
         }
     }
 
