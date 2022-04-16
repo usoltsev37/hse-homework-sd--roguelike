@@ -32,11 +32,12 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
                     EventType.DOWN -> curPos.upper()
                     EventType.LEFT -> curPos.right()
                     EventType.RIGHT -> curPos.left()
-                    else -> return
+                    else -> curPos
                 }
                 if (curPos != mapView.heroPos) {
                     mapView.setHeroPosition(curPos, prevPos)
                 }
+                mapView.show()
             }
             GameModel.Mode.INVENTORY -> {
                 when (eventType) {
