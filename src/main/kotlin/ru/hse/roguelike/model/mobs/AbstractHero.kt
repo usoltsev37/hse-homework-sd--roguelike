@@ -2,6 +2,8 @@ package ru.hse.roguelike.model.mobs
 
 import kotlinx.serialization.Serializable
 import ru.hse.roguelike.model.items.Item
+import ru.hse.roguelike.util.Constants.LEVEL_UPDATE_HEALTH
+import ru.hse.roguelike.util.Constants.LEVEL_UPDATE_STRENGTH
 import kotlin.math.sqrt
 
 @Serializable
@@ -30,8 +32,12 @@ abstract class AbstractHero: Mob() {
     private fun updateLevel() {
         currMaxXp *= valueToUpdateXp
         level += 1
-        health += 5 // TODO: armor and strength depends on inventory?
-        maxHealth += 5
+        if (level % 2 == 0) {
+            strength += LEVEL_UPDATE_STRENGTH
+        } else {
+            health += LEVEL_UPDATE_HEALTH
+            maxHealth += LEVEL_UPDATE_HEALTH
+        }
     }
 
     private fun calcXp(strength: Int): Int {
