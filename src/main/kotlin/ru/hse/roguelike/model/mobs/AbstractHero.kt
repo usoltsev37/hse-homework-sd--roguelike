@@ -35,8 +35,9 @@ abstract class AbstractHero: Mob() {
         level += 1
         if (level % 2 == 0) {
             strength += LEVEL_UPDATE_STRENGTH
+        } else {
+            maxHealth += LEVEL_UPDATE_HEALTH
         }
-        maxHealth += LEVEL_UPDATE_HEALTH
         health = maxHealth
     }
 
