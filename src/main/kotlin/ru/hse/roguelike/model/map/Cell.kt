@@ -28,11 +28,4 @@ class Cell(
         return "{$leftBottomPos, $rightTopPos}"
     }
 
-    /*
-    * Get Random Position from Cell
-    */
-    fun getRandomPosition(): Position {
-        return Position(Random.nextInt(leftBottomPos.x, rightTopPos.x), Random.nextInt(leftBottomPos.y, rightTopPos.y))
-    }
-
 }

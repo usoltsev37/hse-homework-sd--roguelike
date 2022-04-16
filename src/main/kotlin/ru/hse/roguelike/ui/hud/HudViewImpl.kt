@@ -43,6 +43,10 @@ class HudViewImpl(
             
             Armour: ${hero.armor}
             
+            Exp: ${hero.xp} / ${hero.currMaxXp}
+            
+            Level: ${hero.level}
+            
         """.trimIndent()
 
         hudImage.printText(heroInfo, Position(0, 0), TextColor.ANSI.BLACK_BRIGHT, TextColor.ANSI.CYAN)

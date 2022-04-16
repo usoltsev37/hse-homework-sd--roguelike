@@ -35,25 +35,20 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
                     else -> curPos
                 }
 
-                model.currMap.cells.map { mapView.setCell(it) }
+                model.currMap.cells.forEach { mapView.setCell(it) }
 
                 if (curPos != mapView.heroPos) {
                     mapView.setHeroPosition(curPos, prevPos)
                 } else {
                     mapView.setHeroPosition(curPos)
                 }
-
                 mapView.show()
-                
+
                 hudView.setStats(model.hero)
                 hudView.show()
 
                 if (model.hero.isDead) {
                     //TODO: game over
-                }
-
-                model.currMap.cells.forEach {
-                    mapView.setCell(it)
                 }
             }
             GameModel.Mode.INVENTORY -> {
@@ -94,7 +89,7 @@ class ViewActivity(window: Window, private val model: GameModel) : Activity {
         val initialCell = model.currMap.cells.first()
         initialCell.visited = true
 
-        model.currMap.cells.map { mapView.setCell(it) }
+        model.currMap.cells.forEach { mapView.setCell(it) }
         mapView.setHeroPosition(model.hero.position)
         mapView.show()
 

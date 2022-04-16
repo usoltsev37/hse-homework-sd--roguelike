@@ -16,7 +16,7 @@ import kotlin.random.Random
  * @param hero main Hero.
  * @param currMap Map of the game.
  */
-class GameModel(var level: Int, val currMap: Map = Map.createMap().withHeight(24).withWidth(50).build()) {
+class GameModel(val currMap: Map = Map.createMap().withHeight(24).withWidth(50).build()) {
 
     var mode = Mode.GAME
     var currentItemPosition: Position = Position(1, 0)
