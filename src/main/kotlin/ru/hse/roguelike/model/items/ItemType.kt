@@ -80,5 +80,11 @@ enum class ItemType(val value: Int) : Usable {
          * @return item type
          */
         fun fromInt(value: Int) = values().first { it.value == value }
+        val MAX_ARMOUR: Int = Helmet.getHealthIncrease() +
+                ChestPlate.getHealthIncrease() +
+                Leggings.getHealthIncrease() +
+                Boots.getHealthIncrease() +
+                Sword.getHealthIncrease() +
+                Potion.getHealthIncrease()
     }
 }

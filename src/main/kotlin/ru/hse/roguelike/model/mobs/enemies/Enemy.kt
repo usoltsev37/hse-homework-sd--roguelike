@@ -1,6 +1,7 @@
 package ru.hse.roguelike.model.mobs.enemies
 
 import kotlinx.serialization.Serializable
+import ru.hse.roguelike.model.mobs.Hero
 import ru.hse.roguelike.model.mobs.Mob
 import ru.hse.roguelike.model.mobs.enemies.movement.AggressiveMoveStrategy
 import ru.hse.roguelike.model.mobs.enemies.movement.MoveStrategy
@@ -42,7 +43,11 @@ sealed class Enemy : Mob() {
     }
 
     override fun attack(other: Mob) {
-        other.health -= strength
+        if (other is Hero) {
+            other.health -= other.calcAttackStrength(strength)
+        } else {
+            other.health -= strength
+        }
     }
 
 }

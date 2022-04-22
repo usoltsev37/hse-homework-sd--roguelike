@@ -2,6 +2,7 @@ package ru.hse.roguelike.model.mobs
 
 import kotlinx.serialization.Serializable
 import ru.hse.roguelike.model.items.Item
+import ru.hse.roguelike.model.items.ItemType
 import ru.hse.roguelike.util.Constants.LEVEL_UPDATE_HEALTH
 import ru.hse.roguelike.util.Constants.LEVEL_UPDATE_STRENGTH
 import kotlin.math.sqrt
@@ -43,5 +44,9 @@ abstract class AbstractHero: Mob() {
 
     private fun calcXp(strength: Int): Int {
         return sqrt(strength.toDouble()).toInt()
+    }
+
+    fun calcAttackStrength(otherStrength: Int) : Int {
+        return (1 - (1 / (2.0 * ItemType.MAX_ARMOUR)) * armour).toInt() * otherStrength
     }
 }
