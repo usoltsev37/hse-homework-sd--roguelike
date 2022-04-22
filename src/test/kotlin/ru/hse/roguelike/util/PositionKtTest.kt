@@ -34,19 +34,19 @@ internal class PositionKtTest {
 
     @Test
     fun isInCell() {
-        val cell1 = Cell(Position(0, 0), Position(50, 50), emptyList(), emptyList())
+        val cell1 = Cell(Position(0, 0), Position(50, 50), mutableListOf(), mutableListOf())
         Assertions.assertTrue(position.isInCell(cell1))
-        val cell2 = Cell(Position(30, 30), Position(50, 50), emptyList(), emptyList())
+        val cell2 = Cell(Position(30, 30), Position(50, 50), mutableListOf(), mutableListOf())
         Assertions.assertFalse(position.isInCell(cell2))
-        val cell3 = Cell(position, position, emptyList(), emptyList())
+        val cell3 = Cell(position, position, mutableListOf(), mutableListOf())
         Assertions.assertTrue(position.isInCell(cell3))
     }
 
     @Test
     fun findCellByPoint() {
         val cells1 = listOf(
-            Cell(Position(0, 0), Position(10, 10), emptyList(), emptyList()),
-            Cell(Position(20, 25), Position(40, 35), emptyList(), emptyList())
+            Cell(Position(0, 0), Position(10, 10), mutableListOf(), mutableListOf()),
+            Cell(Position(20, 25), Position(40, 35), mutableListOf(), mutableListOf())
         )
         Assertions.assertEquals(findCellByPoint(position, cells1), cells1[1])
         Assertions.assertEquals(findCellByPoint(Position(5, 4), cells1), cells1[0])

@@ -1,7 +1,8 @@
 package ru.hse.roguelike.model.items
 
 import kotlinx.serialization.Serializable
-import ru.hse.roguelike.model.characters.Hero
+import ru.hse.roguelike.model.mobs.AbstractHero
+import ru.hse.roguelike.model.mobs.Hero
 import kotlin.random.Random
 
 /**
@@ -21,7 +22,7 @@ sealed class Item {
      * Use item
      * @param hero who uses the item
      */
-    abstract fun use(hero: Hero)
+    abstract fun use(hero: AbstractHero)
 
     /**
      * Adds item to hero's inventory
@@ -38,7 +39,7 @@ sealed class Item {
          * @return item with given type
          */
         fun createItem(type: ItemType): Item {
-            return EquipableItem(type.name, type, type.getHealthIncrease(), type.getStrengthIncrease())
+            return EquipableItem("${type.name.take(8)} #${Random.nextInt(100)}", type, type.getHealthIncrease(), type.getStrengthIncrease())
         }
 
         /**
@@ -46,7 +47,7 @@ sealed class Item {
          * @return item with random type
          */
         fun getRandomItem(): Item {
-            return if (Random.nextInt(100) < 50) createItem(ItemType.fromInt(Random.nextInt(ItemType.values().size)))
+            return if (Random.nextInt(100) < 50) createItem(ItemType.fromInt(Random.nextInt(ItemType.values().size - 1)))
             else ConsumableItem(ItemType.Potion.name, ItemType.Potion)
         }
     }

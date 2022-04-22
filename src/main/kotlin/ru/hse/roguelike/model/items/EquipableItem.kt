@@ -1,7 +1,8 @@
 package ru.hse.roguelike.model.items
 
 import kotlinx.serialization.Serializable
-import ru.hse.roguelike.model.characters.Hero
+import ru.hse.roguelike.util.Constants
+import ru.hse.roguelike.model.mobs.AbstractHero
 
 /**
  * Item which can be equipped.
@@ -12,13 +13,13 @@ import ru.hse.roguelike.model.characters.Hero
 class EquipableItem(
     override val name: String,
     override val itemType: ItemType,
-    private val healthIncrease: Int, private val strengthIncrease: Int,
+    private val armourIncrease: Int, private val strengthIncrease: Int,
     var isEquiped: Boolean = false
 ) : Item() {
 
-    override fun use(hero: Hero) {
+    override fun use(hero: AbstractHero) {
         hero.strength += strengthIncrease
-        hero.armor += healthIncrease
+        hero.armour += armourIncrease
         isEquiped = true
     }
 
@@ -26,13 +27,15 @@ class EquipableItem(
      * Stop using item
      * @param hero who stops using item
      */
-    fun unuse(hero: Hero) {
+    fun unuse(hero: AbstractHero) {
         hero.strength -= strengthIncrease
-        hero.armor -= healthIncrease
+        hero.armour -= armourIncrease
         isEquiped = false
     }
 
     override val description: String
-        get() = "health increase = $healthIncrease, strength increase = $strengthIncrease"
+        get() = """${name.take(Constants.HUD_WIDTH)} 
+                |armour = $armourIncrease
+                |strength = $strengthIncrease""".trimMargin()
 
 }

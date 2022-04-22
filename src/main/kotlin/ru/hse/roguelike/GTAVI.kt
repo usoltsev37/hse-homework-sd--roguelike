@@ -17,7 +17,7 @@ fun main() {
     val terminal = terminalFactory.createTerminal()
 
     val mainWindow: Window = WindowImpl(terminal)
-    val model = GameModel(Constants.INITIAL_LEVEL)
+    val model = GameModel()
 
     terminal.use {
         it.enterPrivateMode()
@@ -29,6 +29,9 @@ fun main() {
 
         while (curEvent != SpecialEventType.EXIT) {
             controller.update(curEvent as EventType)
+            if (controller.isEndGame) {
+                return
+            }
             curEvent = input.read()
             while (curEvent == SpecialEventType.UNKNOWN) {
                 curEvent = input.read()

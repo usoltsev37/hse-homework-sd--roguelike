@@ -1,7 +1,7 @@
 package ru.hse.roguelike.ui.hud
 
 import com.googlecode.lanterna.TextColor
-import ru.hse.roguelike.model.characters.Hero
+import ru.hse.roguelike.model.mobs.AbstractHero
 import ru.hse.roguelike.ui.image.Image
 import ru.hse.roguelike.ui.window.Window
 import ru.hse.roguelike.util.Constants.HUD_WIDTH
@@ -16,7 +16,8 @@ class HudViewImpl(
 ) : HudView {
     private val hudImage: Image
 
-    private lateinit var hero: Hero
+    private lateinit var hero: AbstractHero
+    private var message: String? = null
 
     init {
         val fullImage = window.getCurrentInstance()
@@ -24,8 +25,12 @@ class HudViewImpl(
         hudImage.fill(TextColor.ANSI.BLACK_BRIGHT)
     }
 
-    override fun setStats(hero: Hero) {
+    override fun setStats(hero: AbstractHero) {
         this.hero = hero
+    }
+
+    override fun setMessage(message: String) {
+        this.message = message
     }
 
     override fun show() {
@@ -34,16 +39,33 @@ class HudViewImpl(
     }
 
     private fun updateImage() {
-        val heroInfo = """
+        hudImage.clear()
+        hudImage.fill(TextColor.ANSI.BLACK_BRIGHT)
+
+        val stringBuilder = StringBuilder()
+
+        stringBuilder.append(
+            """
             
-            Health: ${hero.health} / 50
+            Health: ${hero.health} / ${hero.maxHealth}
             
-            Strenght: ${hero.strength}
+            Strength: ${hero.strength}
             
-            Armour: ${hero.armor}
+            Armour: ${hero.armour}
+            
+            Exp: ${hero.xp} / ${hero.currMaxXp}
+            
+            Level: ${hero.level}
             
         """.trimIndent()
+        )
 
-        hudImage.printText(heroInfo, Position(0, 0), TextColor.ANSI.BLACK_BRIGHT, TextColor.ANSI.CYAN)
+        if (message != null) {
+            stringBuilder.append("-".repeat(HUD_WIDTH) + "\n")
+            stringBuilder.append("\n$message\n")
+        }
+        message = null
+
+        hudImage.printText(stringBuilder.toString(), Position(0, 0), TextColor.ANSI.BLACK_BRIGHT, TextColor.ANSI.CYAN)
     }
 }

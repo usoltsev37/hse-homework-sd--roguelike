@@ -5,7 +5,7 @@ import ru.hse.roguelike.model.items.Item
 import ru.hse.roguelike.model.map.Cell
 
 typealias Position = Pair<Int, Int>
-typealias FreeItems = List<Pair<Item, Position>>
+typealias FreeItems = MutableList<Pair<Item, Position>>
 
 val Position.x: Int
     get() = first

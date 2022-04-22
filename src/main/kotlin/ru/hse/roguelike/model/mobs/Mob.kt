@@ -1,4 +1,4 @@
-package ru.hse.roguelike.model.characters
+package ru.hse.roguelike.model.mobs
 
 import ru.hse.roguelike.util.Position
 
@@ -7,19 +7,20 @@ import ru.hse.roguelike.util.Position
  * @see Hero
  * @see Enemy
  */
-abstract class Movable {
+abstract class Mob {
     abstract var position: Position
     abstract var health: Int
-    abstract val strength: Int
+    abstract var strength: Int
+    abstract val name: String
+
+    var confused: Boolean = false
 
     val isDead: Boolean
         get() = health <= 0
 
     /**
-     * Attack other character
+     * Attack other mob
      * @param other who will be attacked
      */
-    fun attack(other: Movable) {
-        health -= other.strength
-    }
+    abstract fun attack(other: Mob)
 }
