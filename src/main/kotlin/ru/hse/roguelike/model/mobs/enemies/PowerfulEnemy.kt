@@ -1,11 +1,14 @@
 package ru.hse.roguelike.model.mobs.enemies
 
+import kotlinx.serialization.Serializable
 import ru.hse.roguelike.model.mobs.Mob
 import ru.hse.roguelike.util.Position
+import kotlin.math.max
 
 /**
  * Enemy implementation for strong creates
  */
+@Serializable
 class PowerfulEnemy(override var position: Position) : Enemy() {
     override val name: String = "P"
     override val step: Int = DEFAULT_STEP
@@ -13,6 +16,6 @@ class PowerfulEnemy(override var position: Position) : Enemy() {
     override fun attack(other: Mob) {
         other.health -= strength
         strength += 5
-        other.strength -= 5
+        other.strength = max(0, other.strength - 5)
     }
 }
