@@ -11,13 +11,17 @@ import com.googlecode.lanterna.screen.Screen
 import com.googlecode.lanterna.screen.TerminalScreen
 import com.googlecode.lanterna.terminal.Terminal
 import ru.hse.roguelike.util.Constants
-import java.io.Console
 import java.io.File
 import java.util.regex.Pattern
 import kotlin.system.exitProcess
 import ru.hse.roguelike.model.map.Map as GameMap
 
 
+/**
+ * MenuView implementation via Lanterna.
+ * @param terminal Lanterna's terminal implementation
+ * @param mapBuilder Game map builder, it will collect map configuration
+ */
 class MenuViewImpl(
     terminal: Terminal,
     private val mapBuilder: GameMap.Builder
@@ -32,7 +36,7 @@ class MenuViewImpl(
         window = BasicWindow()
     }
 
-    fun draw() {
+    override fun draw() {
         val menubar = MenuBar()
 
         val menuFile = Menu("Game")

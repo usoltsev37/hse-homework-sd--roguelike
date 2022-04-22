@@ -15,7 +15,7 @@ import ru.hse.roguelike.model.map.Map as GameMap
  */
 fun main() {
     val terminalFactory = DefaultTerminalFactory()
-    terminalFactory.setInitialTerminalSize(TerminalSize(Constants.DEFAULT_MAP_WIDTH, Constants.DEFAULT_MAP_HEIGHT))
+    terminalFactory.setInitialTerminalSize(TerminalSize(Constants.MAX_TERMINAL_WIDTH, Constants.MAX_TERMINAL_HEIGHT))
     val terminal = terminalFactory.createTerminal()
 
     val mainWindow: Window = WindowImpl(terminal)
