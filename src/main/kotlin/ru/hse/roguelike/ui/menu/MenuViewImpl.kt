@@ -84,7 +84,7 @@ class MenuViewImpl(
                         return@Button
                     }
 
-                    if (height > Constants.DEFAULT_MAP_HEIGHT || width > Constants.DEFAULT_MAP_WIDTH) {
+                    if (height > Constants.MAX_MAP_HEIGHT || width > Constants.MAX_MAP_WIDTH) {
                         MessageDialog.showMessageDialog(
                             textGUI,
                             "!!!",
