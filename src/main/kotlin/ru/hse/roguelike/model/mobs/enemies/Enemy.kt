@@ -30,8 +30,9 @@ sealed class Enemy : Mob() {
         }
     abstract val step: Int
     val DEFAULT_STEP = 1
+
     /**
-     * Enemy movement strategy TODO
+     * Enemy movement strategy
      * @param heroPos position of Hero
      */
     fun getNextPosition(heroPos: Position): Position {

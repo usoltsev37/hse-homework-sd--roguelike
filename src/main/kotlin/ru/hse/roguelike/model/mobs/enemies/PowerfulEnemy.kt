@@ -3,6 +3,9 @@ package ru.hse.roguelike.model.mobs.enemies
 import ru.hse.roguelike.model.mobs.Mob
 import ru.hse.roguelike.util.Position
 
+/**
+ * Enemy implementation for strong creates
+ */
 class PowerfulEnemy(override var position: Position) : Enemy() {
     override val name: String = "P"
     override val step: Int = DEFAULT_STEP
