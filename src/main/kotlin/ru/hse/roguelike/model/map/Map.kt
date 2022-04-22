@@ -6,9 +6,9 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.model.items.Item
-import ru.hse.roguelike.model.mobs.enemies.AggressiveEnemy
-import ru.hse.roguelike.model.mobs.enemies.CowardEnemy
-import ru.hse.roguelike.model.mobs.enemies.PassiveEnemy
+import ru.hse.roguelike.model.mobs.enemies.PowerfulEnemy
+import ru.hse.roguelike.model.mobs.enemies.TankEnemy
+import ru.hse.roguelike.model.mobs.enemies.factory.*
 import ru.hse.roguelike.util.*
 import java.io.IOException
 import java.lang.Integer.max
@@ -113,14 +113,18 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
             val left = Position(Random.nextInt(leftBottom.x + 1, centre.x), Random.nextInt(leftBottom.y + 1, centre.y))
             val right = Position(Random.nextInt(centre.x + 1, rightTop.x), Random.nextInt(centre.y + 1, rightTop.y))
 
+            val enemyFactory: EnemyFactory
+
             val enemies = ArrayList<Enemy>()
             if (Random.nextInt(100) < Constants.ENEMY_PROB) {
-                val enemyPos = Position(Random.nextInt(left.x, right.x), Random.nextInt(left.y, right.y))
-                val enemy = when (Random.nextInt(3)) {
-                    0 -> PassiveEnemy(enemyPos)
-                    1 -> CowardEnemy(enemyPos)
-                    else -> AggressiveEnemy(enemyPos)
+                enemyFactory = when (Random.nextInt(3)) {
+                    0 -> FastEnemyFactory()
+                    1 -> TankEnemyFactory()
+                    2 -> SimpleEnemyFactory()
+                    else -> PowerfulEnemyFactory()
                 }
+                val enemyPos = Position(Random.nextInt(left.x, right.x), Random.nextInt(left.y, right.y))
+                val enemy = enemyFactory.createEnemy(enemyPos)
                 enemies.add(enemy)
             }
             val items = ArrayList<Pair<Item, Position>>()
