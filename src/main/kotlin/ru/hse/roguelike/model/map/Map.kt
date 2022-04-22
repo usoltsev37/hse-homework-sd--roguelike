@@ -6,8 +6,10 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.model.items.Item
+import ru.hse.roguelike.model.mobs.enemies.TankEnemy
 import ru.hse.roguelike.model.mobs.enemies.factory.EnemyFactory
 import ru.hse.roguelike.model.mobs.enemies.factory.FastEnemyFactory
+import ru.hse.roguelike.model.mobs.enemies.factory.TankEnemyFactory
 import ru.hse.roguelike.util.*
 import java.io.IOException
 import java.lang.Integer.max
@@ -118,6 +120,7 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
             if (Random.nextInt(100) < Constants.ENEMY_PROB) {
                 enemyFactory = when (Random.nextInt(3)) {
                     0 -> FastEnemyFactory()
+                    1 -> TankEnemyFactory()
                     else -> FastEnemyFactory()
                 }
                 val enemyPos = Position(Random.nextInt(left.x, right.x), Random.nextInt(left.y, right.y))
