@@ -4,9 +4,9 @@ import kotlinx.serialization.Serializable
 import ru.hse.roguelike.util.Position
 
 @Serializable
-class PassiveEnemy(override var position: Position): Enemy() {
-    override val name: String = "V"
-    override fun getNextPosition(heroPos: Position): Position {
+class PassiveEnemy(var position: Position) {
+    val name: String = "V"
+    fun getNextPosition(heroPos: Position): Position {
         return position
     }
 }

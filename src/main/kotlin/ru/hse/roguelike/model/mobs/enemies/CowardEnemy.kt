@@ -7,10 +7,10 @@ import ru.hse.roguelike.util.y
 import kotlin.math.abs
 
 @Serializable
-class CowardEnemy(override var position: Position): Enemy() {
+class CowardEnemy(var position: Position) {
 
-    override val name: String = "Z"
-    override fun getNextPosition(heroPos: Position): Position {
+    val name: String = "Z"
+    fun getNextPosition(heroPos: Position): Position {
         val yDist = abs(position.y - heroPos.y)
         val xDist = abs(position.x - heroPos.x)
 
