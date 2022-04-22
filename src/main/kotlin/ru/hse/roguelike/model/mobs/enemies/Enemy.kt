@@ -3,10 +3,7 @@ package ru.hse.roguelike.model.mobs.enemies
 import kotlinx.serialization.Serializable
 import ru.hse.roguelike.model.mobs.Hero
 import ru.hse.roguelike.model.mobs.Mob
-import ru.hse.roguelike.model.mobs.enemies.movement.AggressiveMoveStrategy
-import ru.hse.roguelike.model.mobs.enemies.movement.CowardMoveStrategy
 import ru.hse.roguelike.model.mobs.enemies.movement.MoveStrategy
-import ru.hse.roguelike.model.mobs.enemies.movement.PassiveMoveStrategy
 import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.x
 import ru.hse.roguelike.util.y
@@ -22,14 +19,10 @@ sealed class Enemy : Mob() {
     override var health: Int = Random.nextInt(10, 20)
     override var strength: Int = Random.nextInt(1, 10)
 
-    val moveStrategy: MoveStrategy
-        get() = when (Random.nextInt(3)) {
-            0 -> AggressiveMoveStrategy()
-            1 -> PassiveMoveStrategy()
-            else -> CowardMoveStrategy()
-        }
     abstract val step: Int
-    val DEFAULT_STEP = 1
+    protected val DEFAULT_STEP = 1
+
+    abstract val moveStrategy: MoveStrategy
 
     /**
      * Enemy movement strategy
@@ -38,12 +31,15 @@ sealed class Enemy : Mob() {
     fun getNextPosition(heroPos: Position): Position {
         val yDist = abs(position.y - heroPos.y)
         val xDist = abs(position.x - heroPos.x)
-        if (yDist == 1 || xDist == 1) {
-            return moveStrategy.getNextPosition(position, heroPos, DEFAULT_STEP)
-        } else {
-            return moveStrategy.getNextPosition(position, heroPos, step)
-        }
+        val stepSize = if (yDist == 1 || xDist == 1) DEFAULT_STEP else step
 
+        return if (confused) {
+            val dir = Random.nextInt(-1, 2)
+            if (Random.nextInt(2) == 0) Position(position.x + dir, position.y)
+            else Position(position.x, position.y + dir)
+        } else {
+            moveStrategy.getNextPosition(position, heroPos, stepSize)
+        }
     }
 
     override fun attack(other: Mob) {

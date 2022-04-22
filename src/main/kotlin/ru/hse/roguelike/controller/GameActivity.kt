@@ -1,14 +1,13 @@
 package ru.hse.roguelike.controller
 
 import ru.hse.roguelike.EventType
-import ru.hse.roguelike.exception.ModelLogicException
 import ru.hse.roguelike.model.GameModel
 import ru.hse.roguelike.model.items.ConsumableItem
 import ru.hse.roguelike.model.items.EquipableItem
-import ru.hse.roguelike.model.items.ItemType
-import ru.hse.roguelike.util.*
-import kotlin.math.E
-import kotlin.random.Random
+import ru.hse.roguelike.util.left
+import ru.hse.roguelike.util.lower
+import ru.hse.roguelike.util.right
+import ru.hse.roguelike.util.upper
 
 /**
  * Activity implementation responsible for the Game Model.

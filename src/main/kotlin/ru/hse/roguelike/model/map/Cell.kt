@@ -6,7 +6,6 @@ import ru.hse.roguelike.util.FreeItems
 import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.x
 import ru.hse.roguelike.util.y
-import kotlin.random.Random
 
 /**
  * Represents a cell on the field where Hero can move. The cage also contains Enemies and Items.

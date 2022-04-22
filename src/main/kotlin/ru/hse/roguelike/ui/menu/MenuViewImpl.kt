@@ -3,13 +3,19 @@ package ru.hse.roguelike.ui.menu
 import com.googlecode.lanterna.TerminalSize
 import com.googlecode.lanterna.TextColor
 import com.googlecode.lanterna.gui2.*
-import com.googlecode.lanterna.gui2.dialogs.*
+import com.googlecode.lanterna.gui2.dialogs.FileDialogBuilder
+import com.googlecode.lanterna.gui2.dialogs.MessageDialog
+import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton
 import com.googlecode.lanterna.gui2.menu.Menu
 import com.googlecode.lanterna.gui2.menu.MenuBar
 import com.googlecode.lanterna.gui2.menu.MenuItem
 import com.googlecode.lanterna.screen.Screen
 import com.googlecode.lanterna.screen.TerminalScreen
 import com.googlecode.lanterna.terminal.Terminal
+import ru.hse.roguelike.model.mobs.enemies.factory.DefaultEnemyFactory
+import ru.hse.roguelike.model.mobs.enemies.factory.FastEnemyFactory
+import ru.hse.roguelike.model.mobs.enemies.factory.PowerfulEnemyFactory
+import ru.hse.roguelike.model.mobs.enemies.factory.TankEnemyFactory
 import ru.hse.roguelike.util.Constants
 import java.io.File
 import java.util.regex.Pattern
@@ -62,16 +68,21 @@ class MenuViewImpl(
 
                 panel.addComponent(Label("Mob type "))
                 val operations = ComboBox<String>()
-                operations.addItem("First type")
-                operations.addItem("Second type")
+                operations.addItem("DEFAULT")
+                operations.addItem("FAST")
+                operations.addItem("POWERFUL")
+                operations.addItem("TANK")
                 panel.addComponent(operations)
 
                 panel.addComponent(EmptySpace(TerminalSize(0, 0)))
                 Button("Start") {
                     val height = heightText.text.toIntOrNull()
                     val width = widthText.text.toIntOrNull()
-                    val mobType = when (operations.selectedItem) {
-                        else -> "kek"
+                    val enemyFactory = when (operations.selectedItem) {
+                        "FAST" -> FastEnemyFactory()
+                        "POWERFUL" -> PowerfulEnemyFactory()
+                        "TANK" -> TankEnemyFactory()
+                        else -> DefaultEnemyFactory()
                     }
 
                     if (height == null || width == null) {
@@ -98,7 +109,7 @@ class MenuViewImpl(
                         return@Button
                     }
 
-                    mapBuilder.withHeight(height).withWidth(width) // TODO with Monster
+                    mapBuilder.withHeight(height).withWidth(width).withEnemyFactory(enemyFactory)
                     window.close()
                 }.addTo(panel)
 

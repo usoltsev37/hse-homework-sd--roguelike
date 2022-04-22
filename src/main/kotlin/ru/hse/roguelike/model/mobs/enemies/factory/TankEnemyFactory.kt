@@ -7,8 +7,8 @@ import ru.hse.roguelike.util.Position
 /**
  * Factory implementation for TankEnemies
  */
-class TankEnemyFactory : EnemyFactory {
+class TankEnemyFactory : EnemyFactory() {
     override fun createEnemy(position: Position): Enemy {
-        return TankEnemy(position)
+        return TankEnemy(position, getRandomEnemyStrategy())
     }
 }

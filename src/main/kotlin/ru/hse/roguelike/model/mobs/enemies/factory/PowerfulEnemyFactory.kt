@@ -7,8 +7,8 @@ import ru.hse.roguelike.util.Position
 /**
  * Factory implementation for PowerfulEnemies
  */
-class PowerfulEnemyFactory : EnemyFactory {
+class PowerfulEnemyFactory : EnemyFactory() {
     override fun createEnemy(position: Position): Enemy {
-        return PowerfulEnemy(position)
+        return PowerfulEnemy(position, getRandomEnemyStrategy())
     }
 }

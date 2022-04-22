@@ -4,11 +4,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.model.items.Item
-import ru.hse.roguelike.model.mobs.enemies.PowerfulEnemy
-import ru.hse.roguelike.model.mobs.enemies.TankEnemy
-import ru.hse.roguelike.model.mobs.enemies.factory.*
+import ru.hse.roguelike.model.mobs.enemies.Enemy
+import ru.hse.roguelike.model.mobs.enemies.factory.EnemyFactory
 import ru.hse.roguelike.util.*
 import java.io.IOException
 import java.lang.Integer.max
@@ -52,6 +50,13 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
         fun loadFrom(path: Path): Builder
 
         /**
+         * Specifies enemies type
+         * @param enemyFactory factory to create enemy
+         * @return builder
+         */
+        fun withEnemyFactory(enemyFactory: EnemyFactory): Builder
+
+        /**
          * Build Map with specified parameters
          * @return constructed map
          */
@@ -62,15 +67,21 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
         private var width: Int = Constants.DEFAULT_MAP_WIDTH
         private var height: Int = Constants.DEFAULT_MAP_HEIGHT
         private var path: Path? = null
+        private var enemyFactory: EnemyFactory? = null
 
         override fun withWidth(width: Int): Builder = apply { this.width = width }
         override fun withHeight(height: Int): Builder = apply { this.height = height }
         override fun loadFrom(path: Path): Builder = apply { this.path = path }
+        override fun withEnemyFactory(enemyFactory: EnemyFactory): Builder = apply { this.enemyFactory = enemyFactory }
 
         override fun build(): Map {
             if (path != null) {
                 val jsonString = path!!.readText()
                 return Json.decodeFromString(jsonString)
+            }
+
+            if (enemyFactory == null) {
+                throw IllegalStateException("Please, initialize enemy factory")
             }
 
             val cells = doGenerateCells(Position(0, 0), Position(width, height))
@@ -132,18 +143,10 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
             val left = Position(Random.nextInt(leftBottom.x + 1, centre.x), Random.nextInt(leftBottom.y + 1, centre.y))
             val right = Position(Random.nextInt(centre.x + 1, rightTop.x), Random.nextInt(centre.y + 1, rightTop.y))
 
-            val enemyFactory: EnemyFactory
-
             val enemies = ArrayList<Enemy>()
             if (Random.nextInt(100) < Constants.ENEMY_PROB) {
-                enemyFactory = when (Random.nextInt(3)) {
-                    0 -> FastEnemyFactory()
-                    1 -> TankEnemyFactory()
-                    2 -> SimpleEnemyFactory()
-                    else -> PowerfulEnemyFactory()
-                }
                 val enemyPos = Position(Random.nextInt(left.x, right.x), Random.nextInt(left.y, right.y))
-                val enemy = enemyFactory.createEnemy(enemyPos)
+                val enemy = enemyFactory!!.createEnemy(enemyPos)
                 enemies.add(enemy)
             }
             val items = ArrayList<Pair<Item, Position>>()

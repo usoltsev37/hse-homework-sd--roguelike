@@ -2,6 +2,7 @@ package ru.hse.roguelike.model.mobs.enemies
 
 import kotlinx.serialization.Serializable
 import ru.hse.roguelike.model.mobs.Mob
+import ru.hse.roguelike.model.mobs.enemies.movement.MoveStrategy
 import ru.hse.roguelike.util.Position
 import kotlin.math.max
 
@@ -9,7 +10,7 @@ import kotlin.math.max
  * Enemy implementation for strong creates
  */
 @Serializable
-class PowerfulEnemy(override var position: Position) : Enemy() {
+class PowerfulEnemy(override var position: Position, override val moveStrategy: MoveStrategy) : Enemy() {
     override val name: String = "P"
     override val step: Int = DEFAULT_STEP
 

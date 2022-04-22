@@ -7,8 +7,8 @@ import ru.hse.roguelike.util.Position
 /**
  * Factory implementation for FastEnemies
  */
-class FastEnemyFactory : EnemyFactory {
+class FastEnemyFactory : EnemyFactory() {
     override fun createEnemy(position: Position): Enemy {
-        return FastEnemy(position)
+        return FastEnemy(position, getRandomEnemyStrategy())
     }
 }

@@ -1,14 +1,13 @@
 package ru.hse.roguelike.model
 
-import ru.hse.roguelike.model.mobs.enemies.Enemy
-import ru.hse.roguelike.model.mobs.Hero
 import ru.hse.roguelike.model.map.Cell
 import ru.hse.roguelike.model.map.Map
 import ru.hse.roguelike.model.mobs.AbstractHero
+import ru.hse.roguelike.model.mobs.Hero
 import ru.hse.roguelike.model.mobs.HeroDecorator
+import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.util.*
 import java.util.*
-import kotlin.random.Random
 
 /**
  * Game Model.
@@ -16,7 +15,7 @@ import kotlin.random.Random
  * @param hero main Hero.
  * @param currMap Map of the game.
  */
-class GameModel(val currMap: Map = Map.createMap().withHeight(24).withWidth(50).build()) {
+class GameModel(val currMap: Map) {
 
     var mode = Mode.GAME
     var currentItemPosition: Position = Position(1, 0)
@@ -95,14 +94,7 @@ class GameModel(val currMap: Map = Map.createMap().withHeight(24).withWidth(50).
     }
     
     fun moveEnemy(enemy: Enemy) {
-        val newPos = if (enemy.confused) {
-            val dir = Random.nextInt(-1, 2)
-             if (Random.nextInt(2) == 0) Position(enemy.position.x + dir, enemy.position.y)
-                             else Position(enemy.position.x, enemy.position.y + dir)
-        } else {
-            enemy.getNextPosition(hero.position)
-        }
-
+        val newPos = enemy.getNextPosition(hero.position)
         if (canMove(newPos)) {
             enemy.position = newPos
         }
