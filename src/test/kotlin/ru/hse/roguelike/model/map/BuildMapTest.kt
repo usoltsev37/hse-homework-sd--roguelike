@@ -32,8 +32,7 @@ class BuildMapTest {
         }
     }
 
-    @Ignore
-    @Test //TODO: turns
+    @Test
     fun testConnectedCells() {
         val height = 100
         val width  = 100

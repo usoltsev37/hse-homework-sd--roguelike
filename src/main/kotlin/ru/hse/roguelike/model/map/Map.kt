@@ -72,7 +72,26 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
                 val jsonString = path!!.readText()
                 return Json.decodeFromString(jsonString)
             }
-            return Map(width, height, doGenerateCells(Position(0, 0), Position(width, height)))
+
+            val cells = doGenerateCells(Position(0, 0), Position(width, height))
+
+            var maxLen = 0
+            var biggestConnectedCells = emptyList<Cell>()
+            cells.forEach { cell ->
+                if (!cell.visited) {
+                    val connectedCells = getConnectedCells(cell, cells)
+                    if (connectedCells.size > maxLen) {
+                        maxLen = connectedCells.size
+                        println(maxLen)
+                        biggestConnectedCells = connectedCells
+                    }
+                }
+            }
+
+            biggestConnectedCells.forEach { it.visited = false }
+
+
+            return Map(width, height, biggestConnectedCells)
         }
 
         private fun doGenerateCells(leftBottom: Position, rightTop: Position): List<Cell> {
@@ -193,6 +212,21 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
                     }
                 }
             }
+        }
+
+        private fun getConnectedCells(cell: Cell, allCells: List<Cell>) : List<Cell> {
+            val result = ArrayList<Cell>()
+            cell.visited = true
+            result.add(cell)
+            cell.passages.forEach { passage ->
+                findCellByPoint(passage.to, allCells)?.let {
+                    if (!it.visited) {
+                        val otherCells = getConnectedCells(it, allCells)
+                        result.addAll(otherCells)
+                    }
+                }
+            }
+            return result
         }
 
     }
