@@ -6,9 +6,11 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.model.items.Item
+import ru.hse.roguelike.model.mobs.enemies.PowerfulEnemy
 import ru.hse.roguelike.model.mobs.enemies.TankEnemy
 import ru.hse.roguelike.model.mobs.enemies.factory.EnemyFactory
 import ru.hse.roguelike.model.mobs.enemies.factory.FastEnemyFactory
+import ru.hse.roguelike.model.mobs.enemies.factory.PowerfulEnemyFactory
 import ru.hse.roguelike.model.mobs.enemies.factory.TankEnemyFactory
 import ru.hse.roguelike.util.*
 import java.io.IOException
@@ -121,7 +123,7 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
                 enemyFactory = when (Random.nextInt(3)) {
                     0 -> FastEnemyFactory()
                     1 -> TankEnemyFactory()
-                    else -> FastEnemyFactory()
+                    else -> PowerfulEnemyFactory()
                 }
                 val enemyPos = Position(Random.nextInt(left.x, right.x), Random.nextInt(left.y, right.y))
                 val enemy = enemyFactory.createEnemy(enemyPos)
