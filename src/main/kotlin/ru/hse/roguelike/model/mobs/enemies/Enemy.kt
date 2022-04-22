@@ -4,7 +4,9 @@ import kotlinx.serialization.Serializable
 import ru.hse.roguelike.model.mobs.Hero
 import ru.hse.roguelike.model.mobs.Mob
 import ru.hse.roguelike.model.mobs.enemies.movement.AggressiveMoveStrategy
+import ru.hse.roguelike.model.mobs.enemies.movement.CowardMoveStrategy
 import ru.hse.roguelike.model.mobs.enemies.movement.MoveStrategy
+import ru.hse.roguelike.model.mobs.enemies.movement.PassiveMoveStrategy
 import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.x
 import ru.hse.roguelike.util.y
@@ -23,7 +25,8 @@ sealed class Enemy : Mob() {
     val moveStrategy: MoveStrategy
         get() = when (Random.nextInt(3)) {
             0 -> AggressiveMoveStrategy()
-            else -> AggressiveMoveStrategy()
+            1 -> PassiveMoveStrategy()
+            else -> CowardMoveStrategy()
         }
     abstract val step: Int
     val DEFAULT_STEP = 1
