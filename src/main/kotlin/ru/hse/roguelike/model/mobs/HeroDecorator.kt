@@ -6,57 +6,29 @@ import ru.hse.roguelike.util.Constants
 import ru.hse.roguelike.util.Position
 import kotlin.random.Random
 
+/**
+ * Adds 'confuse enemy' functionality for Hero
+ * @param hero decorated hero
+ */
 class HeroDecorator(private val hero: AbstractHero) : AbstractHero() {
 
-    override var health: Int
-        get() = hero.health
-        set(value) {
-            hero.health = value
-        }
+    override var health: Int by hero::health
 
-    override var maxHealth: Int
-        get() = hero.maxHealth
-        set(value) {
-            hero.health = value
-        }
+    override var maxHealth: Int by hero::maxHealth
 
-    override var position: Position
-        get() = hero.position
-        set(value) {
-            hero.position = value
-        }
+    override var position: Position by hero::position
 
-    override var strength: Int
-        get() = hero.strength
-        set(value) {
-            hero.strength = value
-        }
+    override var strength: Int by hero::strength
 
-    override var armour: Int
-        get() = hero.armour
-        set(value) {
-            hero.armour = value
-        }
+    override var armour: Int by hero::armour
 
-    override var xp: Int
-        get() = hero.xp
-        set(value) {
-            hero.xp = value
-        }
+    override var xp: Int by hero::xp
 
-    override var currMaxXp: Int
-        get() = hero.currMaxXp
-        set(value) {
-            hero.currMaxXp = value
-        }
+    override var currMaxXp: Int by hero::currMaxXp
 
-    override var level: Int
-        get() = hero.level
-        set(value) {
-            hero.level = value
-        }
+    override var level: Int by hero::level
 
-    override val inventory: MutableList<Item> = hero.inventory
+    override val inventory: MutableList<Item> by hero::inventory
 
 
     override fun attack(other: Mob) {
