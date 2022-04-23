@@ -5,6 +5,9 @@ import ru.hse.roguelike.util.x
 import ru.hse.roguelike.util.y
 import kotlin.math.abs
 
+/**
+ * Implements aggressive movement strategy: enemy is chasing player
+ */
 class AggressiveMoveStrategy : MoveStrategy {
     override fun getNextPosition(ourPos: Position, heroPos: Position, step: Int): Position {
         val yDist = abs(ourPos.y - heroPos.y)

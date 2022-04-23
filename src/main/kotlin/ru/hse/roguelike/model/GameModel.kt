@@ -89,11 +89,18 @@ class GameModel(val currMap: Map) {
         return position.first * Constants.COUNT_COLUMNS + position.second
     }
 
+    /**
+     * Move hero to given position if possible
+     * @param newPos new hero position
+     */
     fun moveHero(newPos: Position) {
         if (canMove(newPos))
             hero.position = newPos
     }
 
+    /**
+     * Fight with enemies in current hero position. If there are no enemies at current hero position, do nothing
+     */
     fun fight() {
         curCell.enemies.find {
             it.position == hero.position
@@ -103,6 +110,9 @@ class GameModel(val currMap: Map) {
         }
     }
 
+    /**
+     * Move each enemy from current cell and try to clone all cloneable enemies
+     */
     fun updateStateOfEnemies() {
         val clonedEnemies = ArrayList<CloneableEnemy>()
         curCell.enemies.forEach {
@@ -116,6 +126,9 @@ class GameModel(val currMap: Map) {
         }
     }
 
+    /**
+     * Update cells state: remove died enemies and add moved enemies
+     */
     fun updateCellsState() {
         curCell.visited = true
         currMap.cells.forEach { cell ->

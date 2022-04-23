@@ -4,7 +4,7 @@ import ru.hse.roguelike.model.mobs.Hero
 import ru.hse.roguelike.model.mobs.Mob
 import ru.hse.roguelike.model.mobs.enemies.movement.MoveStrategy
 import ru.hse.roguelike.util.Position
-import ru.hse.roguelike.util.getNearestRandomPosition
+import ru.hse.roguelike.util.getClosestRandomPosition
 import ru.hse.roguelike.util.x
 import ru.hse.roguelike.util.y
 import kotlin.math.abs
@@ -33,7 +33,7 @@ sealed class Enemy : Mob() {
         val stepSize = if (yDist == 1 || xDist == 1) DEFAULT_STEP else step
 
         return if (confused) {
-            position.getNearestRandomPosition()
+            position.getClosestRandomPosition()
         } else {
             moveStrategy.getNextPosition(position, heroPos, stepSize)
         }

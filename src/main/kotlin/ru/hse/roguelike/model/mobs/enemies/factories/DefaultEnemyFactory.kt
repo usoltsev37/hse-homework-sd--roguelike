@@ -5,7 +5,7 @@ import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.util.Position
 
 /**
- * Factory implementation for SimpleEnemies
+ * Factory implementation for DefaultEnemies
  */
 class DefaultEnemyFactory : EnemyFactory() {
     override fun createEnemy(position: Position): Enemy {

@@ -33,7 +33,7 @@ fun Position.isInCell(cell: Cell): Boolean {
             cell.leftBottomPos.y <= y && y <= cell.rightTopPos.y
 }
 
-fun Position.getNearestRandomPosition(): Position {
+fun Position.getClosestRandomPosition(): Position {
     val dir = if (Random.nextInt( 2) == 0) 1 else -1
     return if (Random.nextInt(2) == 0) Position(x + dir, y)
     else Position(x, y + dir)
