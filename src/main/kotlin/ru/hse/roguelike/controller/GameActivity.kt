@@ -44,18 +44,9 @@ class GameActivity(private val model: GameModel, override var isEndGame: Boolean
 
         model.updateCurrentCell()
 
-        model.curCell.enemies.find {
-            it.position == model.hero.position
-        }?.let {
-            model.hero.attack(it)
-            it.attack(model.hero)
-        }
+        model.fight()
 
-        model.curCell.enemies.forEach {
-            model.moveEnemy(it)
-        }
-
-        model.curCell.visited = true
+        model.updateStateOfEnemies()
         model.updateCellsState()
         model.updatePassagesState()
     }

@@ -1,4 +1,4 @@
-package ru.hse.roguelike.model.mobs.enemies.factory
+package ru.hse.roguelike.model.mobs.enemies.factories
 
 import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.model.mobs.enemies.FastEnemy

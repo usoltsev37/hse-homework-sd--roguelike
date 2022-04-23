@@ -6,7 +6,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ru.hse.roguelike.model.items.Item
 import ru.hse.roguelike.model.mobs.enemies.Enemy
-import ru.hse.roguelike.model.mobs.enemies.factory.EnemyFactory
+import ru.hse.roguelike.model.mobs.enemies.factories.EnemyFactory
 import ru.hse.roguelike.util.*
 import java.io.IOException
 import java.lang.Integer.max
@@ -15,6 +15,7 @@ import java.nio.file.Path
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 import kotlin.random.Random
+import kotlin.random.nextInt
 
 /**
  * Represents the entity of the playing field. The playing field consists of Cells and Passages
@@ -93,7 +94,6 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
                     val connectedCells = getConnectedCells(cell, cells)
                     if (connectedCells.size > maxLen) {
                         maxLen = connectedCells.size
-                        println(maxLen)
                         biggestConnectedCells = connectedCells
                     }
                 }
@@ -148,6 +148,9 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
                 val enemyPos = Position(Random.nextInt(left.x, right.x), Random.nextInt(left.y, right.y))
                 val enemy = enemyFactory!!.createEnemy(enemyPos)
                 enemies.add(enemy)
+            }
+            if (Random.nextInt(100) < Constants.CLONEABLE_ENEMY_PROB) {
+                enemies.add(enemyFactory!!.createCloneableEnemy(Position(Random.nextInt(left.x, right.x), Random.nextInt(left.y, right.y))))
             }
             val items = ArrayList<Pair<Item, Position>>()
             if (Random.nextInt(100) < Constants.ITEM_PROB) {

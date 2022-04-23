@@ -12,10 +12,10 @@ import com.googlecode.lanterna.gui2.menu.MenuItem
 import com.googlecode.lanterna.screen.Screen
 import com.googlecode.lanterna.screen.TerminalScreen
 import com.googlecode.lanterna.terminal.Terminal
-import ru.hse.roguelike.model.mobs.enemies.factory.DefaultEnemyFactory
-import ru.hse.roguelike.model.mobs.enemies.factory.FastEnemyFactory
-import ru.hse.roguelike.model.mobs.enemies.factory.PowerfulEnemyFactory
-import ru.hse.roguelike.model.mobs.enemies.factory.TankEnemyFactory
+import ru.hse.roguelike.model.mobs.enemies.factories.DefaultEnemyFactory
+import ru.hse.roguelike.model.mobs.enemies.factories.FastEnemyFactory
+import ru.hse.roguelike.model.mobs.enemies.factories.PowerfulEnemyFactory
+import ru.hse.roguelike.model.mobs.enemies.factories.TankEnemyFactory
 import ru.hse.roguelike.util.Constants
 import java.io.File
 import java.util.regex.Pattern

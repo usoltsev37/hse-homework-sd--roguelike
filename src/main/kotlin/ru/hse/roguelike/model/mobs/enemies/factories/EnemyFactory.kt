@@ -1,6 +1,7 @@
-package ru.hse.roguelike.model.mobs.enemies.factory
+package ru.hse.roguelike.model.mobs.enemies.factories
 
 import ru.hse.roguelike.model.mobs.enemies.Enemy
+import ru.hse.roguelike.model.mobs.enemies.ToxicMold
 import ru.hse.roguelike.model.mobs.enemies.movement.AggressiveMoveStrategy
 import ru.hse.roguelike.model.mobs.enemies.movement.CowardMoveStrategy
 import ru.hse.roguelike.model.mobs.enemies.movement.MoveStrategy
@@ -19,12 +20,15 @@ abstract class EnemyFactory {
      */
     abstract fun createEnemy(position: Position) : Enemy
 
-    protected fun getRandomEnemyStrategy(): MoveStrategy {
-        return when (Random.nextInt(3)) {
+    fun createCloneableEnemy(position: Position): Enemy {
+        return ToxicMold(position, PassiveMoveStrategy())
+    }
+
+    protected fun getRandomEnemyStrategy(): MoveStrategy =
+        when (Random.nextInt(3)) {
             0 -> AggressiveMoveStrategy()
             1 -> PassiveMoveStrategy()
             else -> CowardMoveStrategy()
         }
-    }
 
 }

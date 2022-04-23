@@ -10,6 +10,7 @@ object Constants {
     const val MIN_RECT_DIM_SIZE = 5
 
     const val ENEMY_PROB = 50
+    const val CLONEABLE_ENEMY_PROB = 35
     const val ITEM_PROB = 50
 
     const val COUNT_COLUMNS = 6
@@ -17,6 +18,8 @@ object Constants {
     const val HUD_WIDTH = 20
 
     const val CONFUSE_PROB = 30
+
+    const val CLONE_ENEMY_PROB = 5
 
     const val LEVEL_UPDATE_STRENGTH = 3
     const val LEVEL_UPDATE_HEALTH = 10

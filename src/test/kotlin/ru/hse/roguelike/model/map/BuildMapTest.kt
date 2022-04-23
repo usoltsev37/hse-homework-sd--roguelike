@@ -4,8 +4,7 @@ import ru.hse.roguelike.util.*
 import kotlin.io.path.createTempFile
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import ru.hse.roguelike.model.mobs.enemies.factory.DefaultEnemyFactory
-import kotlin.test.Ignore
+import ru.hse.roguelike.model.mobs.enemies.factories.DefaultEnemyFactory
 
 
 class BuildMapTest {

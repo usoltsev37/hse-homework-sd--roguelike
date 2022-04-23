@@ -5,14 +5,12 @@ import ru.hse.roguelike.model.map.Map
 import ru.hse.roguelike.model.mobs.AbstractHero
 import ru.hse.roguelike.model.mobs.Hero
 import ru.hse.roguelike.model.mobs.HeroDecorator
+import ru.hse.roguelike.model.mobs.enemies.CloneableEnemy
 import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.util.*
-import java.util.*
 
 /**
  * Game Model.
- * @param level current Level of the game.
- * @param hero main Hero.
  * @param currMap Map of the game.
  */
 class GameModel(val currMap: Map) {
@@ -92,15 +90,31 @@ class GameModel(val currMap: Map) {
         if (canMove(newPos))
             hero.position = newPos
     }
-    
-    fun moveEnemy(enemy: Enemy) {
-        val newPos = enemy.getNextPosition(hero.position)
-        if (canMove(newPos)) {
-            enemy.position = newPos
+
+    fun fight() {
+        curCell.enemies.find {
+            it.position == hero.position
+        }?.let {
+            hero.attack(it)
+            it.attack(hero)
+        }
+    }
+
+    fun updateStateOfEnemies() {
+        val clonedEnemies = ArrayList<CloneableEnemy>()
+        curCell.enemies.forEach {
+            moveEnemy(it)
+            if (it is CloneableEnemy) {
+                clonedEnemies.add(it.clone())
+            }
+        }
+        clonedEnemies.forEach {
+            it.tryInitialize(curCell)
         }
     }
 
     fun updateCellsState() {
+        curCell.visited = true
         currMap.cells.forEach { cell ->
             cell.enemies.removeIf {
                 val newCell = findCellByPoint(it.position, currMap.cells)
@@ -118,6 +132,17 @@ class GameModel(val currMap: Map) {
             .forEach { it.visited = true }
     }
 
+    fun updateCurrentCell() {
+        curCell = getCurrentCell()
+    }
+
+    private fun moveEnemy(enemy: Enemy) {
+        val newPos = enemy.getNextPosition(hero.position)
+        if (canMove(newPos)) {
+            enemy.position = newPos
+        }
+    }
+
     private fun canMove(newPos: Position) = checkOnPassage(newPos) || newPos.isInCell(getCurrentCell())
 
     private fun checkOnPassage(pos: Position): Boolean {
@@ -132,10 +157,6 @@ class GameModel(val currMap: Map) {
     private fun getCurrentCell(): Cell {
         curCell = findCellByPoint(hero.position, currMap.cells) ?: curCell
         return curCell
-    }
-
-    fun updateCurrentCell() {
-        curCell = getCurrentCell()
     }
 
     /**
