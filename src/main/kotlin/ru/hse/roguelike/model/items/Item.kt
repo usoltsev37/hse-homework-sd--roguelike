@@ -37,7 +37,12 @@ sealed class Item {
          * @return item with given type
          */
         fun createItem(type: ItemType): Item {
-            return EquipableItem("${type.name.take(8)} #${Random.nextInt(100)}", type, type.getHealthIncrease(), type.getStrengthIncrease())
+            return EquipableItem(
+                "${type.name.take(8)} #${Random.nextInt(100)}",
+                type,
+                type.getHealthIncrease(),
+                type.getStrengthIncrease()
+            )
         }
 
         /**

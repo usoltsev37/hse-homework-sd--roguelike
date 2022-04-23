@@ -7,7 +7,7 @@ import ru.hse.roguelike.util.getClosestRandomPosition
 /**
  * One of cloneable enemies
  */
-class ToxicMold(override var position: Position, override val moveStrategy: MoveStrategy): CloneableEnemy() {
+class ToxicMold(override var position: Position, override val moveStrategy: MoveStrategy) : CloneableEnemy() {
     override val name: String = "M"
 
     override fun clone(): CloneableEnemy {

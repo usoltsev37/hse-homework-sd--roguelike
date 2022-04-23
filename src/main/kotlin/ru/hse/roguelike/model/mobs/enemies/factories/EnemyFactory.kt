@@ -18,7 +18,7 @@ abstract class EnemyFactory {
      * Create Enemy.
      * @param position the Position of  the enemy.
      */
-    abstract fun createEnemy(position: Position) : Enemy
+    abstract fun createEnemy(position: Position): Enemy
 
     fun createCloneableEnemy(position: Position): Enemy {
         return ToxicMold(position, PassiveMoveStrategy())

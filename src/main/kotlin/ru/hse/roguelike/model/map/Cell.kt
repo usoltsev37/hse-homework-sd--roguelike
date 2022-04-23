@@ -16,8 +16,11 @@ import ru.hse.roguelike.util.y
  */
 @Serializable
 class Cell(
-    val leftBottomPos: Position, val rightTopPos: Position, @Transient val enemies: MutableList<Enemy> = mutableListOf(),
-    @Transient val items: FreeItems = mutableListOf(), @Required val passages: MutableList<Passage> = ArrayList()
+    val leftBottomPos: Position,
+    val rightTopPos: Position,
+    @Transient val enemies: MutableList<Enemy> = mutableListOf(),
+    @Transient val items: FreeItems = mutableListOf(),
+    @Required val passages: MutableList<Passage> = ArrayList()
 ) {
 
     var visited = false

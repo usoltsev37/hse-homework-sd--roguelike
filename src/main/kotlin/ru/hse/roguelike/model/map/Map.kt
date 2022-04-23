@@ -78,10 +78,12 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
             if (path != null) {
                 val jsonString = path!!.readText()
                 val map: Map = Json.decodeFromString(jsonString)
-                return map.apply { this.cells.forEach {
-                    it.enemies.addAll(generateEnemies(it.leftBottomPos, it.rightTopPos))
-                    it.items.addAll(generateItems(it.leftBottomPos, it.rightTopPos))
-                } }
+                return map.apply {
+                    this.cells.forEach {
+                        it.enemies.addAll(generateEnemies(it.leftBottomPos, it.rightTopPos))
+                        it.items.addAll(generateItems(it.leftBottomPos, it.rightTopPos))
+                    }
+                }
             }
 
             if (enemyFactory == null) {
@@ -156,12 +158,19 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
                 enemies.add(enemy)
             }
             if (Random.nextInt(100) < Constants.CLONEABLE_ENEMY_PROB) {
-                enemies.add(enemyFactory!!.createCloneableEnemy(Position(Random.nextInt(left.x, right.x), Random.nextInt(left.y, right.y))))
+                enemies.add(
+                    enemyFactory!!.createCloneableEnemy(
+                        Position(
+                            Random.nextInt(left.x, right.x),
+                            Random.nextInt(left.y, right.y)
+                        )
+                    )
+                )
             }
             return enemies
         }
 
-        private fun generateItems(left: Position, right: Position) : FreeItems {
+        private fun generateItems(left: Position, right: Position): FreeItems {
             val items = ArrayList<Pair<Item, Position>>()
             if (Random.nextInt(100) < Constants.ITEM_PROB) {
                 items.add(
@@ -230,7 +239,7 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
             }
         }
 
-        private fun getConnectedCells(cell: Cell, allCells: List<Cell>) : List<Cell> {
+        private fun getConnectedCells(cell: Cell, allCells: List<Cell>): List<Cell> {
             val result = ArrayList<Cell>()
             cell.visited = true
             result.add(cell)

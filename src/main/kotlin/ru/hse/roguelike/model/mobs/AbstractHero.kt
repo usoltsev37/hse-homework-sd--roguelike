@@ -8,7 +8,7 @@ import ru.hse.roguelike.util.Constants.LEVEL_UPDATE_STRENGTH
 import kotlin.math.sqrt
 
 @Serializable
-abstract class AbstractHero: Mob() {
+abstract class AbstractHero : Mob() {
 
     abstract val inventory: MutableList<Item>
     abstract var armour: Int
@@ -46,7 +46,7 @@ abstract class AbstractHero: Mob() {
         return sqrt(strength.toDouble()).toInt()
     }
 
-    fun calcAttackStrength(otherStrength: Int) : Int {
+    fun calcAttackStrength(otherStrength: Int): Int {
         return (1 - (1 / (2.0 * ItemType.MAX_ARMOUR)) * armour).toInt() * otherStrength
     }
 }
