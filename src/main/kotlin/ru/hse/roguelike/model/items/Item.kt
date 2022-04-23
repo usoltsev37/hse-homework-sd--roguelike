@@ -1,6 +1,5 @@
 package ru.hse.roguelike.model.items
 
-import kotlinx.serialization.Serializable
 import ru.hse.roguelike.model.mobs.AbstractHero
 import ru.hse.roguelike.model.mobs.Hero
 import kotlin.random.Random
@@ -11,7 +10,6 @@ import kotlin.random.Random
  * @see EquipableItem
  * @see ItemType
  */
-@Serializable
 sealed class Item {
 
     abstract val name: String

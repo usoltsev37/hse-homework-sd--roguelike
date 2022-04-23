@@ -1,13 +1,12 @@
 package ru.hse.roguelike.model.mobs.enemies
 
-import kotlinx.serialization.Serializable
 import ru.hse.roguelike.model.map.Cell
-import ru.hse.roguelike.util.*
+import ru.hse.roguelike.util.Constants
+import ru.hse.roguelike.util.getNearestRandomPosition
+import ru.hse.roguelike.util.isFree
 import kotlin.random.Random
-import kotlin.random.nextInt
 
 
-@Serializable
 abstract class CloneableEnemy : Enemy() {
     private var myStrength: Int = 1
     private var myHealth: Int = 15

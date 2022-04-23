@@ -66,7 +66,7 @@ class BuildMapTest {
         val tmpFile = createTempFile()
         map.save(tmpFile)
 
-        val loadedMap = Map.createMap().loadFrom(tmpFile).build()
+        val loadedMap = Map.createMap().withEnemyFactory(DefaultEnemyFactory()).loadFrom(tmpFile).build()
 
         Assertions.assertEquals(map.height, loadedMap.height)
         Assertions.assertEquals(map.width, loadedMap.width)

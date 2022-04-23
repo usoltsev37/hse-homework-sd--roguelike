@@ -15,7 +15,6 @@ import java.nio.file.Path
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 import kotlin.random.Random
-import kotlin.random.nextInt
 
 /**
  * Represents the entity of the playing field. The playing field consists of Cells and Passages
@@ -78,7 +77,11 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
         override fun build(): Map {
             if (path != null) {
                 val jsonString = path!!.readText()
-                return Json.decodeFromString(jsonString)
+                val map: Map = Json.decodeFromString(jsonString)
+                return map.apply { this.cells.forEach {
+                    it.enemies.addAll(generateEnemies(it.leftBottomPos, it.rightTopPos))
+                    it.items.addAll(generateItems(it.leftBottomPos, it.rightTopPos))
+                } }
             }
 
             if (enemyFactory == null) {
@@ -142,7 +145,10 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
             val centre = Position((rightTop.x + leftBottom.x) / 2, (rightTop.y + leftBottom.y) / 2)
             val left = Position(Random.nextInt(leftBottom.x + 1, centre.x), Random.nextInt(leftBottom.y + 1, centre.y))
             val right = Position(Random.nextInt(centre.x + 1, rightTop.x), Random.nextInt(centre.y + 1, rightTop.y))
+            return Cell(left, right, generateEnemies(left, right), generateItems(left, right))
+        }
 
+        private fun generateEnemies(left: Position, right: Position): MutableList<Enemy> {
             val enemies = ArrayList<Enemy>()
             if (Random.nextInt(100) < Constants.ENEMY_PROB) {
                 val enemyPos = Position(Random.nextInt(left.x, right.x), Random.nextInt(left.y, right.y))
@@ -152,6 +158,10 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
             if (Random.nextInt(100) < Constants.CLONEABLE_ENEMY_PROB) {
                 enemies.add(enemyFactory!!.createCloneableEnemy(Position(Random.nextInt(left.x, right.x), Random.nextInt(left.y, right.y))))
             }
+            return enemies
+        }
+
+        private fun generateItems(left: Position, right: Position) : FreeItems {
             val items = ArrayList<Pair<Item, Position>>()
             if (Random.nextInt(100) < Constants.ITEM_PROB) {
                 items.add(
@@ -161,7 +171,7 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
                     )
                 )
             }
-            return Cell(left, right, enemies, items)
+            return items
         }
 
         private fun generatePaths(firstCells: List<Cell>, secondCells: List<Cell>, dim: Int) {

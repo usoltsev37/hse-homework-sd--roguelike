@@ -7,7 +7,10 @@ import ru.hse.roguelike.model.mobs.Hero
 import ru.hse.roguelike.model.mobs.HeroDecorator
 import ru.hse.roguelike.model.mobs.enemies.CloneableEnemy
 import ru.hse.roguelike.model.mobs.enemies.Enemy
-import ru.hse.roguelike.util.*
+import ru.hse.roguelike.util.Constants
+import ru.hse.roguelike.util.Position
+import ru.hse.roguelike.util.findCellByPoint
+import ru.hse.roguelike.util.isInCell
 
 /**
  * Game Model.

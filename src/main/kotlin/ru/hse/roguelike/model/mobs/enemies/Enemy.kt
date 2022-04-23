@@ -1,6 +1,5 @@
 package ru.hse.roguelike.model.mobs.enemies
 
-import kotlinx.serialization.Serializable
 import ru.hse.roguelike.model.mobs.Hero
 import ru.hse.roguelike.model.mobs.Mob
 import ru.hse.roguelike.model.mobs.enemies.movement.MoveStrategy
@@ -14,7 +13,6 @@ import kotlin.random.Random
 /**
  * Enemy that randomly spawns on the Map and attacks Hero when he gets too close.
  */
-@Serializable
 sealed class Enemy : Mob() {
 
     override var health: Int = Random.nextInt(10, 20)
