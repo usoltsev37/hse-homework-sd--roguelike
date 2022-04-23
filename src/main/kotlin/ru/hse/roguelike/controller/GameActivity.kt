@@ -1,14 +1,13 @@
 package ru.hse.roguelike.controller
 
 import ru.hse.roguelike.EventType
-import ru.hse.roguelike.exception.ModelLogicException
 import ru.hse.roguelike.model.GameModel
 import ru.hse.roguelike.model.items.ConsumableItem
 import ru.hse.roguelike.model.items.EquipableItem
-import ru.hse.roguelike.model.items.ItemType
-import ru.hse.roguelike.util.*
-import kotlin.math.E
-import kotlin.random.Random
+import ru.hse.roguelike.util.left
+import ru.hse.roguelike.util.lower
+import ru.hse.roguelike.util.right
+import ru.hse.roguelike.util.upper
 
 /**
  * Activity implementation responsible for the Game Model.
@@ -45,18 +44,9 @@ class GameActivity(private val model: GameModel, override var isEndGame: Boolean
 
         model.updateCurrentCell()
 
-        model.curCell.enemies.find {
-            it.position == model.hero.position
-        }?.let {
-            model.hero.attack(it)
-            it.attack(model.hero)
-        }
+        model.fight()
 
-        model.curCell.enemies.forEach {
-            model.moveEnemy(it)
-        }
-
-        model.curCell.visited = true
+        model.updateStateOfEnemies()
         model.updateCellsState()
         model.updatePassagesState()
     }

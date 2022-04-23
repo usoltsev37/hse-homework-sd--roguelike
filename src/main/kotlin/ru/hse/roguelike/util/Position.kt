@@ -3,6 +3,7 @@ package ru.hse.roguelike.util
 import com.googlecode.lanterna.TerminalPosition
 import ru.hse.roguelike.model.items.Item
 import ru.hse.roguelike.model.map.Cell
+import kotlin.random.Random
 
 typealias Position = Pair<Int, Int>
 typealias FreeItems = MutableList<Pair<Item, Position>>
@@ -30,6 +31,21 @@ fun Position.toLanternaTerminalPosition(): TerminalPosition {
 fun Position.isInCell(cell: Cell): Boolean {
     return cell.leftBottomPos.x <= x && x <= cell.rightTopPos.x &&
             cell.leftBottomPos.y <= y && y <= cell.rightTopPos.y
+}
+
+fun Position.getClosestRandomPosition(): Position {
+    val dir = if (Random.nextInt(2) == 0) 1 else -1
+    return if (Random.nextInt(2) == 0) Position(x + dir, y)
+    else Position(x, y + dir)
+}
+
+fun Position.isFree(cell: Cell): Boolean {
+    cell.enemies.forEach {
+        if (it.position == this) {
+            return false
+        }
+    }
+    return isInCell(cell)
 }
 
 fun findCellByPoint(point: Position?, cells: List<Cell>): Cell? {

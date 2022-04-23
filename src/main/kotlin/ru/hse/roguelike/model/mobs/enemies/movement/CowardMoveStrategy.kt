@@ -5,6 +5,9 @@ import ru.hse.roguelike.util.x
 import ru.hse.roguelike.util.y
 import kotlin.math.abs
 
+/**
+ * Coward enemy movement strategy: enemy runs away from the player
+ */
 class CowardMoveStrategy : MoveStrategy {
     override fun getNextPosition(ourPos: Position, heroPos: Position, step: Int): Position {
         val yDist = abs(ourPos.y - heroPos.y)
@@ -13,6 +16,6 @@ class CowardMoveStrategy : MoveStrategy {
         val direction = if (ourPos.x < heroPos.x || ourPos.y < heroPos.y) -1 else 1
 
         return if (xDist <= yDist) Position(ourPos.x + direction * step, ourPos.y)
-            else Position(ourPos.x, ourPos.y + direction * step)
+        else Position(ourPos.x, ourPos.y + direction * step)
     }
 }

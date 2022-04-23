@@ -1,22 +1,22 @@
 package ru.hse.roguelike.model
 
-import ru.hse.roguelike.model.mobs.enemies.Enemy
-import ru.hse.roguelike.model.mobs.Hero
 import ru.hse.roguelike.model.map.Cell
 import ru.hse.roguelike.model.map.Map
 import ru.hse.roguelike.model.mobs.AbstractHero
+import ru.hse.roguelike.model.mobs.Hero
 import ru.hse.roguelike.model.mobs.HeroDecorator
-import ru.hse.roguelike.util.*
-import java.util.*
-import kotlin.random.Random
+import ru.hse.roguelike.model.mobs.enemies.CloneableEnemy
+import ru.hse.roguelike.model.mobs.enemies.Enemy
+import ru.hse.roguelike.util.Constants
+import ru.hse.roguelike.util.Position
+import ru.hse.roguelike.util.findCellByPoint
+import ru.hse.roguelike.util.isInCell
 
 /**
  * Game Model.
- * @param level current Level of the game.
- * @param hero main Hero.
  * @param currMap Map of the game.
  */
-class GameModel(val currMap: Map = Map.createMap().withHeight(24).withWidth(50).build()) {
+class GameModel(val currMap: Map) {
 
     var mode = Mode.GAME
     var currentItemPosition: Position = Position(1, 0)
@@ -89,26 +89,48 @@ class GameModel(val currMap: Map = Map.createMap().withHeight(24).withWidth(50).
         return position.first * Constants.COUNT_COLUMNS + position.second
     }
 
+    /**
+     * Move hero to given position if possible
+     * @param newPos new hero position
+     */
     fun moveHero(newPos: Position) {
         if (canMove(newPos))
             hero.position = newPos
     }
-    
-    fun moveEnemy(enemy: Enemy) {
-        val newPos = if (enemy.confused) {
-            val dir = Random.nextInt(-1, 2)
-             if (Random.nextInt(2) == 0) Position(enemy.position.x + dir, enemy.position.y)
-                             else Position(enemy.position.x, enemy.position.y + dir)
-        } else {
-            enemy.getNextPosition(hero.position)
-        }
 
-        if (canMove(newPos)) {
-            enemy.position = newPos
+    /**
+     * Fight with enemies in current hero position. If there are no enemies at current hero position, do nothing
+     */
+    fun fight() {
+        curCell.enemies.find {
+            it.position == hero.position
+        }?.let {
+            hero.attack(it)
+            it.attack(hero)
         }
     }
 
+    /**
+     * Move each enemy from current cell and try to clone all cloneable enemies
+     */
+    fun updateStateOfEnemies() {
+        val clonedEnemies = ArrayList<CloneableEnemy>()
+        curCell.enemies.forEach {
+            moveEnemy(it)
+            if (it is CloneableEnemy) {
+                clonedEnemies.add(it.clone())
+            }
+        }
+        clonedEnemies.forEach {
+            it.tryInitialize(curCell)
+        }
+    }
+
+    /**
+     * Update cells state: remove died enemies and add moved enemies
+     */
     fun updateCellsState() {
+        curCell.visited = true
         currMap.cells.forEach { cell ->
             cell.enemies.removeIf {
                 val newCell = findCellByPoint(it.position, currMap.cells)
@@ -126,6 +148,17 @@ class GameModel(val currMap: Map = Map.createMap().withHeight(24).withWidth(50).
             .forEach { it.visited = true }
     }
 
+    fun updateCurrentCell() {
+        curCell = getCurrentCell()
+    }
+
+    private fun moveEnemy(enemy: Enemy) {
+        val newPos = enemy.getNextPosition(hero.position)
+        if (canMove(newPos)) {
+            enemy.position = newPos
+        }
+    }
+
     private fun canMove(newPos: Position) = checkOnPassage(newPos) || newPos.isInCell(getCurrentCell())
 
     private fun checkOnPassage(pos: Position): Boolean {
@@ -140,10 +173,6 @@ class GameModel(val currMap: Map = Map.createMap().withHeight(24).withWidth(50).
     private fun getCurrentCell(): Cell {
         curCell = findCellByPoint(hero.position, currMap.cells) ?: curCell
         return curCell
-    }
-
-    fun updateCurrentCell() {
-        curCell = getCurrentCell()
     }
 
     /**

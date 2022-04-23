@@ -1,4 +1,4 @@
-package ru.hse.roguelike.model.mobs.enemies.factory
+package ru.hse.roguelike.model.mobs.enemies.factories
 
 import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.model.mobs.enemies.PowerfulEnemy
@@ -7,8 +7,8 @@ import ru.hse.roguelike.util.Position
 /**
  * Factory implementation for PowerfulEnemies
  */
-class PowerfulEnemyFactory : EnemyFactory {
+class PowerfulEnemyFactory : EnemyFactory() {
     override fun createEnemy(position: Position): Enemy {
-        return PowerfulEnemy(position)
+        return PowerfulEnemy(position, getRandomEnemyStrategy())
     }
 }

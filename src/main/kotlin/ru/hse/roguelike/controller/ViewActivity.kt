@@ -96,7 +96,6 @@ class ViewActivity(window: Window, private val model: GameModel, override var is
     }
 
 
-
     /**
      * Init state of the ViewActivity.
      * @param model the Game Model.

@@ -1,13 +1,10 @@
 package ru.hse.roguelike.model.items
 
-import kotlinx.serialization.Serializable
-
 /**
  * Specifies concrete Item
  * @see Item
  * @see Usable
  */
-@Serializable
 enum class ItemType(val value: Int) : Usable {
     Helmet(0) {
         override fun getHealthIncrease(): Int {

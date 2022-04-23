@@ -1,15 +1,13 @@
 package ru.hse.roguelike.model.items
 
-import kotlinx.serialization.Serializable
-import ru.hse.roguelike.util.Constants
 import ru.hse.roguelike.model.mobs.AbstractHero
+import ru.hse.roguelike.util.Constants
 
 /**
  * Item which can be equipped.
  * @see Item
  * @see ItemType
  */
-@Serializable
 class EquipableItem(
     override val name: String,
     override val itemType: ItemType,
