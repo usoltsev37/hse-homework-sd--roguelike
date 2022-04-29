@@ -3,6 +3,7 @@ package ru.hse.roguelike.ui.menu
 import com.googlecode.lanterna.TerminalSize
 import com.googlecode.lanterna.TextColor
 import com.googlecode.lanterna.gui2.*
+import com.googlecode.lanterna.gui2.dialogs.DirectoryDialogBuilder
 import com.googlecode.lanterna.gui2.dialogs.FileDialogBuilder
 import com.googlecode.lanterna.gui2.dialogs.MessageDialog
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton
@@ -184,6 +185,16 @@ class MenuViewImpl(
         menubar.add(menuFile).add(menuHelp)
 
         window.component = menubar
+    }
+
+    override fun saveMap(map: GameMap) {
+        val file = FileDialogBuilder()
+            .setTitle("Save map")
+            .setActionLabel("Save")
+            .build()
+            .showDialog(textGUI)
+
+        map.save(file.toPath())
     }
 
     override fun show() {

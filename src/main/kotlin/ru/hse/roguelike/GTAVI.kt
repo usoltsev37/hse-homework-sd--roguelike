@@ -38,6 +38,7 @@ fun main() {
         while (curEvent != SpecialEventType.EXIT) {
             controller.update(curEvent as EventType)
             if (controller.isEndGame) {
+                menu.saveMap(model.currMap)
                 return
             }
             curEvent = input.read()
