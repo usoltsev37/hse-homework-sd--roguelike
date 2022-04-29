@@ -4,7 +4,7 @@ import com.googlecode.lanterna.TerminalSize
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory
 import ru.hse.roguelike.controller.Controller
 import ru.hse.roguelike.model.GameModel
-import ru.hse.roguelike.ui.menu.MenuViewImpl
+import ru.hse.roguelike.ui.menu.MenuImpl
 import ru.hse.roguelike.ui.window.Window
 import ru.hse.roguelike.ui.window.WindowImpl
 import ru.hse.roguelike.util.Constants
@@ -21,9 +21,8 @@ fun main() {
     val mainWindow: Window = WindowImpl(terminal)
     val mapBuilder = GameMap.createMap()
 
-    val menu = MenuViewImpl(terminal, mapBuilder)
-    menu.draw()
-    menu.show()
+    val menu = MenuImpl(terminal, mapBuilder)
+    menu.display()
 
     var model = GameModel(mapBuilder.build())
 
@@ -40,7 +39,6 @@ fun main() {
             if (controller.isEndGame) {
                 mainWindow.clear()
                 menu.saveMap(model.currMap)
-                menu.show()
 
                 model = GameModel(mapBuilder.build())
                 controller = Controller(mainWindow, model)

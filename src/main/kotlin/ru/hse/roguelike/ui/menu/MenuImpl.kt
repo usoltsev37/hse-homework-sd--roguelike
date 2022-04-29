@@ -23,6 +23,7 @@ import java.io.File
 import java.util.regex.Pattern
 import kotlin.system.exitProcess
 import ru.hse.roguelike.model.map.Map as GameMap
+import ru.hse.roguelike.ui.menu.Menu as GameMenu
 
 
 /**
@@ -30,10 +31,10 @@ import ru.hse.roguelike.model.map.Map as GameMap
  * @param terminal Lanterna's terminal implementation
  * @param mapBuilder Game map builder, it will collect map configuration
  */
-class MenuViewImpl(
+class MenuImpl(
     terminal: Terminal,
     private val mapBuilder: GameMap.Builder
-) : MenuView {
+) : GameMenu() {
     private val textGUI: MultiWindowTextGUI
     private val window: Window
 
@@ -44,7 +45,7 @@ class MenuViewImpl(
         window = BasicWindow()
     }
 
-    override fun draw() {
+    override fun display() {
         val menubar = MenuBar()
 
         val menuFile = Menu("Game")
@@ -213,6 +214,7 @@ class MenuViewImpl(
         menubar.add(menuFile).add(menuHelp)
 
         window.component = menubar
+        textGUI.addWindowAndWait(window)
     }
 
     override fun saveMap(map: GameMap) {
@@ -232,17 +234,14 @@ class MenuViewImpl(
                 .showDialog(textGUI)
 
             map.save(directory.toPath().resolve(fileName))
-            draw()
+            display()
         }.addTo(panel)
 
         Button("Exit") {
-            draw()
+            display()
         }.addTo(panel)
 
         window.component = panel
-    }
-
-    override fun show() {
         textGUI.addWindowAndWait(window)
     }
 }
