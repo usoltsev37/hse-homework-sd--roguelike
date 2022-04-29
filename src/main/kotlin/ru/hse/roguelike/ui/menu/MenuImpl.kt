@@ -33,8 +33,8 @@ import ru.hse.roguelike.ui.menu.Menu as GameMenu
  */
 class MenuImpl(
     terminal: Terminal,
-    private val mapBuilder: GameMap.Builder
-) : GameMenu() {
+    mapBuilder: GameMap.Builder
+) : GameMenu(mapBuilder) {
     private val textGUI: MultiWindowTextGUI
     private val window: Window
 

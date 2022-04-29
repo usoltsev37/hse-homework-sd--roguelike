@@ -5,7 +5,9 @@ import ru.hse.roguelike.model.map.Map as GameMap
 /**
  * Base game menu.
  */
-abstract class Menu {
+abstract class Menu(
+    protected val mapBuilder: GameMap.Builder
+) {
     /**
      * Display base menu.
      */
