@@ -263,8 +263,14 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
      */
     @Throws(IOException::class)
     fun save(path: Path) {
+        prepareToSave()
         val jsonString = Json.encodeToString(this)
         path.writeText(jsonString)
+    }
+
+    private fun prepareToSave() {
+        cells.flatMap { it.passages }.forEach { it.visited = false }
+        cells.forEach { it.visited = false }
     }
 
     companion object {
