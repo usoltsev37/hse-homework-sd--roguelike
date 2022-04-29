@@ -25,21 +25,25 @@ fun main() {
     menu.draw()
     menu.show()
 
-    val model = GameModel(mapBuilder.build())
+    var model = GameModel(mapBuilder.build())
 
     terminal.use {
         it.enterPrivateMode()
 
         val input = Input(it)
-        val controller = Controller(mainWindow, model)
+        var controller = Controller(mainWindow, model)
 
         var curEvent: EventInterface = input.read()
 
         while (curEvent != SpecialEventType.EXIT) {
             controller.update(curEvent as EventType)
             if (controller.isEndGame) {
+                mainWindow.clear()
                 menu.saveMap(model.currMap)
-                return
+                menu.show()
+
+                model = GameModel(mapBuilder.build())
+                controller = Controller(mainWindow, model)
             }
             curEvent = input.read()
             while (curEvent == SpecialEventType.UNKNOWN) {

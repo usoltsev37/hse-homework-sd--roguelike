@@ -7,6 +7,7 @@ import com.googlecode.lanterna.gui2.dialogs.DirectoryDialogBuilder
 import com.googlecode.lanterna.gui2.dialogs.FileDialogBuilder
 import com.googlecode.lanterna.gui2.dialogs.MessageDialog
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton
+import com.googlecode.lanterna.gui2.dialogs.TextInputDialogBuilder
 import com.googlecode.lanterna.gui2.menu.Menu
 import com.googlecode.lanterna.gui2.menu.MenuBar
 import com.googlecode.lanterna.gui2.menu.MenuItem
@@ -128,21 +129,48 @@ class MenuViewImpl(
             ) {
                 val file: File? = FileDialogBuilder().build().showDialog(textGUI)
                 if (file != null) {
-                    val mes = MessageDialog.showMessageDialog(
-                        textGUI,
-                        "Open",
-                        """
+                    val panel = Panel()
+                    menubar.isVisible = false
+                    window.component = panel
+
+                    panel.layoutManager = GridLayout(2)
+
+                    panel.addComponent(Label("Mob type "))
+                    val operations = ComboBox<String>()
+                    operations.addItem("DEFAULT")
+                    operations.addItem("FAST")
+                    operations.addItem("POWERFUL")
+                    operations.addItem("TANK")
+                    panel.addComponent(operations)
+
+                    Button("Start") {
+                        val enemyFactory = when (operations.selectedItem) {
+                            "FAST" -> FastEnemyFactory()
+                            "POWERFUL" -> PowerfulEnemyFactory()
+                            "TANK" -> TankEnemyFactory()
+                            else -> DefaultEnemyFactory()
+                        }
+
+                        val mes = MessageDialog.showMessageDialog(
+                            textGUI,
+                            "Open",
+                            """
                             Map: $file
-                            Size: 
-                            
+                            Enemy type: ${operations.text}
+
                             Is everything correct?
                         """.trimIndent(), MessageDialogButton.OK, MessageDialogButton.Cancel
-                    )
+                        )
 
-                    if (mes == MessageDialogButton.OK) {
-                        mapBuilder.loadFrom(file.toPath())
-                        window.close()
-                    }
+                        if (mes == MessageDialogButton.OK) {
+                            mapBuilder.loadFrom(file.toPath())
+                            window.close()
+                        }
+
+                        mapBuilder.withEnemyFactory(enemyFactory)
+                    }.addTo(panel)
+
+                    window.component = panel
                 }
             }
         )
@@ -188,13 +216,30 @@ class MenuViewImpl(
     }
 
     override fun saveMap(map: GameMap) {
-        val file = FileDialogBuilder()
-            .setTitle("Save map")
-            .setActionLabel("Save")
-            .build()
-            .showDialog(textGUI)
+        val panel = Panel()
+        panel.layoutManager = GridLayout(2)
 
-        map.save(file.toPath())
+        Button("Save map") {
+            val directory = DirectoryDialogBuilder()
+                .setTitle("Select directory")
+                .setActionLabel("Select")
+                .build()
+                .showDialog(textGUI)
+
+            val fileName = TextInputDialogBuilder()
+                .setTitle("Input file name for map")
+                .build()
+                .showDialog(textGUI)
+
+            map.save(directory.toPath().resolve(fileName))
+            draw()
+        }.addTo(panel)
+
+        Button("Exit") {
+            draw()
+        }.addTo(panel)
+
+        window.component = panel
     }
 
     override fun show() {

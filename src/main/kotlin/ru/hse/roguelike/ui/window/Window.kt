@@ -23,4 +23,9 @@ interface Window {
      * If it is not exists, method calls `getDefaultInstance`
      */
     fun getCurrentInstance(): Image
+
+    /**
+     * Clear game window.
+     */
+    fun clear()
 }
