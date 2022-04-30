@@ -8,20 +8,17 @@ import ru.hse.roguelike.util.getClosestRandomPosition
 import ru.hse.roguelike.util.x
 import ru.hse.roguelike.util.y
 import kotlin.math.abs
-import kotlin.random.Random
 
 /**
  * Enemy that randomly spawns on the Map and attacks Hero when he gets too close.
  */
-sealed class Enemy : Mob() {
-
-    override var health: Int = Random.nextInt(10, 20)
-    override var strength: Int = Random.nextInt(1, 10)
-
-    abstract val step: Int
-    protected val DEFAULT_STEP = 1
-
-    abstract val moveStrategy: MoveStrategy
+abstract class Enemy(
+    position: Position,
+    health: Int, strength: Int,
+    name: String,
+    private val moveStrategy: MoveStrategy,
+    private val stepSize: Int = 1
+) : Mob(position, health, strength, name) {
 
     /**
      * Enemy movement strategy
@@ -30,12 +27,18 @@ sealed class Enemy : Mob() {
     fun getNextPosition(heroPos: Position): Position {
         val yDist = abs(position.y - heroPos.y)
         val xDist = abs(position.x - heroPos.x)
-        val stepSize = if (yDist == 1 || xDist == 1) DEFAULT_STEP else step
+        val step = if (yDist < stepSize) {
+            yDist
+        } else if (xDist < stepSize) {
+            xDist
+        } else {
+            stepSize
+        }
 
         return if (confused) {
             position.getClosestRandomPosition()
         } else {
-            moveStrategy.getNextPosition(position, heroPos, stepSize)
+            moveStrategy.getNextPosition(position, heroPos, step)
         }
     }
 

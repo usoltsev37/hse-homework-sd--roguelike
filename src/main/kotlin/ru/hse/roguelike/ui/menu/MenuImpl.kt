@@ -3,11 +3,7 @@ package ru.hse.roguelike.ui.menu
 import com.googlecode.lanterna.TerminalSize
 import com.googlecode.lanterna.TextColor
 import com.googlecode.lanterna.gui2.*
-import com.googlecode.lanterna.gui2.dialogs.DirectoryDialogBuilder
-import com.googlecode.lanterna.gui2.dialogs.FileDialogBuilder
-import com.googlecode.lanterna.gui2.dialogs.MessageDialog
-import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton
-import com.googlecode.lanterna.gui2.dialogs.TextInputDialogBuilder
+import com.googlecode.lanterna.gui2.dialogs.*
 import com.googlecode.lanterna.gui2.menu.Menu
 import com.googlecode.lanterna.gui2.menu.MenuBar
 import com.googlecode.lanterna.gui2.menu.MenuItem

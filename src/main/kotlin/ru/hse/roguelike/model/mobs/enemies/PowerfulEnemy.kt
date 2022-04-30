@@ -4,13 +4,13 @@ import ru.hse.roguelike.model.mobs.Mob
 import ru.hse.roguelike.model.mobs.enemies.movement.MoveStrategy
 import ru.hse.roguelike.util.Position
 import kotlin.math.max
+import kotlin.random.Random
 
 /**
  * Enemy implementation for strong creates
  */
-class PowerfulEnemy(override var position: Position, override val moveStrategy: MoveStrategy) : Enemy() {
-    override val name: String = "P"
-    override val step: Int = DEFAULT_STEP
+class PowerfulEnemy(position: Position, moveStrategy: MoveStrategy) :
+    Enemy(position, Random.nextInt(10, 20), Random.nextInt(1, 10), "P", moveStrategy) {
 
     override fun attack(other: Mob) {
         other.health -= strength

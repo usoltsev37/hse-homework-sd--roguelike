@@ -18,7 +18,7 @@ class FastEnemyTest {
 
         for (i in 1..1000) {
             val prevEnemyPos = enemy.getNextPosition(hero.position)
-            if (abs(prevEnemyPos.x - enemy.position.x)  > enemy.step) {
+            if (abs(prevEnemyPos.x - enemy.position.x)  > 2) {
                 Assertions.assertTrue(false)
             }
         }

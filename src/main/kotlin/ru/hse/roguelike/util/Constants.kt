@@ -26,4 +26,6 @@ object Constants {
 
     const val MAX_MAP_HEIGHT = MAX_TERMINAL_HEIGHT
     const val MAX_MAP_WIDTH = MAX_TERMINAL_WIDTH - HUD_WIDTH
+
+    const val MAX_HEALTH = 50
 }

@@ -1,7 +1,9 @@
 package ru.hse.roguelike.model.mobs.enemies
 
 import ru.hse.roguelike.model.map.Cell
+import ru.hse.roguelike.model.mobs.enemies.movement.PassiveMoveStrategy
 import ru.hse.roguelike.util.Constants
+import ru.hse.roguelike.util.Position
 import ru.hse.roguelike.util.getClosestRandomPosition
 import ru.hse.roguelike.util.isFree
 import kotlin.random.Random
@@ -10,14 +12,8 @@ import kotlin.random.Random
  * Abstraction for cloneable enemy prototypes
  * @see Enemy
  */
-abstract class CloneableEnemy : Enemy() {
-    private var myStrength: Int = 1
-    private var myHealth: Int = 15
-
-    override var strength: Int by ::myStrength
-    override var health: Int by ::myHealth
-
-    override val step: Int = 0
+abstract class CloneableEnemy(position: Position, name: String) :
+    Enemy(position, 15, 1, name, PassiveMoveStrategy(), 0) {
 
     /**
      * Try to initialize cloned enemy.

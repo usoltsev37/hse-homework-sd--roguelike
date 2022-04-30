@@ -21,7 +21,7 @@ abstract class EnemyFactory {
     abstract fun createEnemy(position: Position): Enemy
 
     fun createCloneableEnemy(position: Position): Enemy {
-        return ToxicMold(position, PassiveMoveStrategy())
+        return ToxicMold(position)
     }
 
     protected fun getRandomEnemyStrategy(): MoveStrategy =

@@ -7,11 +7,12 @@ import ru.hse.roguelike.util.Position
  * @see Hero
  * @see Enemy
  */
-abstract class Mob {
-    abstract var position: Position
-    abstract var health: Int
-    abstract var strength: Int
-    abstract val name: String
+abstract class Mob(
+    var position: Position,
+    var health: Int,
+    var strength: Int,
+    val name: String
+) {
 
     var confused: Boolean = false
 
