@@ -9,12 +9,11 @@ import ru.hse.roguelike.util.Position
  */
 abstract class Mob(
     var position: Position,
-    var health: Int,
     var strength: Int,
     val name: String
 ) {
 
-    var confused: Boolean = false
+    abstract var health: Int
 
     val isDead: Boolean
         get() = health <= 0

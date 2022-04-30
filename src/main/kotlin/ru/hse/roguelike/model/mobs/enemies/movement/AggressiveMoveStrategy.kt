@@ -8,7 +8,7 @@ import kotlin.math.abs
 /**
  * Implements aggressive movement strategy: enemy is chasing player
  */
-class AggressiveMoveStrategy : MoveStrategy {
+object AggressiveMoveStrategy : MoveStrategy {
     override fun getNextPosition(ourPos: Position, heroPos: Position, step: Int): Position {
         val yDist = abs(ourPos.y - heroPos.y)
         val xDist = abs(ourPos.x - heroPos.x)

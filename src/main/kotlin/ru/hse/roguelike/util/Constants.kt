@@ -28,4 +28,5 @@ object Constants {
     const val MAX_MAP_WIDTH = MAX_TERMINAL_WIDTH - HUD_WIDTH
 
     const val MAX_HEALTH = 50
+    const val ENEMY_STATE_HEALTH_THRESHOLD = 0.4
 }

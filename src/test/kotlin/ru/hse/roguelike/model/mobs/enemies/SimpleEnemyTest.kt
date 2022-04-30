@@ -9,8 +9,8 @@ class SimpleEnemyTest {
     @Test
     fun testInvariant() {
         for (i in 1..5) {
-            val enemyTank = TankEnemy(Position(0, 1), AggressiveMoveStrategy())
-            val enemySimple = DefaultEnemy(Position(1, 0), AggressiveMoveStrategy())
+            val enemyTank = TankEnemy(Position(0, 1), AggressiveMoveStrategy)
+            val enemySimple = DefaultEnemy(Position(1, 0), AggressiveMoveStrategy)
 
             Assertions.assertTrue(enemyTank.strength <= enemySimple.strength)
             Assertions.assertTrue(enemyTank.health >= enemySimple.health)
