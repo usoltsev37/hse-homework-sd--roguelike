@@ -7,11 +7,24 @@ import ru.hse.roguelike.model.GameModel
  * @param model Game model
  */
 abstract class Command(
-    private val model: GameModel
+    protected val model: GameModel
 ) {
 
     /**
      * Execute command
      */
-    abstract fun execute()
+    fun execute() {
+        innerExecute()
+
+        if (model.mode == GameModel.Mode.GAME) {
+            model.fight()
+            model.updateState()
+        }
+
+        if (model.hero.isDead) {
+            model.isEndGame = true
+        }
+    }
+
+    protected abstract fun innerExecute()
 }

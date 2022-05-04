@@ -10,11 +10,10 @@ import ru.hse.roguelike.ui.window.Window
 class Controller(window: Window, model: GameModel) {
 
     private val activities: List<Activity>
-    var isEndGame = false
 
     init {
-        val gameActivity = GameActivity(model, isEndGame)
-        val viewActivity = ViewActivity(window, model, isEndGame)
+        val gameActivity = GameActivity(model)
+        val viewActivity = ViewActivity(window, model)
         activities = listOf(gameActivity, viewActivity)
 
         viewActivity.initState(model)
@@ -26,6 +25,5 @@ class Controller(window: Window, model: GameModel) {
      */
     fun update(eventType: EventType) {
         activities.forEach { it.handleEvent(eventType) }
-        isEndGame = activities[0].isEndGame or activities[1].isEndGame
     }
 }

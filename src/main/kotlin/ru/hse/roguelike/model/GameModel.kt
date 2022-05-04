@@ -25,6 +25,7 @@ class GameModel(val currMap: Map = Map.createMap().withEnemyFactory(DefaultEnemy
     var selectedItemPosition: Position? = null
     val hero: AbstractHero = HeroDecorator(Hero(currMap.cells.first().leftBottomPos))
     var curCell: Cell = getCurrentCell()
+    var isEndGame = false
 
     /**
      * for Inventory Mode.
