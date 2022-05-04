@@ -33,22 +33,18 @@ class GameActivity(private val model: GameModel, override var isEndGame: Boolean
             EventType.LEFT -> model.moveHero(model.hero.position.left())
             EventType.RIGHT -> model.moveHero(model.hero.position.right())
             EventType.USE -> {
-                val itemIndex = model.curCell.items.map { it.second }.indexOf(model.hero.position)
-                if (itemIndex != -1) {
-                    model.hero.inventory.add(model.curCell.items[itemIndex].first)
+                model.curCell.items.firstOrNull { it.second == model.hero.position }?.first?.let {
+                    model.hero.inventory.add(
+                        it
+                    )
                 }
             }
             EventType.REMOVE -> return
             else -> {}
         }
 
-        model.updateCurrentCell()
-
         model.fight()
-
-        model.updateStateOfEnemies()
-        model.updateCellsState()
-        model.updatePassagesState()
+        model.updateState()
     }
 
     private fun handleEventInInventoryMode(eventType: EventType) {
@@ -67,7 +63,7 @@ class GameActivity(private val model: GameModel, override var isEndGame: Boolean
             EventType.USE -> {
                 if (model.selectedItemPosition != null) {
                     val selectedItem =
-                        model.hero.inventory.get(model.transformPosition2Index(model.selectedItemPosition!!))
+                        model.hero.inventory[model.transformPosition2Index(model.selectedItemPosition!!)]
                     if (selectedItem is ConsumableItem) {
                         selectedItem.use(model.hero)
                     }
