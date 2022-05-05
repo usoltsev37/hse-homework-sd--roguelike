@@ -9,7 +9,7 @@ import ru.hse.roguelike.util.Position
 class TankEnemyTest {
     @Test
     fun testAttack() {
-        val enemy = TankEnemy(Position(0 ,1), AggressiveMoveStrategy())
+        val enemy = TankEnemy(Position(0 ,1), AggressiveMoveStrategy)
         val hero = Hero(Position(0 ,0))
 
         for (i in 1..5) {

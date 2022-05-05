@@ -13,7 +13,7 @@ import kotlin.random.Random
  * @see Enemy
  */
 abstract class CloneableEnemy(position: Position, name: String) :
-    Enemy(position, 15, 1, name, PassiveMoveStrategy(), 0) {
+    Enemy(position, 15, 1, name, PassiveMoveStrategy, 0) {
 
     /**
      * Try to initialize cloned enemy.

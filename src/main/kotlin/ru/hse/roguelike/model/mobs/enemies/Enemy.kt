@@ -3,10 +3,11 @@ package ru.hse.roguelike.model.mobs.enemies
 import ru.hse.roguelike.model.mobs.Hero
 import ru.hse.roguelike.model.mobs.Mob
 import ru.hse.roguelike.model.mobs.enemies.movement.MoveStrategy
-import ru.hse.roguelike.util.Position
-import ru.hse.roguelike.util.getClosestRandomPosition
-import ru.hse.roguelike.util.x
-import ru.hse.roguelike.util.y
+import ru.hse.roguelike.model.mobs.enemies.states.ConfusedEnemyState
+import ru.hse.roguelike.model.mobs.enemies.states.CowardEnemyState
+import ru.hse.roguelike.model.mobs.enemies.states.DefaultEnemyState
+import ru.hse.roguelike.model.mobs.enemies.states.EnemyState
+import ru.hse.roguelike.util.*
 import kotlin.math.abs
 
 /**
@@ -14,32 +15,33 @@ import kotlin.math.abs
  */
 abstract class Enemy(
     position: Position,
-    health: Int, strength: Int,
+    initHealth: Int, strength: Int,
     name: String,
-    private val moveStrategy: MoveStrategy,
+    internal val moveStrategy: MoveStrategy,
     private val stepSize: Int = 1
-) : Mob(position, health, strength, name) {
+) : Mob(position, strength, name) {
+
+    private var enemyState: EnemyState = DefaultEnemyState
+    private val stateHealthThreshold: Int = (initHealth * Constants.ENEMY_STATE_HEALTH_THRESHOLD).toInt()
+
+    var confused = false
+        set(value) {
+            field = value
+            enemyState = if (value) ConfusedEnemyState else DefaultEnemyState
+        }
+
+    override var health: Int = initHealth
+        set(value) {
+            field = value
+            enemyState = if (field <= stateHealthThreshold) CowardEnemyState else DefaultEnemyState
+        }
 
     /**
      * Enemy movement strategy
      * @param heroPos position of Hero
      */
     fun getNextPosition(heroPos: Position): Position {
-        val yDist = abs(position.y - heroPos.y)
-        val xDist = abs(position.x - heroPos.x)
-        val step = if (yDist < stepSize) {
-            yDist
-        } else if (xDist < stepSize) {
-            xDist
-        } else {
-            stepSize
-        }
-
-        return if (confused) {
-            position.getClosestRandomPosition()
-        } else {
-            moveStrategy.getNextPosition(position, heroPos, step)
-        }
+        return enemyState.getNextPosition(heroPos, this)
     }
 
     override fun attack(other: Mob) {
@@ -47,6 +49,18 @@ abstract class Enemy(
             other.health -= other.calcAttackStrength(strength)
         } else {
             other.health -= strength
+        }
+    }
+
+    internal fun getStep(heroPos: Position): Int {
+        val yDist = abs(position.y - heroPos.y)
+        val xDist = abs(position.x - heroPos.x)
+        return if (yDist < stepSize) {
+            yDist
+        } else if (xDist < stepSize) {
+            xDist
+        } else {
+            stepSize
         }
     }
 

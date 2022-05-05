@@ -8,7 +8,7 @@ import kotlin.math.abs
 /**
  * Coward enemy movement strategy: enemy runs away from the player
  */
-class CowardMoveStrategy : MoveStrategy {
+object CowardMoveStrategy : MoveStrategy {
     override fun getNextPosition(ourPos: Position, heroPos: Position, step: Int): Position {
         val yDist = abs(ourPos.y - heroPos.y)
         val xDist = abs(ourPos.x - heroPos.x)
