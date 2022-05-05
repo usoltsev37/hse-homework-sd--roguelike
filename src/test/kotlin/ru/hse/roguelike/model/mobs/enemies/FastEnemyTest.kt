@@ -11,7 +11,7 @@ import kotlin.math.abs
 class FastEnemyTest {
     @Test
     fun testStep() {
-        val enemy = PowerfulEnemy(Position(0 ,1), AggressiveMoveStrategy())
+        val enemy = PowerfulEnemy(Position(0 ,1), AggressiveMoveStrategy)
         val hero = Hero(Position(0 ,0))
         hero.attack(enemy)
         enemy.attack(hero)

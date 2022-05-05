@@ -5,7 +5,7 @@ import ru.hse.roguelike.util.Position
 /**
  * Interface for move strategy of enemy
  */
-interface MoveStrategy {
+sealed interface MoveStrategy {
 
     /**
      * Get next position of enemy
