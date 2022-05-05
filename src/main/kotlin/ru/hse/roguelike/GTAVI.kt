@@ -36,7 +36,7 @@ fun main() {
 
         while (curEvent != SpecialEventType.EXIT) {
             controller.update(curEvent as EventType)
-            if (controller.isEndGame) {
+            if (model.isEndGame) {
                 mainWindow.clear()
                 menu.saveMap(model.currMap)
 

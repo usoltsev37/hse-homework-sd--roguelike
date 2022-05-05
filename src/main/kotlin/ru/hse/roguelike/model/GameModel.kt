@@ -25,6 +25,7 @@ class GameModel(val currMap: Map = Map.createMap().withEnemyFactory(DefaultEnemy
     var selectedItemPosition: Position? = null
     val hero: AbstractHero = HeroDecorator(Hero(currMap.cells.first().leftBottomPos))
     var curCell: Cell = getCurrentCell()
+    var isEndGame = false
 
     /**
      * for Inventory Mode.
@@ -103,7 +104,7 @@ class GameModel(val currMap: Map = Map.createMap().withEnemyFactory(DefaultEnemy
      * Fight with enemies in current hero position. If there are no enemies at current hero position, do nothing
      */
     fun fight() {
-        curCell.enemies.find {
+        getCurrentCell().enemies.find {
             it.position == hero.position
         }?.let {
             hero.attack(it)
@@ -111,10 +112,17 @@ class GameModel(val currMap: Map = Map.createMap().withEnemyFactory(DefaultEnemy
         }
     }
 
+    fun updateState() {
+        updateCurrentCell()
+        updateStateOfEnemies()
+        updateCellsState()
+        updatePassagesState()
+    }
+
     /**
      * Move each enemy from current cell and try to clone all cloneable enemies
      */
-    fun updateStateOfEnemies() {
+    private fun updateStateOfEnemies() {
         val clonedEnemies = ArrayList<CloneableEnemy>()
         curCell.enemies.forEach {
             moveEnemy(it)
@@ -130,7 +138,7 @@ class GameModel(val currMap: Map = Map.createMap().withEnemyFactory(DefaultEnemy
     /**
      * Update cells state: remove died enemies and add moved enemies
      */
-    fun updateCellsState() {
+    private fun updateCellsState() {
         curCell.visited = true
         currMap.cells.forEach { cell ->
             cell.enemies.removeIf {
@@ -144,12 +152,12 @@ class GameModel(val currMap: Map = Map.createMap().withEnemyFactory(DefaultEnemy
         //TODO: items
     }
 
-    fun updatePassagesState() {
+    private fun updatePassagesState() {
         currMap.cells.flatMap { it.passages }.filter { it.route.subList(1, it.route.lastIndex).contains(hero.position) }
             .forEach { it.visited = true }
     }
 
-    fun updateCurrentCell() {
+    private fun updateCurrentCell() {
         curCell = getCurrentCell()
     }
 
