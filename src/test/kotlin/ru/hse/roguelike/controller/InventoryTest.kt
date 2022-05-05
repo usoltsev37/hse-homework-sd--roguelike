@@ -15,7 +15,7 @@ class InventoryTest {
     @Test
     fun testOpenCloseInventory() {
         val model = GameModel()
-        val gameActivity = GameActivity(model, false)
+        val gameActivity = GameActivity(model)
 
         val openCloseInventory = EventType.INVENTORY
         gameActivity.handleEvent(openCloseInventory)
@@ -28,7 +28,7 @@ class InventoryTest {
     @Test
     fun testInventoryMovement() {
         val model = GameModel()
-        val gameActivity = GameActivity(model, false)
+        val gameActivity = GameActivity(model)
 
         val openCloseInventory = EventType.INVENTORY
         gameActivity.handleEvent(openCloseInventory)
@@ -52,7 +52,7 @@ class InventoryTest {
     @Test
     fun equipAndUseItem() {
         val model = GameModel()
-        val gameActivity = GameActivity(model, false)
+        val gameActivity = GameActivity(model)
 
         val openCloseInventory = EventType.INVENTORY
         gameActivity.handleEvent(openCloseInventory)
@@ -77,7 +77,7 @@ class InventoryTest {
     @Test
     fun reEquipItem() {
         val model = GameModel()
-        val gameActivity = GameActivity(model, false)
+        val gameActivity = GameActivity(model)
 
         val openCloseInventory = EventType.INVENTORY
         gameActivity.handleEvent(openCloseInventory)
