@@ -3,6 +3,7 @@ package ru.hse.roguelike
 import com.googlecode.lanterna.TerminalSize
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory
 import ru.hse.roguelike.controller.Controller
+import ru.hse.roguelike.controller.command.*
 import ru.hse.roguelike.model.GameModel
 import ru.hse.roguelike.ui.menu.MenuImpl
 import ru.hse.roguelike.ui.window.Window
@@ -25,12 +26,22 @@ fun main() {
     menu.display()
 
     var model = GameModel(mapBuilder.build())
+    val buttonToCommandMap = mapOf(
+        EventType.INVENTORY to InventoryCommand(model),
+        EventType.UP to UpCommand(model),
+        EventType.DOWN to DownCommand(model),
+        EventType.LEFT to LeftCommand(model),
+        EventType.RIGHT to RightCommand(model),
+        EventType.USE to UseCommand(model),
+        EventType.REMOVE to RemoveCommand(model),
+        EventType.ENTER to EnterCommand(model)
+    )
 
     terminal.use {
         it.enterPrivateMode()
 
         val input = Input(it)
-        var controller = Controller(mainWindow, model)
+        var controller = Controller(mainWindow, model, buttonToCommandMap)
 
         var curEvent: EventInterface = input.read()
 
@@ -41,7 +52,7 @@ fun main() {
                 menu.saveMap(model.currMap)
 
                 model = GameModel(mapBuilder.build())
-                controller = Controller(mainWindow, model)
+                controller = Controller(mainWindow, model, buttonToCommandMap)
             }
             curEvent = input.read()
             while (curEvent == SpecialEventType.UNKNOWN) {
