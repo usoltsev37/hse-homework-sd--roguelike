@@ -1,8 +1,10 @@
 package ru.hse.roguelike.controller
 
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import ru.hse.roguelike.EventType
+import ru.hse.roguelike.controller.command.*
 import ru.hse.roguelike.model.GameModel
 import ru.hse.roguelike.model.items.ConsumableItem
 import ru.hse.roguelike.model.items.EquipableItem
@@ -12,10 +14,27 @@ import ru.hse.roguelike.util.Position
 
 class InventoryTest {
 
+    private lateinit var model: GameModel
+    lateinit var buttonToCommandMap: Map<EventType, Command>
+
+    @BeforeEach
+    fun init() {
+        model = GameModel()
+        buttonToCommandMap = mapOf(
+            EventType.INVENTORY to InventoryCommand(model),
+            EventType.UP to UpCommand(model),
+            EventType.DOWN to DownCommand(model),
+            EventType.LEFT to LeftCommand(model),
+            EventType.RIGHT to RightCommand(model),
+            EventType.USE to UseCommand(model),
+            EventType.REMOVE to RemoveCommand(model),
+            EventType.ENTER to EnterCommand(model)
+        )
+    }
+
     @Test
     fun testOpenCloseInventory() {
-        val model = GameModel()
-        val gameActivity = GameActivity(model)
+        val gameActivity = GameActivity(buttonToCommandMap)
 
         val openCloseInventory = EventType.INVENTORY
         gameActivity.handleEvent(openCloseInventory)
@@ -27,8 +46,7 @@ class InventoryTest {
 
     @Test
     fun testInventoryMovement() {
-        val model = GameModel()
-        val gameActivity = GameActivity(model)
+        val gameActivity = GameActivity(buttonToCommandMap)
 
         val openCloseInventory = EventType.INVENTORY
         gameActivity.handleEvent(openCloseInventory)
@@ -51,8 +69,7 @@ class InventoryTest {
 
     @Test
     fun equipAndUseItem() {
-        val model = GameModel()
-        val gameActivity = GameActivity(model)
+        val gameActivity = GameActivity(buttonToCommandMap)
 
         val openCloseInventory = EventType.INVENTORY
         gameActivity.handleEvent(openCloseInventory)
@@ -76,8 +93,7 @@ class InventoryTest {
 
     @Test
     fun reEquipItem() {
-        val model = GameModel()
-        val gameActivity = GameActivity(model)
+        val gameActivity = GameActivity(buttonToCommandMap)
 
         val openCloseInventory = EventType.INVENTORY
         gameActivity.handleEvent(openCloseInventory)
