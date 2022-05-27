@@ -38,7 +38,6 @@ fun main() {
     )
 
     terminal.use {
-        it.enterPrivateMode()
 
         val input = Input(it)
         var controller = Controller(mainWindow, model, buttonToCommandMap)
