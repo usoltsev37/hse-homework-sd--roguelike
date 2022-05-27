@@ -27,7 +27,6 @@ fun main() {
     var model = GameModel(mapBuilder.build())
 
     terminal.use {
-        it.enterPrivateMode()
 
         val input = Input(it)
         var controller = Controller(mainWindow, model)
