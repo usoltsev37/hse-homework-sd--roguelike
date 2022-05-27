@@ -1,6 +1,5 @@
 package ru.hse.roguelike.model.items
 
-import kotlinx.serialization.Serializable
 import ru.hse.roguelike.model.mobs.AbstractHero
 import ru.hse.roguelike.model.mobs.Hero
 import kotlin.random.Random
@@ -11,7 +10,6 @@ import kotlin.random.Random
  * @see EquipableItem
  * @see ItemType
  */
-@Serializable
 sealed class Item {
 
     abstract val name: String
@@ -39,7 +37,12 @@ sealed class Item {
          * @return item with given type
          */
         fun createItem(type: ItemType): Item {
-            return EquipableItem("${type.name.take(8)} #${Random.nextInt(100)}", type, type.getHealthIncrease(), type.getStrengthIncrease())
+            return EquipableItem(
+                "${type.name.take(8)} #${Random.nextInt(100)}",
+                type,
+                type.getHealthIncrease(),
+                type.getStrengthIncrease()
+            )
         }
 
         /**

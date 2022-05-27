@@ -4,11 +4,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import ru.hse.roguelike.model.mobs.enemies.Enemy
 import ru.hse.roguelike.model.items.Item
-import ru.hse.roguelike.model.mobs.enemies.AggressiveEnemy
-import ru.hse.roguelike.model.mobs.enemies.CowardEnemy
-import ru.hse.roguelike.model.mobs.enemies.PassiveEnemy
+import ru.hse.roguelike.model.mobs.enemies.Enemy
+import ru.hse.roguelike.model.mobs.enemies.factories.EnemyFactory
 import ru.hse.roguelike.util.*
 import java.io.IOException
 import java.lang.Integer.max
@@ -52,6 +50,13 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
         fun loadFrom(path: Path): Builder
 
         /**
+         * Specifies enemies type
+         * @param enemyFactory factory to create enemy
+         * @return builder
+         */
+        fun withEnemyFactory(enemyFactory: EnemyFactory): Builder
+
+        /**
          * Build Map with specified parameters
          * @return constructed map
          */
@@ -62,17 +67,47 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
         private var width: Int = Constants.DEFAULT_MAP_WIDTH
         private var height: Int = Constants.DEFAULT_MAP_HEIGHT
         private var path: Path? = null
+        private var enemyFactory: EnemyFactory? = null
 
         override fun withWidth(width: Int): Builder = apply { this.width = width }
         override fun withHeight(height: Int): Builder = apply { this.height = height }
         override fun loadFrom(path: Path): Builder = apply { this.path = path }
+        override fun withEnemyFactory(enemyFactory: EnemyFactory): Builder = apply { this.enemyFactory = enemyFactory }
 
         override fun build(): Map {
             if (path != null) {
                 val jsonString = path!!.readText()
-                return Json.decodeFromString(jsonString)
+                val map: Map = Json.decodeFromString(jsonString)
+                return map.apply {
+                    this.cells.forEach {
+                        it.enemies.addAll(generateEnemies(it.leftBottomPos, it.rightTopPos))
+                        it.items.addAll(generateItems(it.leftBottomPos, it.rightTopPos))
+                    }
+                }
             }
-            return Map(width, height, doGenerateCells(Position(0, 0), Position(width, height)))
+
+            if (enemyFactory == null) {
+                throw IllegalStateException("Please, initialize enemy factory")
+            }
+
+            val cells = doGenerateCells(Position(0, 0), Position(width, height))
+
+            var maxLen = 0
+            var biggestConnectedCells = emptyList<Cell>()
+            cells.forEach { cell ->
+                if (!cell.visited) {
+                    val connectedCells = getConnectedCells(cell, cells)
+                    if (connectedCells.size > maxLen) {
+                        maxLen = connectedCells.size
+                        biggestConnectedCells = connectedCells
+                    }
+                }
+            }
+
+            biggestConnectedCells.forEach { it.visited = false }
+
+
+            return Map(width, height, biggestConnectedCells)
         }
 
         private fun doGenerateCells(leftBottom: Position, rightTop: Position): List<Cell> {
@@ -112,17 +147,30 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
             val centre = Position((rightTop.x + leftBottom.x) / 2, (rightTop.y + leftBottom.y) / 2)
             val left = Position(Random.nextInt(leftBottom.x + 1, centre.x), Random.nextInt(leftBottom.y + 1, centre.y))
             val right = Position(Random.nextInt(centre.x + 1, rightTop.x), Random.nextInt(centre.y + 1, rightTop.y))
+            return Cell(left, right, generateEnemies(left, right), generateItems(left, right))
+        }
 
+        private fun generateEnemies(left: Position, right: Position): MutableList<Enemy> {
             val enemies = ArrayList<Enemy>()
             if (Random.nextInt(100) < Constants.ENEMY_PROB) {
                 val enemyPos = Position(Random.nextInt(left.x, right.x), Random.nextInt(left.y, right.y))
-                val enemy = when (Random.nextInt(3)) {
-                    0 -> PassiveEnemy(enemyPos)
-                    1 -> CowardEnemy(enemyPos)
-                    else -> AggressiveEnemy(enemyPos)
-                }
+                val enemy = enemyFactory!!.createEnemy(enemyPos)
                 enemies.add(enemy)
             }
+            if (Random.nextInt(100) < Constants.CLONEABLE_ENEMY_PROB) {
+                enemies.add(
+                    enemyFactory!!.createCloneableEnemy(
+                        Position(
+                            Random.nextInt(left.x, right.x),
+                            Random.nextInt(left.y, right.y)
+                        )
+                    )
+                )
+            }
+            return enemies
+        }
+
+        private fun generateItems(left: Position, right: Position): FreeItems {
             val items = ArrayList<Pair<Item, Position>>()
             if (Random.nextInt(100) < Constants.ITEM_PROB) {
                 items.add(
@@ -132,7 +180,7 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
                     )
                 )
             }
-            return Cell(left, right, enemies, items)
+            return items
         }
 
         private fun generatePaths(firstCells: List<Cell>, secondCells: List<Cell>, dim: Int) {
@@ -191,6 +239,21 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
             }
         }
 
+        private fun getConnectedCells(cell: Cell, allCells: List<Cell>): List<Cell> {
+            val result = ArrayList<Cell>()
+            cell.visited = true
+            result.add(cell)
+            cell.passages.forEach { passage ->
+                findCellByPoint(passage.to, allCells)?.let {
+                    if (!it.visited) {
+                        val otherCells = getConnectedCells(it, allCells)
+                        result.addAll(otherCells)
+                    }
+                }
+            }
+            return result
+        }
+
     }
 
     /**
@@ -200,8 +263,14 @@ class Map private constructor(val width: Int, val height: Int, val cells: List<C
      */
     @Throws(IOException::class)
     fun save(path: Path) {
+        prepareToSave()
         val jsonString = Json.encodeToString(this)
         path.writeText(jsonString)
+    }
+
+    private fun prepareToSave() {
+        cells.flatMap { it.passages }.forEach { it.visited = false }
+        cells.forEach { it.visited = false }
     }
 
     companion object {

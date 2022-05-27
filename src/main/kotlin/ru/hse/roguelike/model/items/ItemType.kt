@@ -1,13 +1,10 @@
 package ru.hse.roguelike.model.items
 
-import kotlinx.serialization.Serializable
-
 /**
  * Specifies concrete Item
  * @see Item
  * @see Usable
  */
-@Serializable
 enum class ItemType(val value: Int) : Usable {
     Helmet(0) {
         override fun getHealthIncrease(): Int {
@@ -80,5 +77,11 @@ enum class ItemType(val value: Int) : Usable {
          * @return item type
          */
         fun fromInt(value: Int) = values().first { it.value == value }
+        val MAX_ARMOUR: Int = Helmet.getHealthIncrease() +
+                ChestPlate.getHealthIncrease() +
+                Leggings.getHealthIncrease() +
+                Boots.getHealthIncrease() +
+                Sword.getHealthIncrease() +
+                Potion.getHealthIncrease()
     }
 }

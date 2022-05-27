@@ -1,9 +1,7 @@
 package ru.hse.roguelike.model.items
 
-import kotlinx.serialization.Serializable
-import ru.hse.roguelike.util.Constants
 import ru.hse.roguelike.model.mobs.AbstractHero
-import ru.hse.roguelike.model.mobs.Hero
+import ru.hse.roguelike.util.Constants
 import java.lang.Integer.min
 import kotlin.random.Random
 
@@ -13,7 +11,6 @@ import kotlin.random.Random
  * @see Item
  * @see ItemType
  */
-@Serializable
 class ConsumableItem(
     override val name: String,
     override val itemType: ItemType

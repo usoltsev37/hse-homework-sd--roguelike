@@ -42,4 +42,8 @@ class WindowImpl(
             getDefaultInstance()
         else
             currentImage
+
+    override fun clear() {
+        terminal.clearScreen()
+    }
 }

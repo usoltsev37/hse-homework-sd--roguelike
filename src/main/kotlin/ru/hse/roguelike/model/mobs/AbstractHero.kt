@@ -1,22 +1,25 @@
 package ru.hse.roguelike.model.mobs
 
-import kotlinx.serialization.Serializable
 import ru.hse.roguelike.model.items.Item
+import ru.hse.roguelike.model.items.ItemType
+import ru.hse.roguelike.util.Constants
 import ru.hse.roguelike.util.Constants.LEVEL_UPDATE_HEALTH
 import ru.hse.roguelike.util.Constants.LEVEL_UPDATE_STRENGTH
+import ru.hse.roguelike.util.Position
 import kotlin.math.sqrt
 
-@Serializable
-abstract class AbstractHero: Mob() {
+abstract class AbstractHero(position: Position, health: Int, strength: Int) : Mob(position, health, strength, "H") {
 
-    abstract val inventory: MutableList<Item>
-    abstract var armour: Int
-    abstract var xp: Int
-    abstract var level: Int
-    abstract var maxHealth: Int
-    abstract var currMaxXp: Int
+    var armour: Int = 0
+    var xp: Int = 0
+    var level: Int = 0
+    var maxHealth: Int = Constants.MAX_HEALTH
+    var currMaxXp: Int = 2
 
-    override val name: String = "H"
+    /**
+    The first 6 elements are worn on the hero (isEquiped = True)
+     */
+    val inventory: MutableList<Item> = ArrayList(Constants.COUNT_COLUMNS)
 
     /**
      * Update XP
@@ -43,5 +46,9 @@ abstract class AbstractHero: Mob() {
 
     private fun calcXp(strength: Int): Int {
         return sqrt(strength.toDouble()).toInt()
+    }
+
+    fun calcAttackStrength(otherStrength: Int): Int {
+        return (1 - (1 / (2.0 * ItemType.MAX_ARMOUR)) * armour).toInt() * otherStrength
     }
 }

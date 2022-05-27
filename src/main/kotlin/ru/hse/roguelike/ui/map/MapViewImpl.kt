@@ -3,9 +3,6 @@ package ru.hse.roguelike.ui.map
 import com.googlecode.lanterna.TextCharacter
 import com.googlecode.lanterna.TextColor
 import ru.hse.roguelike.model.map.Cell
-import ru.hse.roguelike.model.mobs.enemies.AggressiveEnemy
-import ru.hse.roguelike.model.mobs.enemies.CowardEnemy
-import ru.hse.roguelike.model.mobs.enemies.PassiveEnemy
 import ru.hse.roguelike.ui.image.Image
 import ru.hse.roguelike.ui.window.Window
 import ru.hse.roguelike.util.Constants.HUD_WIDTH
@@ -55,7 +52,11 @@ class MapViewImpl(
         }
 
         cell.enemies.forEach { enemy ->
-            mapImage.printText(enemy.name, enemy.position, if (enemy.confused) TextColor.ANSI.MAGENTA else TextColor.ANSI.RED)
+            mapImage.printText(
+                enemy.name,
+                enemy.position,
+                if (enemy.confused) TextColor.ANSI.MAGENTA else TextColor.ANSI.RED
+            )
         }
     }
 
