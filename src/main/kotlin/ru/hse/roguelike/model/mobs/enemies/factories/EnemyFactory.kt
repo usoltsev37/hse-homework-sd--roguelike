@@ -26,9 +26,9 @@ abstract class EnemyFactory {
 
     protected fun getRandomEnemyStrategy(): MoveStrategy =
         when (Random.nextInt(3)) {
-            0 -> AggressiveMoveStrategy()
-            1 -> PassiveMoveStrategy()
-            else -> CowardMoveStrategy()
+            0 -> AggressiveMoveStrategy
+            1 -> PassiveMoveStrategy
+            else -> CowardMoveStrategy
         }
 
 }

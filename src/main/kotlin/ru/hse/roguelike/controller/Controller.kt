@@ -1,20 +1,20 @@
 package ru.hse.roguelike.controller
 
 import ru.hse.roguelike.EventType
+import ru.hse.roguelike.controller.command.Command
 import ru.hse.roguelike.model.GameModel
 import ru.hse.roguelike.ui.window.Window
 
 /**
  * The Controller of the game.
  */
-class Controller(window: Window, model: GameModel) {
+class Controller(window: Window, model: GameModel, buttonToCommandMap: Map<EventType, Command>) {
 
     private val activities: List<Activity>
-    var isEndGame = false
 
     init {
-        val gameActivity = GameActivity(model, isEndGame)
-        val viewActivity = ViewActivity(window, model, isEndGame)
+        val gameActivity = GameActivity(buttonToCommandMap)
+        val viewActivity = ViewActivity(window, model)
         activities = listOf(gameActivity, viewActivity)
 
         viewActivity.initState(model)
@@ -26,6 +26,5 @@ class Controller(window: Window, model: GameModel) {
      */
     fun update(eventType: EventType) {
         activities.forEach { it.handleEvent(eventType) }
-        isEndGame = activities[0].isEndGame or activities[1].isEndGame
     }
 }

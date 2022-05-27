@@ -17,7 +17,7 @@ import ru.hse.roguelike.util.upper
 /**
  * Activity implementation responsible for the View.
  */
-class ViewActivity(window: Window, private val model: GameModel, override var isEndGame: Boolean) : Activity {
+class ViewActivity(window: Window, private val model: GameModel) : Activity {
 
     private val mapView: MapView = MapViewImpl(window, model.hero.position)
     private val hudView: HudView = HudViewImpl(window)

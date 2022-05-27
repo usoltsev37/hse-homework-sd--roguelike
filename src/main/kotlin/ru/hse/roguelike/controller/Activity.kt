@@ -12,6 +12,4 @@ interface Activity {
      * @param model the Game Model.
      */
     fun handleEvent(eventType: EventType)
-
-    var isEndGame: Boolean
 }

@@ -8,7 +8,8 @@ import ru.hse.roguelike.util.Constants.LEVEL_UPDATE_STRENGTH
 import ru.hse.roguelike.util.Position
 import kotlin.math.sqrt
 
-abstract class AbstractHero(position: Position, health: Int, strength: Int) : Mob(position, health, strength, "H") {
+abstract class AbstractHero(position: Position, override var health: Int, strength: Int) :
+    Mob(position, strength, "H") {
 
     var armour: Int = 0
     var xp: Int = 0

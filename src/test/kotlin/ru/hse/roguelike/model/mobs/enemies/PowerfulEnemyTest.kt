@@ -10,7 +10,7 @@ import kotlin.math.max
 class PowerfulEnemyTest {
     @Test
     fun testAttack() {
-        val enemy = PowerfulEnemy(Position(0 ,1), CowardMoveStrategy())
+        val enemy = PowerfulEnemy(Position(0 ,1), CowardMoveStrategy)
         val hero = Hero(Position(0 ,0))
         for (i in 1..10) {
             hero.attack(enemy)
